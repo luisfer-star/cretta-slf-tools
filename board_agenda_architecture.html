@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Agenda Architecture™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{--navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.1);--cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;--t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;--r:rgba(196,154,60,0.2)}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+input,textarea,select{font-family:'Montserrat',sans-serif;outline:none}
+.topbar{background:var(--navy);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.tb-brand{font-size:.53rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-label{font-size:.5rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,236,.3)}
+.btn-print{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(196,154,60,.28);color:var(--gold);cursor:pointer}
+.shell{max-width:860px;margin:0 auto;padding:28px}
+.eyebrow{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px}
+.h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,5vw,3rem);font-weight:300;color:var(--navy);line-height:1.12;margin-bottom:8px}
+.h1 em{font-style:italic;color:var(--gold2)}
+.rule{width:32px;height:1px;background:var(--gold);opacity:.5;margin-bottom:18px}
+.lead{font-size:.82rem;color:var(--t2);line-height:1.82;margin-bottom:18px}
+.callout{background:var(--navy);padding:20px 22px;margin-bottom:24px}
+.callout p{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;color:var(--cream);line-height:1.7;font-weight:300}
+.callout strong{color:var(--gold2);font-style:normal;font-weight:400}
+.sec-lbl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+.config-block{background:white;padding:16px 16px}
+.cb-label{font-size:.6rem;font-weight:700;color:var(--navy);display:block;margin-bottom:5px}
+.cb-hint{font-size:.54rem;color:var(--t3);font-style:italic;display:block;margin-bottom:5px}
+select,input[type=text]{width:100%;padding:9px 12px;border:1px solid var(--r);font-size:.74rem;color:var(--t1);background:white;transition:border-color .15s}
+select:focus,input[type=text]:focus{border-color:var(--gold)}
+textarea{width:100%;padding:9px 12px;border:1px solid var(--r);font-size:.74rem;color:var(--t1);background:white;resize:vertical;min-height:70px;line-height:1.6;transition:border-color .15s}
+textarea:focus{border-color:var(--gold)}
+textarea::placeholder,input::placeholder{color:var(--t3)}
+.btn-gen{background:var(--navy);color:var(--cream);padding:12px 28px;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:background .15s}
+.btn-gen:hover{background:var(--navy3)}
+.btn-reset{font-size:.54rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);border:1px solid var(--r);padding:10px 16px;margin-left:8px;transition:all .13s}
+.btn-reset:hover{border-color:var(--gold);color:var(--navy)}
+
+/* AGENDA OUTPUT */
+.agenda-output{display:none;background:white;border:1px solid var(--r);margin-top:28px}
+.ao-header{background:var(--navy);padding:22px 28px;position:relative;overflow:hidden}
+.ao-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80%,rgba(196,154,60,.1),transparent 55%);pointer-events:none}
+.ao-eye{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.55);display:block;margin-bottom:6px;position:relative;z-index:1}
+.ao-title{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:300;color:var(--cream);margin-bottom:3px;position:relative;z-index:1}
+.ao-meta{font-size:.52rem;color:rgba(244,241,236,.35);position:relative;z-index:1}
+.ao-body{padding:22px 28px}
+.ao-section{margin-bottom:18px;border-left:2px solid var(--r);padding-left:16px}
+.aos-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.aos-num{font-size:.44rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold)}
+.aos-time{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);background:var(--cream2);padding:2px 7px}
+.aos-title{font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:3px}
+.aos-type{font-size:.44rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:2px 7px;display:inline-block;margin-bottom:5px}
+.aot-dec{background:rgba(13,27,62,.08);color:var(--navy)}.aot-inf{background:var(--golda);color:#7a5c00}.aot-rev{background:rgba(45,122,66,.1);color:#1a5c2e}.aot-adm{background:var(--cream2);color:var(--t3)}
+.aos-items{font-size:.72rem;color:var(--t2);line-height:1.7}
+.aos-items li{margin-bottom:3px;padding-left:12px;position:relative}
+.aos-items li::before{content:'—';position:absolute;left:0;color:var(--gold);font-size:.65rem}
+.ao-footer{background:var(--cream2);padding:14px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.aof-stat{text-align:center}
+.aof-num{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--navy);display:block}
+.aof-lbl{font-size:.42rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3)}
+.principles{background:var(--cream);padding:14px 28px;border-top:1px solid var(--r)}
+.pr-item{font-size:.66rem;color:var(--t3);line-height:1.6;padding:5px 0;border-bottom:1px solid var(--r)}
+.pr-item:last-child{border-bottom:none}
+.pr-item strong{color:var(--navy);font-weight:700}
+.cta-blk{background:var(--navy);padding:24px 28px;text-align:center;margin-top:2px}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.7;max-width:500px;margin:0 auto 16px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:11px 24px;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+@media print{.topbar,.btn-gen,.btn-reset,.btn-print,.btn-cta{display:none!important}.agenda-output{display:block!important}body{background:white}}
+@media(max-width:640px){.config-grid{grid-template-columns:1fr}.ao-header,.ao-body,.ao-footer,.principles{padding-left:16px;padding-right:16px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div style="display:flex;gap:12px;align-items:center">
+    <span class="tb-label">Board Agenda Architecture™ · Exclusivo</span>
+    <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+  </div>
+</div>
+<div class="shell">
+  <span class="eyebrow">Gobierno corporativo · SLF Insights · Exclusivo</span>
+  <h1 class="h1">Board Agenda <em>Architecture™</em></h1>
+  <div class="rule"></div>
+  <p class="lead">La agenda del consejo es el primer acto de gobierno. Una agenda mal diseñada convierte una sesión de consejo en una reunión de reportes. Una bien diseñada convierte al consejo en el lugar donde las decisiones más importantes de la empresa se toman con el criterio correcto — no donde se aprueban las que ya tomó el management.</p>
+  <div class="callout">
+    <p>El error más frecuente en las agendas de consejo es confundir <strong>información</strong> con <strong>decisión</strong>. Si el consejo recibe un reporte del mes, lo revisa y pasa al siguiente punto, no ha gobernado: ha confirmado. Gobernar implica preguntar qué cambia, qué decide y qué controla.</p>
+  </div>
+
+  <span class="sec-lbl">Configuración de la sesión</span>
+  <div class="config-grid">
+    <div class="config-block"><span class="cb-label">Empresa</span><input type="text" id="cfgCompany" placeholder="Nombre de la empresa"></div>
+    <div class="config-block"><span class="cb-label">Tipo de sesión</span><select id="cfgType"><option value="Q">Sesión trimestral de estrategia</option><option value="A">Sesión anual de planificación</option><option value="O">Sesión ordinaria mensual</option><option value="E">Sesión extraordinaria</option><option value="C">Sesión de crisis</option></select></div>
+    <div class="config-block"><span class="cb-label">Duración total</span><select id="cfgDur"><option value="120">2 horas</option><option value="180">3 horas</option><option value="240" selected>4 horas (recomendado)</option><option value="360">6 horas — día completo</option></select></div>
+    <div class="config-block"><span class="cb-label">Composición del consejo</span><select id="cfgComp"><option value="F">Solo familia / socios fundadores</option><option value="I">Con consejeros independientes</option><option value="M">Mixto: familia + independientes + externos</option></select></div>
+    <div class="config-block"><span class="cb-label">Fecha de la sesión</span><input type="text" id="cfgDate" placeholder="Ej: 15 de mayo, 2026"></div>
+    <div class="config-block"><span class="cb-label">Prioridad estratégica principal del trimestre</span><span class="cb-hint">¿Cuál es el tema estratégico más crítico que este consejo debe atender?</span><textarea id="cfgPriority" placeholder="Ej: Decisión sobre expansión a Monterrey, revisión del modelo de pricing..."></textarea></div>
+  </div>
+  <div style="display:flex;gap:0;flex-wrap:wrap">
+    <button class="btn-gen" onclick="generateAgenda()">Generar agenda →</button>
+    <button class="btn-reset" onclick="resetForm()">Limpiar</button>
+  </div>
+
+  <div class="agenda-output" id="agendaOutput"></div>
+</div>
+
+<script>
+const TYPES={
+  Q:{name:'Sesión Trimestral de Estrategia',desc:'Revisión del desempeño estratégico, ajuste de prioridades y decisiones para el siguiente trimestre.'},
+  A:{name:'Sesión Anual de Planificación',desc:'Evaluación del año en curso, aprobación del plan del siguiente año y validación de la dirección estratégica a 3 años.'},
+  O:{name:'Sesión Ordinaria Mensual',desc:'Revisión operativa con foco en desviaciones críticas y decisiones de operación inmediata.'},
+  E:{name:'Sesión Extraordinaria',desc:'Sesión convocada para atender una decisión o situación que no puede esperar al siguiente ciclo ordinario.'},
+  C:{name:'Sesión de Crisis',desc:'Sesión de respuesta inmediata ante una situación que amenaza la operación, reputación o viabilidad de la empresa.'}
+};
+function getAgendaSections(type,dur,comp,priority){
+  const p=priority||'Revisión de prioridades estratégicas del período';
+  const hasInd=comp==='I'||comp==='M';
+  let sections=[];
+  if(type==='Q'){
+    const base=dur>=240?[15,20,60,50,25,20,10]:[10,15,50,40,20,15,10];
+    sections=[
+      {num:'00',title:'Apertura y verificación de quórum',time:base[0],type:'adm',items:['Verificación de quórum y declaración de apertura','Aprobación del orden del día','Aprobación del acta de la sesión anterior']},
+      {num:'01',title:'Resultados del trimestre — desempeño vs. plan',time:base[1],type:'inf',items:['Resultados financieros: ingresos, margen, flujo vs. plan','KPIs estratégicos: avance en objetivos del período','Desviaciones críticas y su causa raíz']},
+      {num:'02',title:p,time:base[2],type:'dec',items:['Presentación del tema estratégico prioritario','Análisis de opciones y criterios de decisión','Perspectiva del consejo y cuestionamiento constructivo','Resolución o directriz de la sesión']},
+      {num:'03',title:'Revisión de iniciativas estratégicas activas',time:base[3],type:'rev',items:['Estatus de cada iniciativa estratégica en curso','Identificación de iniciativas en riesgo o bloqueadas','Decisión sobre recursos, priorización o cancelación'],},
+      {num:'04',title:'Agenda del siguiente trimestre',time:base[4],type:'dec',items:['Validación de objetivos del siguiente trimestre','Prioridades de agenda para la próxima sesión','Compromisos del management para la próxima sesión']},
+      hasInd?{num:'05',title:'Sesión privada de consejeros independientes',time:base[5],type:'rev',items:['Evaluación sin presencia del management','Preguntas que no pudieron plantearse en sesión abierta','Orientación para la próxima sesión']}:{num:'05',title:'Asuntos de gobierno',time:base[5],type:'rev',items:['Revisión de cumplimiento regulatorio','Actualización de política de riesgos','Temas de estructura accionaria o corporativa']},
+      {num:'06',title:'Cierre y próxima sesión',time:base[6],type:'adm',items:['Acuerdos formales de la sesión','Compromisos y responsables','Fecha y convocatoria de la próxima sesión']}
+    ];
+  } else if(type==='A'){
+    sections=[
+      {num:'00',title:'Apertura y revisión del año',time:20,type:'inf',items:['Verificación de quórum','Resultados del año: financieros y estratégicos','Logros y aprendizajes del período']},
+      {num:'01',title:'Evaluación de la estrategia',time:45,type:'rev',items:['¿La tesis estratégica sigue siendo válida?','¿Qué cambió en el entorno que modifica el plan?','Ajustes requeridos a la dirección estratégica']},
+      {num:'02',title:p,time:60,type:'dec',items:['Decisión estratégica prioritaria del año','Análisis de opciones con criterio externo','Resolución formal del consejo']},
+      {num:'03',title:'Aprobación del plan anual',time:50,type:'dec',items:['Revisión del plan financiero y operativo','Revisión de iniciativas estratégicas del año','Validación de asignación de recursos','Aprobación formal del plan']},
+      {num:'04',title:'Gobierno y estructura',time:25,type:'rev',items:['Evaluación del desempeño del consejo','Revisión de la composición y estructura del órgano','Agenda de gobierno para el siguiente año']},
+      {num:'05',title:'Cierre del ejercicio de planificación',time:20,type:'adm',items:['Acuerdos del año','Compromisos del management para el Q1','Fecha de primera sesión trimestral']}
+    ];
+  } else if(type==='O'){
+    sections=[
+      {num:'00',title:'Apertura',time:10,type:'adm',items:['Verificación de quórum','Aprobación del acta anterior']},
+      {num:'01',title:'Reporte ejecutivo del período',time:25,type:'inf',items:['Resultados operativos y financieros del mes','KPIs vs. plan','Novedades de mercado o competencia relevantes']},
+      {num:'02',title:p||'Tema estratégico del mes',time:35,type:'dec',items:['Tema o decisión que requiere criterio del consejo','Preguntas directas al management','Resolución o directriz']},
+      {num:'03',title:'Desviaciones y riesgos',time:20,type:'rev',items:['Desviaciones al plan que requieren atención del consejo','Riesgos emergentes y acciones de mitigación']},
+      {num:'04',title:'Cierre',time:10,type:'adm',items:['Acuerdos formales','Próxima sesión']}
+    ];
+  } else if(type==='E'){
+    sections=[
+      {num:'00',title:'Apertura y contexto de la convocatoria',time:15,type:'adm',items:['Razón de la convocatoria extraordinaria','Quórum y validez de la sesión','Objetivo único de la sesión']},
+      {num:'01',title:'Presentación del tema',time:30,type:'inf',items:['Contexto completo de la situación','Información disponible y brechas de información','Urgencia y consecuencias de actuar vs. esperar']},
+      {num:'02',title:p||'Deliberación y decisión',time:60,type:'dec',items:['Evaluación de opciones por el consejo','Cuestionamiento constructivo al management','Criterio externo de consejeros independientes','Deliberación formal']},
+      {num:'03',title:'Resolución y plan de implementación',time:25,type:'dec',items:['Resolución formal del consejo','Responsable de implementación y fecha','Mecanismo de seguimiento y reporte']},
+      {num:'04',title:'Cierre',time:10,type:'adm',items:['Acta de acuerdos','Comunicación interna/externa si aplica']}
+    ];
+  } else { // Crisis
+    sections=[
+      {num:'00',title:'Apertura de emergencia — situación actual',time:10,type:'adm',items:['Declaración del estado de crisis','Quórum','Objetivo de la sesión: contener y decidir']},
+      {num:'01',title:'Briefing ejecutivo de la crisis',time:20,type:'inf',items:['¿Qué ocurrió? Hechos verificados vs. hipótesis','¿Cuál es la magnitud real del impacto?','¿Qué se ha hecho hasta ahora?']},
+      {num:'02',title:'Evaluación de opciones de respuesta',time:45,type:'dec',items:[p||'Decisión de respuesta inmediata','Opciones de corto, mediano y largo plazo','Riesgo de cada opción','Recursos requeridos para cada opción']},
+      {num:'03',title:'Decisión y mandato de acción',time:30,type:'dec',items:['Resolución del consejo','Mandato de acción al CEO','Autorización de recursos','Responsable único de la respuesta']},
+      {num:'04',title:'Comunicación y siguiente contacto',time:15,type:'adm',items:['¿Qué se comunica y a quién?','Próxima sesión de seguimiento (en 24-48h)','Flujo de información en la crisis']}
+    ];
+  }
+  return sections;
+}
+function generateAgenda(){
+  const company=document.getElementById('cfgCompany').value.trim()||'[Empresa]';
+  const type=document.getElementById('cfgType').value;
+  const dur=parseInt(document.getElementById('cfgDur').value);
+  const comp=document.getElementById('cfgComp').value;
+  const date=document.getElementById('cfgDate').value.trim()||new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+  const priority=document.getElementById('cfgPriority').value.trim();
+  const typeInfo=TYPES[type];
+  const sections=getAgendaSections(type,dur,comp,priority);
+  const totalMin=sections.reduce((s,sec)=>s+sec.time,0);
+  const totalStr=totalMin>=60?`${Math.floor(totalMin/60)}h${totalMin%60?` ${totalMin%60}min`:''}`:totalMin+'min';
+  const typeClasses={dec:'aot-dec',inf:'aot-inf',rev:'aot-rev',adm:'aot-adm'};
+  const typeLabels={dec:'Decisión','inf':'Información','rev':'Revisión','adm':'Administrativo'};
+  let sectionsHTML=sections.map(s=>`
+    <div class="ao-section">
+      <div class="aos-hdr">
+        <span class="aos-num">Sección ${s.num}</span>
+        <span class="aos-time">${s.time} min</span>
+      </div>
+      <div class="aos-title">${s.title}</div>
+      <span class="aos-type ${typeClasses[s.type]}">${typeLabels[s.type]}</span>
+      <ul class="aos-items">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+    </div>`).join('');
+  document.getElementById('agendaOutput').innerHTML=`
+    <div class="ao-header">
+      <span class="ao-eye">Board Agenda Architecture™ · CRETTA SLF · Exclusivo</span>
+      <div class="ao-title">${typeInfo.name} — ${company}</div>
+      <div class="ao-meta">${date} · Duración total: ${totalStr} · ${document.getElementById('cfgComp').options[document.getElementById('cfgComp').selectedIndex].text}</div>
+    </div>
+    <div class="ao-body">${sectionsHTML}</div>
+    <div class="ao-footer">
+      <div class="aof-stat"><span class="aof-num">${sections.length}</span><span class="aof-lbl">Secciones</span></div>
+      <div class="aof-stat"><span class="aof-num">${totalStr}</span><span class="aof-lbl">Duración total</span></div>
+      <div class="aof-stat"><span class="aof-num">${sections.filter(s=>s.type==='dec').length}</span><span class="aof-lbl">Secciones decisión</span></div>
+      <div class="aof-stat"><span class="aof-num">${sections.filter(s=>s.type==='inf').length}</span><span class="aof-lbl">Secciones información</span></div>
+    </div>
+    <div class="principles">
+      <p class="pr-item"><strong>Principio 1:</strong> El consejo no se reúne para ser informado. Se reúne para decidir. Reducir las secciones de reporte al mínimo indispensable.</p>
+      <p class="pr-item"><strong>Principio 2:</strong> El tiempo asignado a cada sección es una declaración de prioridades. La sección estratégica debe recibir el mayor bloque de tiempo.</p>
+      <p class="pr-item"><strong>Principio 3:</strong> Los materiales de cada sección se distribuyen 72 horas antes — nunca se leen en la sesión. La sesión es para deliberar, no para revisar.</p>
+      <p class="pr-item"><strong>Principio 4:</strong> Cada sección termina con un acuerdo explícito: qué se decidió, quién es responsable, y cuándo se reporta el avance.</p>
+    </div>
+    <div class="cta-blk">
+      <p class="cta-text">Un consejo bien diseñado es el activo de gobierno más subutilizado en la empresa mediana. Cretta puede acompañar la instalación o profesionalización del consejo de su empresa.</p>
+      <button class="btn-cta">Contactar a Cretta →</button>
+    </div>`;
+  document.getElementById('agendaOutput').style.display='block';
+  document.getElementById('agendaOutput').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function resetForm(){document.getElementById('agendaOutput').style.display='none';document.getElementById('cfgCompany').value='';document.getElementById('cfgDate').value='';document.getElementById('cfgPriority').value=''}
+</script>
+</body>
+</html>

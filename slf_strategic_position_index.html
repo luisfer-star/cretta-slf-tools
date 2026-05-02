@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLF Strategic Position Index™ · CRETTA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{
+  --navy:#0D1B3E;--navy2:#142248;--navy3:#1e2f5c;
+  --gold:#C49A3C;--gold2:#d4ab50;--gold3:rgba(196,154,60,0.15);
+  --cream:#F4F1EC;--cream2:#ece8e0;
+  --white:#fff;--t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;
+  --r:rgba(196,154,60,0.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{background:var(--cream);font-family:'Montserrat',sans-serif;color:var(--t1);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none}
+
+/* ── SHELL ── */
+.shell{flex:1;display:flex;flex-direction:column;max-width:780px;margin:0 auto;width:100%;padding:0 24px}
+
+/* ── TOPBAR ── */
+.topbar{padding:20px 0 0;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.tool-label{font-size:.55rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--t3)}
+
+/* ── PROGRESS ── */
+.progress-wrap{padding:20px 0 0}
+.progress-meta{display:flex;justify-content:space-between;margin-bottom:8px}
+.progress-meta span{font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.progress-bar-bg{height:2px;background:rgba(13,27,62,.1);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease}
+
+/* ── SCREENS (hidden by default) ── */
+.screen{display:none;flex-direction:column;flex:1;padding:40px 0 60px;animation:fadeIn .35s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── INTRO SCREEN ── */
+.intro-eyebrow{font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.intro-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3rem);font-weight:300;color:var(--navy);line-height:1.15;margin-bottom:16px}
+.intro-title em{font-style:italic;color:var(--gold2)}
+.intro-lead{font-size:.95rem;color:var(--t2);line-height:1.8;max-width:580px;margin-bottom:40px}
+.intro-rule{width:40px;height:1px;background:var(--gold);margin-bottom:32px;opacity:.6}
+.intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:44px}
+.intro-stat{background:var(--navy);padding:20px 18px}
+.intro-stat-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--gold2);display:block;margin-bottom:4px}
+.intro-stat-label{font-size:.58rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,241,236,.45)}
+.intro-note{font-size:.78rem;color:var(--t3);line-height:1.7;margin-bottom:40px;border-left:2px solid var(--r);padding-left:16px}
+.btn-primary{background:var(--navy);color:var(--cream);padding:16px 40px;font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;transition:background .2s}
+.btn-primary:hover{background:var(--navy3)}
+
+/* ── QUESTION SCREEN ── */
+.q-num{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:block}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3vw,1.7rem);font-weight:300;color:var(--navy);line-height:1.4;margin-bottom:36px}
+.q-dimension{font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--r)}
+.options{display:flex;flex-direction:column;gap:2px;margin-bottom:44px}
+.option{background:white;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;border:1px solid transparent;transition:all .18s;text-align:left}
+.option:hover{border-color:rgba(196,154,60,.4);background:rgba(196,154,60,.04)}
+.option.selected{border-color:var(--gold);background:rgba(196,154,60,.06)}
+.option-letter{font-size:.62rem;font-weight:700;letter-spacing:.12em;color:var(--gold);flex-shrink:0;margin-top:2px;width:16px}
+.option-text{font-size:.88rem;color:var(--t2);line-height:1.65}
+.option.selected .option-text{color:var(--navy)}
+.q-nav{display:flex;gap:12px;align-items:center}
+.btn-next{background:var(--navy);color:var(--cream);padding:14px 36px;font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transition:all .18s;opacity:.35;pointer-events:none}
+.btn-next.ready{opacity:1;pointer-events:all}
+.btn-next.ready:hover{background:var(--navy3)}
+.btn-back{background:transparent;color:var(--t3);padding:14px 20px;font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--r);transition:all .18s}
+.btn-back:hover{border-color:var(--gold);color:var(--navy)}
+
+/* ── CALCULATING SCREEN ── */
+.calc-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 0}
+.calc-label{font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+.calc-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--navy);margin-bottom:40px}
+.calc-bar-bg{width:280px;height:2px;background:rgba(13,27,62,.12);margin:0 auto;border-radius:2px;overflow:hidden}
+.calc-bar-fill{height:100%;background:var(--gold);border-radius:2px;animation:calcLoad 1.8s ease forwards}
+@keyframes calcLoad{from{width:0}to{width:100%}}
+
+/* ── RESULT SCREEN ── */
+.result-header{background:var(--navy);padding:40px 36px;margin-bottom:2px;position:relative;overflow:hidden}
+.result-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(196,154,60,.08) 0%,transparent 65%);pointer-events:none}
+.result-eyebrow{font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,154,60,.7);margin-bottom:12px;display:block;position:relative;z-index:1}
+.result-profile-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,4vw,2.4rem);font-weight:300;color:var(--cream);line-height:1.15;margin-bottom:16px;position:relative;z-index:1}
+.result-profile-name em{font-style:italic;color:var(--gold2)}
+.result-score-row{display:flex;align-items:center;gap:24px;position:relative;z-index:1}
+.result-score-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--gold);line-height:1}
+.result-score-meta{font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,236,.35)}
+.result-score-bar-bg{flex:1;height:3px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden;max-width:200px}
+.result-score-bar-fill{height:100%;background:var(--gold);border-radius:3px;transition:width 1s ease .3s}
+
+.result-body{background:white;padding:36px}
+.result-diagnosis-label{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:block}
+.result-diagnosis{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;font-style:italic;color:var(--navy);line-height:1.7;margin-bottom:32px;padding-bottom:28px;border-bottom:1px solid var(--r)}
+.result-section-title{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:16px;display:block}
+.implications{display:flex;flex-direction:column;gap:2px;margin-bottom:36px}
+.impl-item{display:flex;gap:14px;background:var(--cream);padding:16px 18px;align-items:flex-start}
+.impl-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:6px}
+.impl-text{font-size:.88rem;color:var(--t2);line-height:1.65}
+
+.result-cta{background:var(--navy);padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.result-cta-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.5;max-width:440px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:14px 28px;font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;flex-shrink:0;transition:background .18s}
+.btn-cta:hover{background:var(--gold2)}
+.btn-restart{background:transparent;color:rgba(244,241,236,.45);padding:12px 20px;font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(196,154,60,.2);margin-top:12px;width:100%;transition:all .18s}
+.btn-restart:hover{border-color:var(--gold);color:var(--cream)}
+
+/* ── DIMENSION PILLS ── */
+.dim-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px}
+.dim-pill{font-size:.55rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border:1px solid var(--r);color:var(--t3)}
+.dim-pill.strong{border-color:var(--gold);color:var(--navy);background:rgba(196,154,60,.08)}
+
+.result-disclaimer{font-size:.72rem;color:var(--t3);line-height:1.7;margin-top:24px;padding-top:20px;border-top:1px solid var(--r);font-style:italic}
+
+@media(max-width:520px){
+  .intro-stats{grid-template-columns:1fr}
+  .result-cta{flex-direction:column}
+  .result-cta-text{font-size:1rem}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <span class="brand">CRETTA · Strategic Leadership Firm</span>
+    <span class="tool-label">SLF Strategic Position Index™</span>
+  </div>
+
+  <div class="progress-wrap" id="progressWrap" style="display:none">
+    <div class="progress-meta">
+      <span id="progressLabel">Pregunta 1 de 12</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- ══ INTRO ══ -->
+  <div class="screen active" id="screenIntro">
+    <div style="flex:1;padding:40px 0 60px">
+      <p class="intro-eyebrow">Herramienta de Diagnóstico · Acceso Abierto</p>
+      <h1 class="intro-title">SLF Strategic<br>Position <em>Index</em>™</h1>
+      <div class="intro-rule"></div>
+      <p class="intro-lead">Doce preguntas. Ocho minutos. Una lectura objetiva de la posición estratégica real de su empresa — no la que el equipo reporta, sino la que determina su trayectoria de crecimiento.</p>
+
+      <div class="intro-stats">
+        <div class="intro-stat">
+          <span class="intro-stat-num">12</span>
+          <span class="intro-stat-label">Preguntas de diagnóstico</span>
+        </div>
+        <div class="intro-stat">
+          <span class="intro-stat-num">4</span>
+          <span class="intro-stat-label">Perfiles de posición</span>
+        </div>
+        <div class="intro-stat">
+          <span class="intro-stat-num">8'</span>
+          <span class="intro-stat-label">Tiempo estimado</span>
+        </div>
+      </div>
+
+      <p class="intro-note">Este diagnóstico evalúa seis dimensiones críticas de la arquitectura estratégica de una empresa: claridad de mandato, ejecución, gobierno corporativo, velocidad de decisión, capacidad organizacional y accountability estratégico. El resultado no es una calificación — es una lectura de posición.</p>
+
+      <button class="btn-primary" onclick="startQuiz()">Iniciar diagnóstico</button>
+    </div>
+  </div>
+
+  <!-- ══ QUESTION ══ -->
+  <div class="screen" id="screenQuestion">
+    <span class="q-num" id="qNum">Pregunta 1 · Claridad Estratégica</span>
+    <h2 class="q-text" id="qText"></h2>
+    <div class="options" id="optionsList"></div>
+    <div class="q-nav">
+      <button class="btn-back" id="btnBack" onclick="goBack()">← Anterior</button>
+      <button class="btn-next" id="btnNext" onclick="goNext()">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ══ CALCULATING ══ -->
+  <div class="screen" id="screenCalc">
+    <div class="calc-inner">
+      <span class="calc-label">Procesando su diagnóstico</span>
+      <p class="calc-title">Analizando 12 dimensiones<br>de posición estratégica</p>
+      <div class="calc-bar-bg"><div class="calc-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ RESULT ══ -->
+  <div class="screen" id="screenResult">
+    <div style="flex:1;padding:40px 0 60px">
+      <div class="result-header">
+        <span class="result-eyebrow" id="rEyebrow">Diagnóstico completado</span>
+        <h2 class="result-profile-name" id="rProfileName"></h2>
+        <div class="result-score-row">
+          <div>
+            <div class="result-score-num" id="rScoreNum"></div>
+            <div class="result-score-meta">de 48 puntos posibles</div>
+          </div>
+          <div style="flex:1">
+            <div class="result-score-bar-bg">
+              <div class="result-score-bar-fill" id="rScoreBar" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-body">
+        <span class="result-diagnosis-label">Lectura de posición</span>
+        <p class="result-diagnosis" id="rDiagnosis"></p>
+
+        <span class="result-section-title">Implicaciones directas para su agenda</span>
+        <div class="implications" id="rImplications"></div>
+
+        <span class="result-section-title">Señales que refuerzan este diagnóstico</span>
+        <div class="dim-pills" id="rDimPills"></div>
+
+        <p class="result-disclaimer" id="rDisclaimer"></p>
+      </div>
+
+      <div class="result-cta">
+        <p class="result-cta-text" id="rCtaText"></p>
+        <button class="btn-cta" onclick="openLink('https://cretta.mx')">Contactar a Cretta →</button>
+      </div>
+      <button class="btn-restart" onclick="restartQuiz()">Reiniciar diagnóstico</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    dimension: "Claridad Estratégica",
+    text: "¿Puede describir en una sola frase la posición estratégica que su empresa ocupará en los próximos tres años?",
+    options: [
+      { letter:"A", text:"Sí, con precisión. Existe una definición clara, compartida por el equipo directivo y validada por el consejo de administración.", score:4 },
+      { letter:"B", text:"Aproximadamente. Existe una dirección general, aunque no está completamente formalizada ni alineada entre todos los directivos.", score:3 },
+      { letter:"C", text:"Con dificultad. Hay visiones distintas dentro del equipo directivo sobre hacia dónde va la empresa.", score:2 },
+      { letter:"D", text:"No. La empresa opera sin una posición estratégica explícita para ese horizonte de tiempo.", score:1 }
+    ]
+  },
+  {
+    dimension: "Ejecución de Iniciativas",
+    text: "De las cinco iniciativas estratégicas más importantes del último año, ¿cuántas se ejecutaron según el plan original?",
+    options: [
+      { letter:"A", text:"Cuatro o cinco. La tasa de ejecución es alta y los desvíos son menores en alcance o tiempo.", score:4 },
+      { letter:"B", text:"Dos o tres. Hay ejecución, pero con desvíos significativos de alcance, tiempo o recursos.", score:3 },
+      { letter:"C", text:"Una o ninguna. La mayoría de las iniciativas se diluyeron, se pospusieron o no concluyeron.", score:2 },
+      { letter:"D", text:"Las iniciativas estratégicas raramente llegan a la ejecución real. El gap entre intención y acción es estructural.", score:1 }
+    ]
+  },
+  {
+    dimension: "Agenda del CEO",
+    text: "¿Qué proporción de su agenda semanal está dedicada a decisiones y actividades de naturaleza estratégica —versus operativa?",
+    options: [
+      { letter:"A", text:"Más del 40%. Existe una separación deliberada entre mi agenda estratégica y la gestión operativa.", score:4 },
+      { letter:"B", text:"Entre 20% y 40%. La operación compite con la agenda estratégica, aunque mantengo espacio para ambas.", score:3 },
+      { letter:"C", text:"Menos del 20%. La operación domina mi agenda la mayor parte del tiempo.", score:2 },
+      { letter:"D", text:"Prácticamente toda mi agenda es operativa. La estrategia se discute en reuniones periódicas, no en la agenda diaria.", score:1 }
+    ]
+  },
+  {
+    dimension: "Gobierno Corporativo",
+    text: "¿Qué tan activo e involucrado está su consejo de administración en las decisiones estratégicas críticas de la empresa?",
+    options: [
+      { letter:"A", text:"El consejo es un órgano que contribuye activamente al diseño y seguimiento de la estrategia con criterio real.", score:4 },
+      { letter:"B", text:"El consejo cumple su función de supervisión, aunque su participación en decisiones estratégicas es limitada.", score:3 },
+      { letter:"C", text:"El consejo existe formalmente pero su impacto en las decisiones estratégicas es marginal.", score:2 },
+      { letter:"D", text:"No existe un consejo de administración formal, o funciona como un trámite sin impacto estratégico real.", score:1 }
+    ]
+  },
+  {
+    dimension: "Velocidad de Decisión",
+    text: "Cuando identifican una oportunidad de crecimiento relevante, ¿cuánto tiempo tarda su organización en tomar una decisión ejecutable?",
+    options: [
+      { letter:"A", text:"Menos de 30 días. El proceso de decisión estratégica es ágil y tiene una arquitectura clara.", score:4 },
+      { letter:"B", text:"Entre 1 y 3 meses. El proceso existe pero incluye revisiones y aprobaciones que lo dilatan.", score:3 },
+      { letter:"C", text:"Entre 3 y 6 meses. Las decisiones pasan por múltiples instancias y frecuentemente pierden urgencia en el proceso.", score:2 },
+      { letter:"D", text:"Más de 6 meses, o las oportunidades se pierden antes de que se tome una decisión ejecutable.", score:1 }
+    ]
+  },
+  {
+    dimension: "Trayectoria de Crecimiento",
+    text: "¿Cuál ha sido la trayectoria de ingresos de su empresa en los últimos tres años?",
+    options: [
+      { letter:"A", text:"Crecimiento sostenido superior al 15% anual. La trayectoria es consistente y responde a una arquitectura deliberada.", score:4 },
+      { letter:"B", text:"Entre 5% y 15% anual. Hay crecimiento, aunque no a la velocidad que la empresa podría alcanzar.", score:3 },
+      { letter:"C", text:"Entre 0% y 5%. La empresa está consolidada pero sin una trayectoria de crecimiento relevante.", score:2 },
+      { letter:"D", text:"Negativa o volátil. Los ingresos han decrecido o fluctúan sin una tendencia clara.", score:1 }
+    ]
+  },
+  {
+    dimension: "Capacidad Directiva",
+    text: "¿El equipo directivo actual tiene la capacidad para ejecutar la agenda de crecimiento que la empresa requiere en los próximos tres años?",
+    options: [
+      { letter:"A", text:"Sí, con plena confianza. El equipo tiene las capacidades para llevar a la empresa al siguiente nivel.", score:4 },
+      { letter:"B", text:"En su mayoría. El equipo es sólido, pero hay brechas específicas que deberán cubrirse antes de escalar.", score:3 },
+      { letter:"C", text:"Tengo dudas importantes. El equipo que nos llevó hasta aquí puede no ser el adecuado para el siguiente nivel.", score:2 },
+      { letter:"D", text:"El equipo directivo es una de mis principales preocupaciones para el crecimiento futuro de la empresa.", score:1 }
+    ]
+  },
+  {
+    dimension: "Posición Competitiva",
+    text: "¿Cómo describiría la ventaja competitiva de su empresa frente a sus principales competidores en el mercado?",
+    options: [
+      { letter:"A", text:"Clara y reconocida. Tenemos una ventaja diferencial sostenible y una estrategia activa para ampliarla.", score:4 },
+      { letter:"B", text:"Tenemos fortalezas competitivas, pero no están formalizadas como ventaja estratégica articulable.", score:3 },
+      { letter:"C", text:"Competimos principalmente en precio o relacionamiento. No tenemos una ventaja diferencial clara.", score:2 },
+      { letter:"D", text:"Nuestra posición competitiva es vulnerable. Sería difícil articular por qué un cliente elegiría nuestra empresa.", score:1 }
+    ]
+  },
+  {
+    dimension: "Arquitectura Financiera",
+    text: "¿La estructura financiera actual de su empresa le permite financiar el crecimiento que tiene en mente?",
+    options: [
+      { letter:"A", text:"Sí. La estructura financiera está diseñada para soportar el crecimiento proyectado sin comprometer la operación.", score:4 },
+      { letter:"B", text:"Parcialmente. Podemos financiar crecimientos moderados, pero escalar significativamente requiere capital adicional.", score:3 },
+      { letter:"C", text:"Las restricciones financieras son uno de los principales limitantes de nuestro crecimiento actual.", score:2 },
+      { letter:"D", text:"La situación financiera es una preocupación constante que afecta las decisiones estratégicas de forma directa.", score:1 }
+    ]
+  },
+  {
+    dimension: "Accountability Estratégico",
+    text: "¿Quién en su organización es responsable de liderar la agenda estratégica entre sesión y sesión del consejo?",
+    options: [
+      { letter:"A", text:"Existe una persona o función con mandato explícito para liderar la agenda estratégica de forma continua.", score:4 },
+      { letter:"B", text:"El CEO asume esa responsabilidad, aunque la comparte con una agenda operativa que compite por su tiempo.", score:3 },
+      { letter:"C", text:"La responsabilidad es difusa. Nadie tiene un mandato claro sobre la conducción continua de la estrategia.", score:2 },
+      { letter:"D", text:"La agenda estratégica no tiene un custodio permanente. Avanza cuando hay presión y se detiene cuando no la hay.", score:1 }
+    ]
+  },
+  {
+    dimension: "Advisory Estratégico",
+    text: "¿Cómo calificaría la calidad del pensamiento estratégico externo al que accede actualmente?",
+    options: [
+      { letter:"A", text:"Alto. Accedemos a pensamiento externo que desafía nuestras premisas y mejora la calidad de nuestras decisiones.", score:4 },
+      { letter:"B", text:"Moderado. Tenemos asesores que aportan valor en áreas específicas, aunque no hay una visión estratégica integrada.", score:3 },
+      { letter:"C", text:"Limitado. El advisory externo produce buenos entregables pero su impacto en las decisiones reales es marginal.", score:2 },
+      { letter:"D", text:"Escaso o inexistente. No accedemos a advisory estratégico externo de forma sistemática o éste no ha generado resultados.", score:1 }
+    ]
+  },
+  {
+    dimension: "Naturaleza de las Decisiones",
+    text: "¿Cuál describe mejor la naturaleza predominante de las decisiones importantes que toma su organización?",
+    options: [
+      { letter:"A", text:"Principalmente proactivas. Las decisiones son el resultado de una arquitectura deliberada, no de presiones del entorno.", score:4 },
+      { letter:"B", text:"Una mezcla equilibrada. Hay decisiones anticipadas y otras en respuesta a circunstancias, pero hay intención en ambas.", score:3 },
+      { letter:"C", text:"Principalmente reactivas. Respondemos más de lo que iniciamos. La agenda la impone el mercado más que la estrategia.", score:2 },
+      { letter:"D", text:"Prácticamente en modo reactivo. Las crisis y presiones del entorno dictan nuestra agenda de forma casi total.", score:1 }
+    ]
+  }
+];
+
+const PROFILES = {
+  A: {
+    range: [40,48],
+    eyebrow: "Perfil I de IV · Diagnóstico completado",
+    name: "Plataforma de <em>Crecimiento</em>",
+    diagnosis: "La empresa opera con claridad estratégica, ejecución disciplinada y gobierno corporativo funcional. Está posicionada para escalar — el reto no es si puede crecer, sino si tiene la arquitectura de liderazgo para sostener la escala sin perder coherencia estratégica en el proceso. A esta velocidad, las empresas que carecen del Strategic Leadership Layer comienzan a experimentar fragmentación: el crecimiento ocurre, pero la organización pierde la cohesión que lo hizo posible.",
+    implications: [
+      "La siguiente fase de crecimiento requiere una función de liderazgo estratégico que opere por encima de la dirección general — no para sustituirla, sino para sostener la coherencia estratégica mientras la operación escala.",
+      "El riesgo en esta posición no es operativo: es de arquitectura. Las empresas en Plataforma de Crecimiento frecuentemente sobreestiman la capacidad de su modelo actual para sostener una escala significativamente mayor.",
+      "El consejo necesita evolucionar de órgano de supervisión a órgano de dirección estratégica — o el CEO quedará solo ante decisiones de complejidad creciente.",
+      "La velocidad actual de crecimiento requiere que el CEO libere progresivamente su agenda operativa. Sin ese movimiento, el CEO se convierte en el principal cuello de botella de la empresa."
+    ],
+    pills: ["Claridad de mandato","Gobierno activo","Ejecución consistente","Velocidad de decisión","Posición diferencial"],
+    disclaimer: "Las empresas en Plataforma de Crecimiento frecuentemente subestiman su fragilidad: el mismo dinamismo que las impulsa puede fragmentarlas si el liderazgo estratégico no evoluciona al mismo ritmo que la organización.",
+    cta: "Su empresa está en posición de dar el siguiente salto. La pregunta no es si tiene la energía — es si tiene la arquitectura. Cretta puede acompañarle en ese movimiento."
+  },
+  B: {
+    range: [28,39],
+    eyebrow: "Perfil II de IV · Diagnóstico completado",
+    name: "Empresa en <em>Consolidación</em>",
+    diagnosis: "La empresa tiene bases sólidas y una historia de ejecución. Ha llegado hasta aquí con el modelo que construyó — y ese modelo tiene un techo. El síntoma más frecuente en esta posición es la sensación de que la empresa trabaja mucho y crece poco: hay actividad, hay esfuerzo, pero la tasa de conversión de iniciativas en crecimiento real es menor de lo que debería ser. El problema no es la ejecución — es que se ejecuta sobre una arquitectura estratégica que ya no está calibrada para el siguiente nivel.",
+    implications: [
+      "El próximo nivel de crecimiento requiere una revisión de la arquitectura estratégica completa — no un nuevo plan de negocios, sino una redefinición de la posición, las prioridades y el modelo operativo que las sostiene.",
+      "El equipo directivo que llevó a la empresa hasta aquí puede tener brechas de capacidad para el siguiente nivel. Esa conversión requiere honestidad y una evaluación objetiva que difícilmente emerge desde adentro.",
+      "La agenda del CEO está probablemente sobrecargada con responsabilidades que deberían haberse delegado o rediseñado hace tiempo. Liberar esa agenda es una condición previa para el crecimiento.",
+      "El gobierno corporativo es una oportunidad no capturada. Un consejo más activo puede ser el principal catalizador del siguiente ciclo de crecimiento — si se diseña correctamente."
+    ],
+    pills: ["Revisión de arquitectura","Capacidad directiva","Agenda del CEO","Gobierno corporativo","Modelo de crecimiento"],
+    disclaimer: "La Empresa en Consolidación es la posición más frecuente en el mercado mid-market de México y LATAM: empresas exitosas que han tocado un techo sin saber exactamente por qué. La respuesta casi siempre tiene que ver con el Strategic Leadership Layer — o su ausencia.",
+    cta: "El techo que está sintiendo no es del mercado — es de arquitectura. Cretta puede diagnosticar su origen y diseñar el movimiento para superarlo."
+  },
+  C: {
+    range: [16,27],
+    eyebrow: "Perfil III de IV · Diagnóstico completado",
+    name: "Organización en <em>Transición</em>",
+    diagnosis: "La empresa está en un momento de cambio significativo — y el cambio sin arquitectura estratégica produce dispersión. Los síntomas son reconocibles: iniciativas que no se sostienen en el tiempo, prioridades que cambian con la presión del entorno, un equipo directivo que opera con mandatos no completamente claros, y un CEO que siente que está resolviendo más problemas de los que puede crear oportunidades. El riesgo no es el cambio en sí — es la ausencia de liderazgo estratégico que lo conduzca con un rumbo claro.",
+    implications: [
+      "La prioridad inmediata es estabilizar el mandato estratégico: qué hace la empresa, para quién, con qué diferencial, y hacia dónde va en los próximos 3 años. Sin esa claridad, cada decisión operativa compite con la visión.",
+      "El gobierno corporativo necesita fortalecerse con urgencia. En posición de transición, un consejo inactivo amplifica el riesgo. Un consejo activo puede ser el ancla que evite la dispersión.",
+      "El equipo directivo necesita una evaluación honesta. Hay brechas que, si no se cierran, harán que la transición se extienda indefinidamente sin llegar a una nueva estabilidad.",
+      "La agenda del CEO está en riesgo de convertirse exclusivamente operativa. Recuperar espacio para el liderazgo estratégico no es un lujo — es la condición para que la transición concluya."
+    ],
+    pills: ["Claridad de mandato urgente","Gobierno como ancla","Evaluación del equipo","Priorización estratégica","Recuperar agenda del CEO"],
+    disclaimer: "Las Organizaciones en Transición tienen un horizonte crítico: si en los próximos 12-18 meses no logran instalar una arquitectura estratégica clara, el dinamismo del cambio puede convertirse en dispersión crónica. El momento de actuar es ahora.",
+    cta: "La transición que está viviendo tiene solución — pero requiere liderazgo estratégico externo que conduzca el proceso con mandato y accountability reales. Cretta está diseñada exactamente para ese momento."
+  },
+  D: {
+    range: [12,15],
+    eyebrow: "Perfil IV de IV · Diagnóstico completado",
+    name: "Negocio en <em>Riesgo Estructural</em>",
+    diagnosis: "La empresa enfrenta presiones estructurales que requieren intervención de liderazgo, no más análisis. Este diagnóstico no es una sentencia — es una lectura honesta de una posición que, si se actúa con determinación, tiene salida. Pero la urgencia es real. El primer paso no es un plan de crecimiento: es una lectura objetiva de la posición real — qué puede defenderse, qué puede construirse con los recursos disponibles y qué debe abandonarse para liberar la energía y el capital que el negocio necesita para recuperar tracción.",
+    implications: [
+      "La prioridad no es crecer — es estabilizar. Antes de diseñar una agenda de crecimiento, es necesario clarificar qué parte del negocio tiene viabilidad real y qué parte está consumiendo recursos sin generar valor.",
+      "El consejo, si existe, necesita activarse de inmediato como órgano de gobierno real. Si no existe, la creación de un advisory board con criterio es una prioridad de primer orden.",
+      "Las decisiones en esta posición son de alta consecuencia y requieren criterio externo. El error más frecuente es intentar resolver problemas estructurales con las mismas herramientas que los produjeron.",
+      "El CEO necesita apoyo de liderazgo estratégico urgente — no para sustituir su autoridad, sino para estructurar un proceso de decisión que opere con criterio y claridad en un entorno de alta presión."
+    ],
+    pills: ["Estabilización prioritaria","Claridad de viabilidad","Consejo activo urgente","Criterio externo","Decisiones de alta consecuencia"],
+    disclaimer: "El Negocio en Riesgo Estructural frecuentemente tiene más opciones de las que percibe desde adentro. La presión del día a día crea una visión de túnel que impide ver alternativas reales. El primer paso es siempre una lectura externa, honesta y sin conflicto de interés.",
+    cta: "Esta posición requiere acción, no más tiempo. Cretta puede acompañarle con la claridad y el criterio que una situación de alta consecuencia exige."
+  }
+};
+
+let currentQ = 0;
+let answers = new Array(12).fill(null);
+
+function startQuiz(){
+  document.getElementById('screenIntro').classList.remove('active');
+  document.getElementById('progressWrap').style.display='block';
+  showQuestion(0);
+}
+
+function showQuestion(idx){
+  document.getElementById('screenCalc').classList.remove('active');
+  document.getElementById('screenResult').classList.remove('active');
+  const q = QUESTIONS[idx];
+  document.getElementById('qNum').textContent = `Pregunta ${idx+1} de 12  ·  ${q.dimension}`;
+  document.getElementById('qText').textContent = q.text;
+  const list = document.getElementById('optionsList');
+  list.innerHTML = '';
+  q.options.forEach((o,i)=>{
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[idx]===i ? ' selected' : '');
+    div.innerHTML = `<span class="option-letter">${o.letter}</span><span class="option-text">${o.text}</span>`;
+    div.onclick = ()=>selectOption(idx,i);
+    list.appendChild(div);
+  });
+  document.getElementById('btnBack').style.display = idx===0 ? 'none' : 'inline-block';
+  updateNext(idx);
+  updateProgress(idx);
+  document.getElementById('screenQuestion').classList.add('active');
+}
+
+function selectOption(qIdx, optIdx){
+  answers[qIdx] = optIdx;
+  document.querySelectorAll('.option').forEach((el,i)=>{
+    el.classList.toggle('selected', i===optIdx);
+  });
+  updateNext(qIdx);
+}
+
+function updateNext(qIdx){
+  const btn = document.getElementById('btnNext');
+  const ready = answers[qIdx]!==null;
+  btn.classList.toggle('ready', ready);
+  const isLast = qIdx===11;
+  btn.textContent = isLast ? 'Ver mi diagnóstico →' : 'Siguiente →';
+}
+
+function updateProgress(idx){
+  const answered = answers.filter(a=>a!==null).length;
+  const pct = Math.round((answered/12)*100);
+  document.getElementById('progressLabel').textContent = `Pregunta ${idx+1} de 12`;
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('progressFill').style.width = pct+'%';
+}
+
+function goNext(){
+  if(answers[currentQ]===null) return;
+  if(currentQ===11){ showCalc(); return; }
+  currentQ++;
+  document.getElementById('screenQuestion').classList.remove('active');
+  setTimeout(()=>showQuestion(currentQ),100);
+}
+
+function goBack(){
+  if(currentQ===0) return;
+  currentQ--;
+  document.getElementById('screenQuestion').classList.remove('active');
+  setTimeout(()=>showQuestion(currentQ),100);
+}
+
+function showCalc(){
+  document.getElementById('screenQuestion').classList.remove('active');
+  document.getElementById('progressWrap').style.display='none';
+  document.getElementById('screenCalc').classList.add('active');
+  setTimeout(showResult, 2200);
+}
+
+function showResult(){
+  const score = answers.reduce((sum, aIdx, qIdx)=>{
+    if(aIdx===null) return sum;
+    return sum + QUESTIONS[qIdx].options[aIdx].score;
+  },0);
+
+  let profile;
+  if(score>=40) profile = PROFILES.A;
+  else if(score>=28) profile = PROFILES.B;
+  else if(score>=16) profile = PROFILES.C;
+  else profile = PROFILES.D;
+
+  document.getElementById('rEyebrow').textContent = profile.eyebrow;
+  document.getElementById('rProfileName').innerHTML = profile.name;
+  document.getElementById('rScoreNum').textContent = score;
+  document.getElementById('rDiagnosis').textContent = profile.diagnosis;
+
+  const impList = document.getElementById('rImplications');
+  impList.innerHTML = '';
+  profile.implications.forEach(imp=>{
+    impList.innerHTML += `<div class="impl-item"><div class="impl-dot"></div><p class="impl-text">${imp}</p></div>`;
+  });
+
+  const pills = document.getElementById('rDimPills');
+  pills.innerHTML = '';
+  profile.pills.forEach((p,i)=>{
+    pills.innerHTML += `<span class="dim-pill ${i<3?'strong':''}">${p}</span>`;
+  });
+
+  document.getElementById('rDisclaimer').textContent = profile.disclaimer;
+  document.getElementById('rCtaText').textContent = profile.cta;
+
+  document.getElementById('screenCalc').classList.remove('active');
+  document.getElementById('screenResult').classList.add('active');
+
+  setTimeout(()=>{
+    const pct = Math.round((score/48)*100);
+    document.getElementById('rScoreBar').style.width = pct+'%';
+  },200);
+}
+
+function restartQuiz(){
+  answers = new Array(12).fill(null);
+  currentQ = 0;
+  document.getElementById('screenResult').classList.remove('active');
+  document.getElementById('progressWrap').style.display='block';
+  showQuestion(0);
+}
+</script>
+</body>
+</html>

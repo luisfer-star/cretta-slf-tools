@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hiring Pattern Diagnostic™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{--navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.1);--cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;--t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;--r:rgba(196,154,60,0.2);--fwd:#1a5c2e;--fwdl:rgba(26,92,46,0.1);--bwd:#7a1a1a;--bwdl:rgba(122,26,26,0.08);--neu:#4a4a1a}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+input{font-family:'Montserrat',sans-serif;outline:none}
+.topbar{background:var(--navy);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.tb-brand{font-size:.53rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-label{font-size:.5rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,236,.3)}
+.btn-print{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(196,154,60,.28);color:var(--gold);cursor:pointer;transition:all .18s}
+.btn-print:hover{border-color:var(--gold)}
+.prog-bar{height:2px;background:rgba(196,154,60,.1)}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s ease}
+.shell{max-width:720px;margin:0 auto;padding:0 28px}
+.screen{display:none;padding:38px 0 60px;animation:fi .3s ease}
+.screen.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px}
+.h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,5vw,3rem);font-weight:300;color:var(--navy);line-height:1.12;margin-bottom:8px}
+.h1 em{font-style:italic;color:var(--gold2)}
+.rule{width:32px;height:1px;background:var(--gold);opacity:.5;margin-bottom:18px}
+.lead{font-size:.82rem;color:var(--t2);line-height:1.82;margin-bottom:18px}
+.callout{background:var(--navy);padding:20px 20px;margin-bottom:22px}
+.callout p{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;color:var(--cream);line-height:1.7;font-weight:300}
+.callout strong{color:var(--gold2);font-style:normal;font-weight:400}
+.sec-lbl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:24px}
+.phase-card{background:white;padding:16px 14px;cursor:pointer;border:1px solid transparent;transition:all .15s}
+.phase-card:hover{border-color:var(--r)}.phase-card.sel{border-color:var(--gold);background:var(--golda)}
+.pc-range{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--navy);display:block;margin-bottom:3px}
+.pc-lbl{font-size:.48rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:5px}
+.pc-desc{font-size:.68rem;color:var(--t3);line-height:1.45}
+.count-row{display:flex;gap:2px;margin-bottom:22px}
+.count-btn{flex:1;padding:12px 8px;border:1px solid var(--r);background:white;font-size:.68rem;font-weight:700;color:var(--t3);text-align:center;cursor:pointer;transition:all .13s}
+.count-btn.sel{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.hire-name-grid{display:grid;gap:4px;margin-bottom:20px}
+.hire-name-row{display:flex;gap:10px;align-items:center}
+.hire-num{font-size:.52rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);min-width:24px}
+.hire-name-input{flex:1;padding:9px 12px;border:1px solid var(--r);background:white;font-size:.75rem;color:var(--t1);transition:border-color .15s}
+.hire-name-input:focus{border-color:var(--gold)}
+.hire-name-input::placeholder{color:var(--t3)}
+.btn-start{background:var(--navy);color:var(--cream);padding:13px 30px;font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;transition:background .15s}
+.btn-start:hover{background:var(--navy3)}
+.eval-prog{display:flex;gap:2px;margin-bottom:20px}
+.ep-item{flex:1;height:2px;background:var(--cream2);border-radius:1px;transition:background .3s}
+.ep-item.done{background:var(--gold)}.ep-item.active{background:rgba(196,154,60,.4)}
+.hire-header{background:var(--navy);padding:20px 20px;margin-bottom:24px}
+.hh-eye{font-size:.48rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:4px}
+.hh-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--cream);margin-bottom:3px}
+.hh-sub{font-size:.58rem;color:rgba(244,241,236,.38);font-style:italic}
+.q-block{background:white;padding:16px 18px;margin-bottom:2px}
+.q-num{font-size:.46rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.q-text{font-size:.78rem;font-weight:600;color:var(--navy);line-height:1.4;margin-bottom:13px}
+.q-opts{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.q-opt{padding:11px 12px;cursor:pointer;border:1px solid transparent;transition:all .13s}
+.q-opt:hover{border-color:var(--r)}
+.q-opt.bwd{background:#fdf5f5}.q-opt.bwd:hover{border-color:#d4a0a0}
+.q-opt.fwd{background:#f2f8f4}.q-opt.fwd:hover{border-color:#a0c4a8}
+.q-opt.sel.bwd{border-color:var(--bwd);background:var(--bwdl)}
+.q-opt.sel.fwd{border-color:var(--fwd);background:var(--fwdl)}
+.opt-icon{font-size:.62rem;display:block;margin-bottom:3px;color:var(--t3)}
+.opt-text{font-size:.7rem;color:var(--t2);line-height:1.55}
+.q-opt.sel.bwd .opt-text{font-weight:600;color:var(--bwd)}
+.q-opt.sel.fwd .opt-text{font-weight:600;color:var(--fwd)}
+.eval-nav{display:flex;gap:8px;margin-top:18px}
+.btn-back{color:var(--t3);border:1px solid var(--r);padding:10px 16px;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:all .13s}
+.btn-back:hover{border-color:var(--gold);color:var(--navy)}
+.btn-next{background:var(--navy);color:var(--cream);padding:10px 24px;font-size:.58rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.3;pointer-events:none;transition:all .13s}
+.btn-next.ready{opacity:1;pointer-events:all}.btn-next.ready:hover{background:var(--navy3)}
+.calc-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center}
+.calc-lbl{font-size:.54rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.calc-title{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:300;color:var(--navy);margin-bottom:28px;line-height:1.3}
+.calc-bar-bg{width:200px;height:2px;background:rgba(13,27,62,.1);overflow:hidden}
+.calc-bar-fill{height:100%;background:var(--gold);animation:cl 2s ease forwards}
+@keyframes cl{from{width:0}to{width:100%}}
+.results-hero{background:var(--navy);padding:28px 24px;margin-bottom:2px;position:relative;overflow:hidden}
+.results-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 65%,rgba(196,154,60,.08),transparent 60%);pointer-events:none}
+.rh-eye{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.55);display:block;margin-bottom:8px;position:relative;z-index:1}
+.rh-archetype{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--cream);line-height:1.2;margin-bottom:6px;position:relative;z-index:1}
+.rh-arch-def{font-size:.72rem;color:rgba(244,241,236,.55);font-style:italic;line-height:1.65;max-width:520px;position:relative;z-index:1}
+.score-bar-section{background:white;padding:20px 18px;margin-bottom:2px}
+.sbs-lbl{font-size:.48rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:12px}
+.score-nums{display:flex;justify-content:space-between;margin-bottom:8px}
+.sn-item{text-align:center}
+.sn-num{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;display:block}
+.sn-num.fwd{color:var(--fwd)}.sn-num.bwd{color:var(--bwd)}.sn-num.neu{color:var(--gold)}
+.sn-lbl{font-size:.46rem;color:var(--t3)}
+.mirror-bar{position:relative;height:28px;background:var(--bwdl);margin-bottom:8px;overflow:hidden}
+.mirror-fill{position:absolute;left:0;top:0;height:100%;background:var(--fwdl);transition:width 1s ease}
+.mirror-fill::after{content:'';position:absolute;right:0;top:0;bottom:0;width:2px;background:var(--fwd)}
+.mirror-labels{display:flex;justify-content:space-between;font-size:.52rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.ml-bwd{color:var(--bwd)}.ml-fwd{color:var(--fwd)}
+.pattern-section{background:var(--cream);padding:18px 18px;margin-bottom:2px}
+.pattern-grid{display:grid;gap:2px}
+.pattern-item{background:white;padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
+.pi-dim{min-width:30px;font-size:.46rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)}
+.pi-bar-wrap{flex:1}
+.pi-name{font-size:.66rem;font-weight:600;color:var(--navy);margin-bottom:5px}
+.pi-bar{height:6px;background:var(--cream2);border-radius:2px;overflow:hidden;margin-bottom:4px}
+.pi-fill{height:100%;border-radius:2px;transition:width .7s ease}
+.pif-fwd{background:var(--fwd)}.pif-mid{background:#c49000}.pif-bwd{background:var(--bwd)}
+.pi-tag{font-size:.5rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.pit-fwd{color:var(--fwd)}.pit-mid{color:#c49000}.pit-bwd{color:var(--bwd)}
+.hire-cards{margin-bottom:2px}
+.hire-card{background:white;padding:14px 16px;margin-bottom:2px}
+.hc-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.hc-name{font-size:.75rem;font-weight:700;color:var(--navy)}
+.hc-score{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300}
+.hc-score.fwd{color:var(--fwd)}.hc-score.mid{color:#c49000}.hc-score.bwd{color:var(--bwd)}
+.hc-dots{display:flex;gap:4px}
+.hc-dot{width:11px;height:11px;border-radius:50%}
+.dot-fwd{background:var(--fwd)}.dot-bwd{background:var(--bwd)}
+.insight-section{background:var(--cream);padding:18px 18px;margin-bottom:2px}
+.insight-item{background:white;padding:14px 16px;margin-bottom:2px}
+.ins-label{font-size:.46rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:5px}
+.ins-title{font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.ins-text{font-size:.72rem;color:var(--t2);line-height:1.65}
+.summary-bar{background:var(--navy2);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.sb-stats{display:flex;gap:20px;flex-wrap:wrap}
+.sb-stat{text-align:center}
+.sb-stat-num{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;display:block;line-height:1}
+.sb-stat-lbl{font-size:.42rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,236,.28)}
+.stat-green{color:#5abf7a}.stat-amber{color:#e8b84a}.stat-red{color:#e87a7a}
+.btn-restart{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(196,154,60,.18);color:rgba(244,241,236,.35);transition:all .15s}
+.btn-restart:hover{border-color:var(--gold);color:var(--cream)}
+.cta-block{background:var(--navy);padding:32px 24px;text-align:center}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.7;max-width:520px;margin:0 auto 20px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:12px 26px;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:background .15s}
+.btn-cta:hover{background:var(--gold2)}
+@media print{.topbar,.eval-nav,.btn-print,.btn-restart,.btn-cta{display:none!important}body{background:white}}
+@media(max-width:600px){.phase-grid{grid-template-columns:1fr}.q-opts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div class="tb-right">
+    <span class="tb-label">Hiring Pattern Diagnostic™ · SLF Insights</span>
+    <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+  </div>
+</div>
+<div class="prog-bar"><div class="prog-fill" id="pFill" style="width:5%"></div></div>
+<div class="shell">
+
+<!-- INTRO -->
+<div class="screen active" id="sIntro">
+  <span class="eyebrow">Herramienta de diagnóstico · SLF Insights</span>
+  <h1 class="h1">El error de contratar<br>para lo que <em>ya somos</em></h1>
+  <div class="rule"></div>
+  <p class="lead">Toda empresa contrata en su propia imagen. Busca perfiles que encajen, que sean cómodos de integrar, que no generen fricción. El problema no es que el talento sea malo — el problema es que es perfectamente adecuado para la empresa que ya existe, e insuficiente para la empresa que necesita ser.</p>
+  <div class="callout">
+    <p>Las organizaciones que no crecen al ritmo de su potencial rara vez tienen un problema de estrategia. Tienen un problema de <strong>patrón de contratación</strong>: contratan hacia atrás, perpetuando su identidad actual en lugar de construir la capacidad que su siguiente nivel requiere.</p>
+  </div>
+  <p class="lead" style="margin-bottom:28px">Este diagnóstico evalúa sus últimas contrataciones clave para determinar si su patrón está construyendo la empresa que ya es — o la que necesita convertirse.</p>
+
+  <span class="sec-lbl">Fase de crecimiento que la empresa está entrando</span>
+  <div class="phase-grid">
+    <div class="phase-card" onclick="selPhase(0,this)"><span class="pc-range">10–25%</span><span class="pc-lbl">Consolidación</span><span class="pc-desc">Eficiencia y escala incremental sobre el modelo actual.</span></div>
+    <div class="phase-card" onclick="selPhase(1,this)"><span class="pc-range">25–75%</span><span class="pc-lbl">Crecimiento acelerado</span><span class="pc-desc">Nuevos mercados, clientes o líneas. El equipo debe evolucionar.</span></div>
+    <div class="phase-card" onclick="selPhase(2,this)"><span class="pc-range">75%+</span><span class="pc-lbl">Escala significativa</span><span class="pc-desc">Transformación profunda. Capacidades radicalmente distintas.</span></div>
+  </div>
+
+  <span class="sec-lbl">¿Cuántas contrataciones clave evalúa? (últimos 18–24 meses)</span>
+  <div class="count-row">
+    <div class="count-btn" onclick="selCount(2,this)">2</div>
+    <div class="count-btn" onclick="selCount(3,this)">3</div>
+    <div class="count-btn" onclick="selCount(4,this)">4</div>
+    <div class="count-btn" onclick="selCount(5,this)">5</div>
+  </div>
+
+  <span class="sec-lbl" style="margin-bottom:10px">Nombre o cargo de cada contratación (para identificarlas en el resultado)</span>
+  <div class="hire-name-grid" id="hireNameGrid"></div>
+  <button class="btn-start" id="btnStart" onclick="startDiag()" style="opacity:.3;pointer-events:none">Iniciar diagnóstico →</button>
+</div>
+
+<!-- EVAL -->
+<div class="screen" id="sEval">
+  <div class="eval-prog" id="evalProg"></div>
+  <div class="hire-header">
+    <span class="hh-eye" id="hhEye">Contratación 1 de 3</span>
+    <div class="hh-name" id="hhName"></div>
+    <div class="hh-sub">Evalúe esta contratación frente a la empresa que necesita ser — no la que era cuando contrató</div>
+  </div>
+  <div id="qContainer"></div>
+  <div class="eval-nav">
+    <button class="btn-back" id="evalBack" onclick="goBack()" style="display:none">← Anterior</button>
+    <button class="btn-next" id="evalNext" onclick="goNext()">Siguiente contratación →</button>
+  </div>
+</div>
+
+<!-- CALC -->
+<div class="screen" id="sCalc">
+  <div class="calc-wrap">
+    <span class="calc-lbl">Analizando patrón de contratación</span>
+    <p class="calc-title">Construyendo su mapa<br>de identidad organizacional</p>
+    <div class="calc-bar-bg"><div class="calc-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="sResults">
+  <div class="results-hero">
+    <span class="rh-eye">Hiring Pattern Diagnostic™ · Resultado</span>
+    <div class="rh-archetype" id="rArchetype"></div>
+    <div class="rh-arch-def" id="rArchDef"></div>
+  </div>
+  <div class="score-bar-section">
+    <span class="sbs-lbl">Distribución del patrón de contratación</span>
+    <div class="score-nums" id="scoreNums"></div>
+    <div class="mirror-bar"><div class="mirror-fill" id="mirrorFill"></div></div>
+    <div class="mirror-labels"><span class="ml-bwd">← Contratación hacia atrás</span><span class="ml-fwd">Contratación hacia adelante →</span></div>
+  </div>
+  <div class="pattern-section">
+    <span class="sec-lbl">Patrón por dimensión — dónde se concentra el sesgo</span>
+    <div class="pattern-grid" id="patternGrid"></div>
+  </div>
+  <div class="hire-cards" id="hireCards" style="padding:0 0 2px">
+    <div style="background:var(--cream);padding:18px 18px 6px"><span class="sec-lbl">Perfil por contratación</span></div>
+  </div>
+  <div class="insight-section">
+    <span class="sec-lbl">Lo que su patrón revela</span>
+    <div id="insightItems"></div>
+  </div>
+  <div class="summary-bar">
+    <div class="sb-stats" id="sbStats"></div>
+    <button class="btn-restart" onclick="restart()">Nuevo diagnóstico</button>
+  </div>
+  <div class="cta-block">
+    <p class="cta-text">Cambiar el patrón de contratación de una organización es uno de los movimientos más difíciles — y más transformadores — que un CEO puede hacer. Requiere romper con la comodidad de contratar en imagen propia y establecer una filosofía de talento orientada al destino.</p>
+    <button class="btn-cta">Contactar a Cretta →</button>
+  </div>
+</div>
+
+</div>
+<script>
+const QUESTIONS=[{id:'origin',text:'¿De dónde proviene esta persona?',opts:[{text:'De una empresa de escala similar o menor a la suya',type:'bwd'},{text:'De una empresa de mayor escala o complejidad superior a la suya',type:'fwd'}]},{id:'reason',text:'¿Cuál fue la razón principal para contratarla?',opts:[{text:'Encajaba bien con la cultura y el equipo existente',type:'bwd'},{text:'Tenía capacidades o criterio que no existían en la organización',type:'fwd'}]},{id:'role',text:'¿Para qué empresa fue diseñado el rol?',opts:[{text:'Para la empresa tal como es hoy',type:'bwd'},{text:'Para la empresa en su siguiente nivel de crecimiento',type:'fwd'}]},{id:'growth',text:'¿Tenía experiencia relevante en entornos de alto crecimiento?',opts:[{text:'No tenía experiencia en crecimiento acelerado o transformación',type:'bwd'},{text:'Había navegado crecimientos o transformaciones de escala similar o mayor',type:'fwd'}]},{id:'tension',text:'¿Qué impacto generó en la organización al integrarse?',opts:[{text:'Se integró con fluidez, sin generar fricción significativa',type:'bwd'},{text:'Generó incomodidad productiva y presionó al equipo hacia estándares más altos',type:'fwd'}]},{id:'decision',text:'¿Cómo fue la decisión de contratación?',opts:[{text:'Fue cómoda — estábamos seguros desde el inicio',type:'bwd'},{text:'Fue difícil — estiraba nuestros parámetros habituales de contratación',type:'fwd'}]}];
+const QDIM_NAMES=['Origen organizacional','Razón de contratación','Diseño del rol','Experiencia en crecimiento','Impacto e incomodidad productiva','Dificultad de la decisión'];
+const ARCHETYPES=[{range:[0,25],name:'Contratador en espejo',def:'Su organización contrata sistemáticamente en su propia imagen. Cada nueva incorporación refuerza quien ya es, no quien necesita ser. El resultado es una empresa perfectamente optimizada para su pasado — e insuficiente para su futuro.'},{range:[26,45],name:'Contratador conservador',def:'Hay intenciones de evolucionar el talento, pero el patrón dominante sigue siendo la contratación hacia atrás. Las decisiones difíciles se resuelven con comodidad, no con criterio estratégico.'},{range:[46,64],name:'Contratador en transición',def:'Su patrón es inconsistente — contrataciones hacia adelante mezcladas con decisiones conservadoras. No hay una filosofía de talento clara. El resultado es un equipo heterogéneo en capacidades y criterio.'},{range:[65,82],name:'Contratador estratégico',def:'La mayoría de sus contrataciones recientes han sido orientadas hacia la empresa que necesita ser. Hay conciencia del patrón y voluntad de romper la comodidad cuando el criterio estratégico lo requiere.'},{range:[83,100],name:'Contratador de destino',def:'Su organización contrata sistemáticamente hacia su siguiente nivel. Cada incorporación es un acto deliberado de construcción de la empresa futura — con la incomodidad, fricción y estiramiento que eso implica.'}];
+const INSIGHTS={origin:{bwd:'El origen de su talento revela dónde busca seguridad: en organizaciones que ya han recorrido menos camino que la suya. Esto asegura que el talento que llega nunca desafiará el status quo.',fwd:'Traer personas de organizaciones más complejas introduce perspectivas que su equipo actual no tiene — lo que acelera el aprendizaje organizacional.'},reason:{bwd:'Contratar por encaje cultural es el mecanismo más eficiente para perpetuar quien ya se es. La cultura se refuerza; la capacidad, se estanca.',fwd:'Contratar por brechas de capacidad requiere gestionar la incomodidad de integrar perspectivas distintas — pero es el único camino al siguiente nivel.'},role:{bwd:'Diseñar roles para la empresa de hoy garantiza que el talento llegue a una estructura que ya conoce. Es cómodo. Y es el primer paso hacia la obsolescencia.',fwd:'Diseñar roles para el siguiente nivel requiere claridad sobre a dónde va la empresa — y mandatos que hoy se sienten exagerados.'},growth:{bwd:'Sin experiencia en alto crecimiento, el talento no tiene el criterio práctico que el siguiente nivel requiere. Aprenderá — pero a su costo y tiempo.',fwd:'El criterio práctico de haber navegado escala es una capacidad organizacional que no se puede construir desde adentro en el tiempo que el mercado permite.'},tension:{bwd:'La integración sin fricción es una señal de alarma: significa que el talento que llegó no tiene nada que la organización no supiera ya. Es talento de mantenimiento, no de transformación.',fwd:'La incomodidad productiva generada por nuevo talento es una de las señales más confiables de que la organización está incorporando perspectiva que antes no tenía.'},decision:{bwd:'Las decisiones de contratación cómodas son casi siempre decisiones hacia atrás. La comodidad en la selección de talento es el síntoma más confiable de un patrón de espejo.',fwd:'Una decisión difícil de contratar — donde el candidato estiraba los parámetros — es la señal de que la organización está eligiendo con criterio estratégico, no con comodidad.'}};
+let phase=-1,hireCount=0,hires=[],curIdx=0,answers={};
+function selPhase(i,el){phase=i;document.querySelectorAll('.phase-card').forEach((c,j)=>c.classList.toggle('sel',j===i));chk()}
+function selCount(n,el){hireCount=n;document.querySelectorAll('.count-btn').forEach(b=>b.classList.toggle('sel',parseInt(b.textContent)===n));renderHireNames();chk()}
+function renderHireNames(){const g=document.getElementById('hireNameGrid');g.innerHTML='';for(let i=0;i<hireCount;i++){const r=document.createElement('div');r.className='hire-name-row';r.innerHTML=`<span class="hire-num">${i+1}</span><input class="hire-name-input" id="hn${i}" type="text" placeholder="${['Director Comercial','CFO','Director de Operaciones','CMO','Dir. Capital Humano'][i]||'Cargo o nombre'}">`;g.appendChild(r)}for(let i=0;i<hireCount;i++)document.getElementById('hn'+i).addEventListener('input',chk);chk()}
+function chk(){if(phase<0||hireCount<2){off();return}let ok=true;for(let i=0;i<hireCount;i++){const el=document.getElementById('hn'+i);if(!el||!el.value.trim()){ok=false;break}}const b=document.getElementById('btnStart');b.style.opacity=ok?'1':'.3';b.style.pointerEvents=ok?'all':'none'}
+function off(){const b=document.getElementById('btnStart');b.style.opacity='.3';b.style.pointerEvents='none'}
+function startDiag(){hires=[];answers={};for(let i=0;i<hireCount;i++){const n=document.getElementById('hn'+i).value.trim();hires.push(n);answers[i]={}}curIdx=0;document.getElementById('sIntro').classList.remove('active');renderEval(0);document.getElementById('sEval').classList.add('active');updProg();window.scrollTo(0,0)}
+function renderEval(idx){const hire=hires[idx];document.getElementById('hhEye').textContent=`Contratación ${idx+1} de ${hireCount}`;document.getElementById('hhName').textContent=hire;const ep=document.getElementById('evalProg');ep.innerHTML='';hires.forEach((_,i)=>{const el=document.createElement('div');el.className='ep-item'+(i<idx?' done':i===idx?' active':'');ep.appendChild(el)});const qc=document.getElementById('qContainer');qc.innerHTML='';QUESTIONS.forEach((q,qi)=>{const sv=answers[idx][q.id];const bl=document.createElement('div');bl.className='q-block';let opts='<div class="q-opts">';q.opts.forEach((o,oi)=>{const s=sv===oi?' sel':'';opts+=`<div class="q-opt ${o.type}${s}" onclick="setA(${idx},${qi},${oi},this)"><span class="opt-icon">${o.type==='fwd'?'▲':'◆'}</span><span class="opt-text">${o.text}</span></div>`});opts+='</div>';bl.innerHTML=`<span class="q-num">Dimensión ${qi+1} · ${QDIM_NAMES[qi]}</span><div class="q-text">${q.text}</div>${opts}`;qc.appendChild(bl)});document.getElementById('evalBack').style.display=idx===0?'none':'inline-block';const isLast=idx===hireCount-1;document.getElementById('evalNext').textContent=isLast?'Ver diagnóstico →':'Siguiente contratación →';updNxt(idx)}
+function setA(hIdx,qi,oi,el){const q=QUESTIONS[qi];answers[hIdx][q.id]=oi;el.parentElement.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');updNxt(hIdx)}
+function updNxt(idx){const ok=QUESTIONS.every(q=>answers[idx][q.id]!==undefined);document.getElementById('evalNext').classList.toggle('ready',ok)}
+function goNext(){if(!QUESTIONS.every(q=>answers[curIdx][q.id]!==undefined))return;if(curIdx===hireCount-1){showCalc();return}curIdx++;renderEval(curIdx);updProg();window.scrollTo(0,0)}
+function goBack(){if(curIdx===0)return;curIdx--;renderEval(curIdx);updProg();window.scrollTo(0,0)}
+function updProg(){const d=Object.keys(answers).filter(i=>QUESTIONS.every(q=>answers[i][q.id]!==undefined)).length;document.getElementById('pFill').style.width=Math.round((d/hireCount)*100)+'%'}
+function showCalc(){document.getElementById('sEval').classList.remove('active');document.getElementById('sCalc').classList.add('active');setTimeout(showResults,2100)}
+function showResults(){
+  const dimFwd={};QUESTIONS.forEach(q=>{dimFwd[q.id]=0});
+  let totFwd=0;const totQ=hireCount*QUESTIONS.length;
+  const hireScores=hires.map((_,i)=>{let hf=0;QUESTIONS.forEach(q=>{const o=answers[i][q.id];if(q.opts[o].type==='fwd'){hf++;dimFwd[q.id]++;totFwd++}});return Math.round((hf/QUESTIONS.length)*100)});
+  const pct=Math.round((totFwd/totQ)*100);
+  const arch=ARCHETYPES.find(a=>pct>=a.range[0]&&pct<=a.range[1]);
+  document.getElementById('rArchetype').textContent=arch.name;
+  document.getElementById('rArchDef').textContent=arch.def;
+  document.getElementById('scoreNums').innerHTML=`<div class="sn-item"><span class="sn-num bwd">${100-pct}%</span><span class="sn-lbl">Hacia atrás</span></div><div class="sn-item"><span class="sn-num neu">${pct}</span><span class="sn-lbl">Índice de avance</span></div><div class="sn-item"><span class="sn-num fwd">${pct}%</span><span class="sn-lbl">Hacia adelante</span></div>`;
+  setTimeout(()=>{document.getElementById('mirrorFill').style.width=pct+'%'},100);
+  const pg=document.getElementById('patternGrid');pg.innerHTML='';
+  QUESTIONS.forEach((q,qi)=>{const p=Math.round((dimFwd[q.id]/hireCount)*100);const cls=p>=65?'fwd':p>=35?'mid':'bwd';const tag=p>=65?'Patrón sólido':p>=35?'Patrón mixto':'Sesgo hacia atrás';pg.innerHTML+=`<div class="pattern-item"><div class="pi-dim">D${qi+1}</div><div class="pi-bar-wrap"><div class="pi-name">${QDIM_NAMES[qi]}</div><div class="pi-bar"><div class="pi-fill pif-${cls}" style="width:0%" data-w="${p}"></div></div><span class="pi-tag pit-${cls}">${tag} · ${p}% forward</span></div></div>`});
+  setTimeout(()=>document.querySelectorAll('.pi-fill').forEach(el=>el.style.width=el.dataset.w+'%'),150);
+  const hc=document.getElementById('hireCards');
+  hires.forEach((name,i)=>{const s=hireScores[i];const cls=s>=65?'fwd':s>=35?'mid':'bwd';let dots='';QUESTIONS.forEach((q,qi)=>{const o=answers[i][q.id];const t=q.opts[o].type;dots+=`<div class="hc-dot dot-${t==='fwd'?'fwd':'bwd'}" title="${QDIM_NAMES[qi]}"></div>`});hc.innerHTML+=`<div class="hire-card"><div class="hc-header"><span class="hc-name">${name}</span><span class="hc-score ${cls}">${s}% forward</span></div><div class="hc-dots">${dots}</div></div>`});
+  const bwdDims=QUESTIONS.filter(q=>dimFwd[q.id]/hireCount<0.4);const fwdDims=QUESTIONS.filter(q=>dimFwd[q.id]/hireCount>=0.7);
+  const ii=document.getElementById('insightItems');ii.innerHTML='';
+  if(bwdDims.length>0)bwdDims.forEach(q=>{ii.innerHTML+=`<div class="insight-item"><span class="ins-label">Patrón de riesgo · ${QDIM_NAMES[QUESTIONS.indexOf(q)]}</span><div class="ins-title">${QDIM_NAMES[QUESTIONS.indexOf(q)]}</div><p class="ins-text">${INSIGHTS[q.id].bwd}</p></div>`});
+  if(fwdDims.length>0)fwdDims.slice(0,2).forEach(q=>{ii.innerHTML+=`<div class="insight-item"><span class="ins-label" style="color:var(--fwd)">Fortaleza del patrón · ${QDIM_NAMES[QUESTIONS.indexOf(q)]}</span><div class="ins-title">${QDIM_NAMES[QUESTIONS.indexOf(q)]}</div><p class="ins-text">${INSIGHTS[q.id].fwd}</p></div>`});
+  if(ii.innerHTML==='')ii.innerHTML='<div class="insight-item"><p class="ins-text" style="font-style:italic">Su patrón de contratación es equilibrado entre dimensiones. El riesgo no está concentrado en un área específica. El siguiente paso es definir una filosofía de talento explícita que ancle las decisiones futuras hacia el destino de crecimiento.</p></div>';
+  const fwdCount=hireScores.filter(s=>s>=65).length;const midCount=hireScores.filter(s=>s>=35&&s<65).length;const bwdCount=hireScores.filter(s=>s<35).length;
+  document.getElementById('sbStats').innerHTML=`<div class="sb-stat"><span class="sb-stat-num stat-green">${fwdCount}</span><span class="sb-stat-lbl">Contrataciones forward</span></div><div class="sb-stat"><span class="sb-stat-num stat-amber">${midCount}</span><span class="sb-stat-lbl">Mixtas</span></div><div class="sb-stat"><span class="sb-stat-num stat-red">${bwdCount}</span><span class="sb-stat-lbl">Contrataciones espejo</span></div><div class="sb-stat"><span class="sb-stat-num" style="color:var(--gold)">${pct}</span><span class="sb-stat-lbl">Índice de avance global</span></div>`;
+  document.getElementById('sCalc').classList.remove('active');document.getElementById('sResults').classList.add('active');document.getElementById('pFill').style.width='100%';window.scrollTo(0,0);
+}
+function restart(){phase=-1;hireCount=0;hires=[];curIdx=0;answers={};document.querySelectorAll('.phase-card').forEach(c=>c.classList.remove('sel'));document.querySelectorAll('.count-btn').forEach(b=>b.classList.remove('sel'));document.getElementById('hireNameGrid').innerHTML='';document.getElementById('hireCards').innerHTML='<div style="background:var(--cream);padding:18px 18px 6px"><span class="sec-lbl">Perfil por contratación</span></div>';document.getElementById('sResults').classList.remove('active');document.getElementById('sIntro').classList.add('active');document.getElementById('pFill').style.width='5%';window.scrollTo(0,0);off()}
+</script>
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growth Architecture Canvas™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{
+  --navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;
+  --gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.12);
+  --cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;
+  --t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;
+  --r:rgba(196,154,60,0.22);--rh:rgba(196,154,60,0.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+textarea{font-family:'Montserrat',sans-serif;resize:vertical;outline:none}
+input{font-family:'Montserrat',sans-serif;outline:none}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100}
+.topbar-brand{font-size:.55rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.topbar-title{font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,241,236,.55)}
+.topbar-actions{display:flex;gap:8px;align-items:center}
+.btn-action{padding:8px 16px;font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:all .18s}
+.btn-action.outline{color:rgba(244,241,236,.6);border:1px solid rgba(196,154,60,.25)}
+.btn-action.outline:hover{border-color:var(--gold);color:var(--gold)}
+.btn-action.solid{background:var(--gold);color:var(--navy)}
+.btn-action.solid:hover{background:var(--gold2)}
+
+/* ── PROGRESS ── */
+.progress-bar{height:2px;background:rgba(196,154,60,.18)}
+.progress-fill{height:100%;background:var(--gold);transition:width .5s ease}
+
+/* ── SHELL ── */
+.shell{max-width:1100px;margin:0 auto;padding:28px 24px 60px}
+
+/* ── HEADER ── */
+.canvas-header{margin-bottom:28px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.canvas-header-left h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:300;color:var(--navy);line-height:1.2;margin-bottom:4px}
+.canvas-header-left h1 em{font-style:italic;color:var(--gold2)}
+.canvas-header-left p{font-size:.72rem;color:var(--t3);line-height:1.6;max-width:480px}
+.progress-label{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-align:right}
+.company-input{border:none;border-bottom:1px solid var(--r);background:transparent;font-size:.72rem;color:var(--t2);padding:4px 0;width:220px;transition:border-color .2s}
+.company-input:focus{border-color:var(--gold)}
+.company-input::placeholder{color:var(--t3)}
+
+/* ── LEGEND ── */
+.legend{display:flex;gap:20px;margin-bottom:20px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:.58rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+.dot-empty{background:var(--cream2);border:1px solid rgba(13,27,62,.12)}
+.dot-partial{background:rgba(196,154,60,.3)}
+.dot-full{background:var(--gold)}
+.dot-active{background:var(--navy)}
+
+/* ── CANVAS GRID ── */
+.canvas-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,auto);gap:2px;margin-bottom:2px}
+
+/* ── BLOCK ── */
+.block{background:white;padding:20px 18px;cursor:pointer;border:1px solid transparent;transition:all .2s;min-height:140px;display:flex;flex-direction:column;position:relative}
+.block:hover{border-color:var(--rh);background:rgba(196,154,60,.025)}
+.block.active{border-color:var(--gold);background:rgba(196,154,60,.04)}
+.block.filled{background:white}
+.block.filled .block-bg{opacity:1}
+.block-bg{position:absolute;top:0;right:0;width:3px;height:100%;background:var(--gold);opacity:0;transition:opacity .3s}
+.block.filled .block-bg{opacity:1}
+.block.active .block-bg{background:var(--navy);opacity:1}
+
+.block-num{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.6;margin-bottom:8px;display:block}
+.block.active .block-num{color:var(--navy);opacity:.7}
+.block-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--navy);margin-bottom:6px;line-height:1.2}
+.block-tagline{font-size:.68rem;color:var(--t3);line-height:1.5;margin-bottom:10px;font-style:italic}
+.block-preview{font-size:.75rem;color:var(--t2);line-height:1.6;flex:1;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.block-empty-hint{font-size:.68rem;color:rgba(13,27,62,.2);line-height:1.5;flex:1;font-style:italic}
+.block-status{display:flex;align-items:center;gap:5px;margin-top:10px}
+.block-status-dot{width:5px;height:5px;border-radius:50%;background:var(--cream2);border:1px solid rgba(13,27,62,.12);flex-shrink:0}
+.block.filled .block-status-dot{background:var(--gold);border-color:var(--gold)}
+.block-status-text{font-size:.52rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.block.filled .block-status-text{color:var(--gold)}
+
+/* ── ROW LABELS ── */
+.row-label{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);font-size:.5rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(13,27,62,.18);padding:12px 6px;background:var(--navy2);display:flex;align-items:center;justify-content:center}
+
+/* ── CANVAS WITH LABELS ── */
+.canvas-with-labels{display:grid;grid-template-columns:28px 1fr;gap:2px}
+.row-labels{display:flex;flex-direction:column;gap:2px}
+.row-label-cell{flex:1;background:var(--navy);display:flex;align-items:center;justify-content:center;min-height:140px}
+.row-label-cell span{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);font-size:.44rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.4)}
+
+/* Column headers */
+.col-headers{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:2px;margin-left:30px}
+.col-header{background:var(--navy2);padding:7px 12px;font-size:.48rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(196,154,60,.45);text-align:center}
+
+/* ── EDITOR PANEL ── */
+.editor-panel{background:white;border-top:2px solid var(--gold);margin-top:2px;transition:all .3s;overflow:hidden}
+.editor-panel.hidden{display:none}
+.editor-inner{padding:32px 36px;max-width:900px}
+.editor-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:20px;flex-wrap:wrap}
+.editor-block-info{}
+.editor-block-num{font-size:.55rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
+.editor-block-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--navy);line-height:1.2;margin-bottom:6px}
+.editor-block-tagline{font-size:.8rem;color:var(--t3);font-style:italic}
+.btn-close-editor{color:var(--t3);font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--r);transition:all .18s;flex-shrink:0}
+.btn-close-editor:hover{border-color:var(--gold);color:var(--navy)}
+
+.editor-description{font-size:.82rem;color:var(--t2);line-height:1.75;margin-bottom:28px;padding:16px 20px;background:var(--cream);border-left:2px solid var(--r)}
+
+.editor-questions{margin-bottom:24px}
+.editor-questions-label{font-size:.55rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:12px;display:block}
+.editor-question{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.eq-num{font-size:.6rem;font-weight:700;color:var(--gold);flex-shrink:0;width:16px;margin-top:1px}
+.eq-text{font-size:.8rem;color:var(--t2);line-height:1.6}
+
+.editor-field{}
+.editor-field label{font-size:.55rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:10px}
+.editor-textarea{width:100%;min-height:140px;padding:14px 16px;border:1px solid var(--r);font-size:.85rem;color:var(--t1);line-height:1.7;transition:border-color .2s;background:var(--cream3)}
+.editor-textarea:focus{border-color:var(--gold);background:white}
+.editor-textarea::placeholder{color:rgba(13,27,62,.2);font-style:italic}
+
+.editor-footer{display:flex;align-items:center;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:12px}
+.editor-char-count{font-size:.58rem;color:var(--t3)}
+.editor-nav{display:flex;gap:8px}
+.btn-editor-nav{padding:10px 20px;font-size:.62rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;transition:all .18s}
+.btn-prev-block{color:var(--t3);border:1px solid var(--r)}
+.btn-prev-block:hover{border-color:var(--gold);color:var(--navy)}
+.btn-next-block{background:var(--navy);color:var(--cream)}
+.btn-next-block:hover{background:var(--navy3)}
+.btn-save-block{background:var(--gold);color:var(--navy)}
+.btn-save-block:hover{background:var(--gold2)}
+
+/* ── SYNTHESIS VIEW ── */
+.synthesis-view{display:none;background:white;margin-top:2px}
+.synthesis-view.visible{display:block}
+.synthesis-header{background:var(--navy);padding:32px 36px;position:relative;overflow:hidden}
+.synthesis-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(196,154,60,.07) 0%,transparent 65%);pointer-events:none}
+.synthesis-header h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--cream);margin-bottom:6px;position:relative;z-index:1}
+.synthesis-header p{font-size:.75rem;color:rgba(244,241,236,.4);font-style:italic;position:relative;z-index:1}
+.synthesis-header .company-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;color:var(--gold2);font-style:italic;position:relative;z-index:1}
+.synthesis-body{padding:36px}
+.synthesis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:2px}
+.synthesis-block{padding:20px 18px;background:var(--cream)}
+.synthesis-block-num{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.7;display:block;margin-bottom:5px}
+.synthesis-block-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:600;color:var(--navy);margin-bottom:10px}
+.synthesis-block-content{font-size:.78rem;color:var(--t2);line-height:1.7;white-space:pre-wrap}
+.synthesis-block-empty{font-size:.75rem;color:rgba(13,27,62,.2);font-style:italic}
+.synthesis-footer{background:var(--navy);padding:24px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.synthesis-footer span{font-size:.55rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,241,236,.35)}
+.synthesis-footer strong{color:var(--gold);font-weight:700}
+
+/* ── PRINT ── */
+@media print{
+  .topbar,.editor-panel,.btn-action,.legend,.canvas-header-left p,.block:not(.filled){display:none!important}
+  .block{min-height:auto;border:1px solid #ddd!important}
+  .synthesis-view{display:block!important}
+  body{background:white}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:720px){
+  .canvas-grid{grid-template-columns:1fr}
+  .synthesis-grid{grid-template-columns:1fr}
+  .col-headers{display:none}
+  .canvas-with-labels{grid-template-columns:1fr}
+  .row-labels{display:none}
+  .editor-inner{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div>
+    <div class="topbar-brand">CRETTA · Strategic Leadership Firm</div>
+    <div class="topbar-title">Growth Architecture Canvas™ · Acceso Miembro</div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn-action outline" onclick="toggleSynthesis()">Ver síntesis</button>
+    <button class="btn-action outline" onclick="window.print()">Imprimir / PDF</button>
+    <button class="btn-action solid" onclick="resetCanvas()">Nuevo canvas</button>
+  </div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+<div class="shell">
+
+  <!-- HEADER -->
+  <div class="canvas-header">
+    <div class="canvas-header-left">
+      <h1>Growth Architecture <em>Canvas</em>™</h1>
+      <p>La herramienta de arquitectura estratégica que Cretta utiliza para diseñar el crecimiento de sus clientes. Nueve bloques. Una sola lógica. La visión completa de cómo una empresa pasa de donde está a donde debe estar.</p>
+    </div>
+    <div style="text-align:right">
+      <div class="progress-label" id="progressLabel">0 de 9 bloques completados</div>
+      <div style="margin-top:8px">
+        <input class="company-input" type="text" id="companyName" placeholder="Nombre de la empresa" oninput="updateSynthesis()">
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot dot-empty"></div>Sin completar</div>
+    <div class="legend-item"><div class="legend-dot dot-full"></div>Completado</div>
+    <div class="legend-item"><div class="legend-dot dot-active"></div>En edición</div>
+  </div>
+
+  <!-- COLUMN HEADERS -->
+  <div class="col-headers">
+    <div class="col-header">Fundamento</div>
+    <div class="col-header">Arquitectura</div>
+    <div class="col-header">Ejecución</div>
+  </div>
+
+  <!-- CANVAS WITH ROW LABELS -->
+  <div class="canvas-with-labels">
+    <div class="row-labels">
+      <div class="row-label-cell"><span>Por qué</span></div>
+      <div class="row-label-cell"><span>Cómo</span></div>
+      <div class="row-label-cell"><span>Condiciones</span></div>
+    </div>
+
+    <!-- CANVAS GRID -->
+    <div class="canvas-grid" id="canvasGrid"></div>
+  </div>
+
+  <!-- EDITOR PANEL -->
+  <div class="editor-panel hidden" id="editorPanel">
+    <div class="editor-inner">
+      <div class="editor-header">
+        <div class="editor-block-info">
+          <span class="editor-block-num" id="edNum"></span>
+          <div class="editor-block-title" id="edTitle"></div>
+          <div class="editor-block-tagline" id="edTagline"></div>
+        </div>
+        <button class="btn-close-editor" onclick="closeEditor()">Cerrar ×</button>
+      </div>
+      <div class="editor-description" id="edDescription"></div>
+      <div class="editor-questions">
+        <span class="editor-questions-label">Preguntas guía para este bloque</span>
+        <div id="edQuestions"></div>
+      </div>
+      <div class="editor-field">
+        <label>Respuesta estratégica — escriba en el registro de su consejo de administración</label>
+        <textarea class="editor-textarea" id="edTextarea" rows="6" oninput="onTextareaInput()"></textarea>
+      </div>
+      <div class="editor-footer">
+        <span class="editor-char-count" id="edCharCount">0 caracteres</span>
+        <div class="editor-nav">
+          <button class="btn-editor-nav btn-prev-block" onclick="navigateBlock(-1)">← Anterior</button>
+          <button class="btn-editor-nav btn-save-block" onclick="saveBlock()">Guardar bloque</button>
+          <button class="btn-editor-nav btn-next-block" onclick="navigateBlock(1)">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYNTHESIS VIEW -->
+  <div class="synthesis-view" id="synthesisView">
+    <div class="synthesis-header">
+      <span class="company-name" id="synthCompany">— Sin nombre —</span>
+      <h2>Growth Architecture Canvas™</h2>
+      <p>Síntesis estratégica de los nueve bloques · CRETTA SLF</p>
+    </div>
+    <div class="synthesis-body">
+      <div class="synthesis-grid" id="synthesisGrid"></div>
+    </div>
+    <div class="synthesis-footer">
+      <span>CRETTA · <strong>Strategic Leadership Firm</strong> · Growth Architecture Canvas™</span>
+      <span id="synthDate"></span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const BLOCKS = [
+  {
+    id:'proposito', num:'01',
+    title:'Propósito de Crecimiento',
+    tagline:'¿Por qué debe crecer esta empresa?',
+    description:'La razón estratégica que justifica el crecimiento — no el crecimiento como objetivo genérico, sino como respuesta a una oportunidad concreta, una ventana de mercado o una necesidad accionaria específica. Sin un propósito de crecimiento claro, todas las decisiones posteriores carecen de fundamento estratégico.',
+    questions:[
+      '¿Qué oportunidad de mercado o necesidad del cliente hace que el crecimiento sea la decisión estratégica correcta en este momento?',
+      '¿Qué valor adicional genera el crecimiento para los accionistas que no puede crearse manteniendo la escala actual?',
+      '¿Cuál es el costo estratégico — en posición competitiva y valor empresarial — de no crecer en los próximos 3 años?'
+    ],
+    placeholder:'Articule la razón estratégica fundamental del crecimiento. La respuesta debe ser lo suficientemente concreta y convincente para presentarla ante el consejo de administración como el argumento central que justifica la agenda de crecimiento.'
+  },
+  {
+    id:'posicion', num:'02',
+    title:'Posición Estratégica',
+    tagline:'¿Dónde compite la empresa y por qué gana?',
+    description:'La definición precisa del espacio competitivo que ocupa la empresa y la lógica de su ventaja en ese espacio. Una posición estratégica real no es una aspiración — es una descripción verificable de por qué clientes específicos eligen consistentemente a esta empresa sobre sus alternativas.',
+    questions:[
+      '¿En qué segmento de mercado, tipo de cliente o categoría de solución compite con ventaja diferencial esta empresa?',
+      '¿Cuál es la ventaja competitiva real — reconocida por el mercado — que hace que esta empresa gane en esa posición?',
+      '¿Qué haría que esta posición fuera insostenible o estuviera en riesgo en los próximos 3 años?'
+    ],
+    placeholder:'Describa el espacio competitivo que ocupa la empresa con la precisión que permitiría a un observador externo verificar si la posición es real. Evite generalidades como "líder en calidad" o "socio estratégico de confianza" — esas no son posiciones, son aspiraciones.'
+  },
+  {
+    id:'motor', num:'03',
+    title:'Motor de Crecimiento',
+    tagline:'¿Qué mecanismo específico produce el crecimiento?',
+    description:'El mecanismo concreto por el cual la empresa generará un volumen adicional de ingresos y valor. Los motores de crecimiento son finitos y específicos: penetración en mercados existentes, expansión geográfica, nuevas líneas de producto o servicio, adquisiciones, alianzas estratégicas. Cada empresa tiene un motor principal y no puede operar con varios motores simultáneos sin fragmentar su ejecución.',
+    questions:[
+      '¿Cuál es el mecanismo principal por el que la empresa generará crecimiento incremental — nuevos clientes, nuevos mercados, nuevas líneas, adquisiciones?',
+      '¿Por qué este motor es el correcto para la posición estratégica y las capacidades actuales de la empresa?',
+      '¿En qué se diferencia este motor de lo que la empresa ha intentado antes, o qué lo hace más viable ahora que en el pasado?'
+    ],
+    placeholder:'Describa el motor de crecimiento con la especificidad suficiente para diseñar un plan de ejecución. "Crecer con nuevos clientes" no es un motor — "penetrar el segmento de empresas EPC en el norte del país a través de alianzas con operadores industriales" sí lo es.'
+  },
+  {
+    id:'capacidades', num:'04',
+    title:'Capacidades Críticas',
+    tagline:'¿Qué capacidades son indispensables para ejecutar?',
+    description:'Las capacidades — no los recursos, sino las capacidades — sin las cuales el motor de crecimiento no puede funcionar. Algunas de estas capacidades ya existen en la organización; otras deben construirse o adquirirse. La brecha entre las capacidades necesarias y las disponibles es el principal predictor del éxito o fracaso de la ejecución.',
+    questions:[
+      '¿Qué capacidades organizacionales, técnicas o directivas son absolutamente indispensables para que el motor de crecimiento funcione?',
+      '¿Cuáles de esas capacidades ya existen en la organización con el nivel requerido, y cuáles deben construirse o adquirirse?',
+      '¿Cuánto tiempo y qué inversión requiere cerrar las brechas de capacidad críticas antes de que el motor de crecimiento pueda operar?'
+    ],
+    placeholder:'Liste las capacidades críticas — máximo 5 — diferenciando entre las que la empresa ya posee y las que debe desarrollar. Para cada brecha, indique si la solución es contratar, formar, adquirir o asociarse.'
+  },
+  {
+    id:'valor', num:'05',
+    title:'Arquitectura de Valor',
+    tagline:'¿Cómo captura la empresa el valor que crea?',
+    description:'El modelo económico que convierte el crecimiento en rentabilidad sostenida. El crecimiento sin arquitectura de valor produce escala sin rentabilidad — el error más frecuente y más caro en las empresas mid-market que crecen por inercia sin diseñar cómo capturar el valor que generan.',
+    questions:[
+      '¿Cuál es el modelo de ingresos específico del crecimiento — cómo cobra la empresa por el valor que entrega al cliente?',
+      '¿Cómo evoluciona el margen operativo a medida que escala el modelo de crecimiento — hay economías de escala, o los costos crecen al mismo ritmo que los ingresos?',
+      '¿Cuál es el horizonte de tiempo en que el motor de crecimiento se convierte en un generador de caja libre positiva?'
+    ],
+    placeholder:'Describa la lógica económica del modelo de crecimiento: cómo se generan ingresos, cuál es la estructura de costos, qué márgenes son alcanzables y en qué horizonte de tiempo el crecimiento genera valor económico neto positivo.'
+  },
+  {
+    id:'ruta', num:'06',
+    title:'Ruta de Expansión',
+    tagline:'¿En qué secuencia y con qué hitos?',
+    description:'La secuencia específica en que se ejecuta el crecimiento — las fases, los hitos verificables y los puntos de decisión que estructuran el horizonte de 3 años. Sin una ruta de expansión explícita, el crecimiento se convierte en una aspiración difusa que nunca encuentra su momento de inicio.',
+    questions:[
+      '¿Cuáles son las tres fases del crecimiento en un horizonte de 36 meses, y qué logros específicos marcan el inicio y el fin de cada fase?',
+      '¿Cuáles son los dos o tres hitos no negociables — los que si no se alcanzan indican que la estrategia requiere revisión?',
+      '¿En qué puntos de la ruta se tomarán decisiones de continuación, ajuste o salida, y con qué criterios?'
+    ],
+    placeholder:'Describa la ruta de expansión en tres fases con horizonte de 36 meses. Para cada fase, indique: qué se hace, qué se logra, cuánto tiempo toma y qué recursos requiere. Los hitos deben ser verificables — no opiniones sino hechos medibles.'
+  },
+  {
+    id:'condiciones', num:'07',
+    title:'Condiciones de Éxito',
+    tagline:'¿Qué debe ser verdad para que este modelo funcione?',
+    description:'Las premisas críticas sobre las que descansa la estrategia de crecimiento — las suposiciones que, si resultan falsas, hacen fallar el modelo. Identificar las condiciones de éxito no es un ejercicio de pesimismo: es la diferencia entre una estrategia frágil y una estrategia robusta que puede adaptarse cuando el entorno no se comporta como se esperaba.',
+    questions:[
+      '¿Qué suposiciones sobre el mercado, el cliente, la competencia o el entorno regulatorio son fundamentales para que el modelo de crecimiento funcione?',
+      '¿Cuáles de esas suposiciones son las más inciertas — las que tienen mayor probabilidad de resultar incorrectas?',
+      '¿Cómo se verifican las condiciones de éxito durante la ejecución, y qué disparadores de revisión estratégica deben establecerse?'
+    ],
+    placeholder:'Liste las 4-5 condiciones de éxito más críticas del modelo de crecimiento. Para cada una, indique: cuán verificable es hoy, cuál es el nivel de incertidumbre y qué señal indicaría que esa condición está fallando.'
+  },
+  {
+    id:'riesgos', num:'08',
+    title:'Riesgos Estructurales',
+    tagline:'¿Qué podría destruir el valor del crecimiento?',
+    description:'Los vectores de riesgo que, si se materializan, pueden destruir el valor que el crecimiento está generando. Los riesgos estructurales son distintos de los riesgos operativos: no son los problemas del día a día, sino las fuerzas que pueden hacer que el modelo de crecimiento entero pierda su lógica.',
+    questions:[
+      '¿Qué movimientos de la competencia, cambios regulatorios o disruptores tecnológicos podrían eliminar la ventaja competitiva sobre la que descansa el crecimiento?',
+      '¿Qué riesgos internos — de talento, de capital, de ejecución o de gobierno — podrían hacer colapsar la implementación antes de que el modelo madure?',
+      '¿Cómo se gestiona activamente el riesgo más crítico — no como contingencia sino como prioridad de liderazgo?'
+    ],
+    placeholder:'Identifique los 3 riesgos estructurales más relevantes. Para cada uno: describa el mecanismo por el que podría materializarse, estime su probabilidad e impacto, y defina quién es responsable de monitorarlo y mitigarlo.'
+  },
+  {
+    id:'mandato', num:'09',
+    title:'Mandato de Liderazgo',
+    tagline:'¿Quién lidera qué, con qué accountability?',
+    description:'La arquitectura de responsabilidad que garantiza que el crecimiento pasa de la arquitectura al resultado. El mandato de liderazgo define quién toma qué decisiones, quién es accountable ante el consejo por los resultados del crecimiento y cómo se reporta el avance de forma que permita corrección a tiempo.',
+    questions:[
+      '¿Quién tiene el mandato explícito de liderar la agenda de crecimiento — con autoridad real sobre las decisiones críticas y accountability ante el consejo?',
+      '¿Cómo se articula la línea de accountability entre el liderazgo de crecimiento, el CEO y el consejo de administración?',
+      '¿Con qué frecuencia y en qué formato se revisa el avance del canvas — y quién tiene autoridad para tomar decisiones de ajuste en tiempo real?'
+    ],
+    placeholder:'Defina la arquitectura de liderazgo del crecimiento: quién lidera, con qué mandato formal, cómo se toman las decisiones críticas, cómo se reporta al consejo y qué mecanismos de accountability garantizan que la ejecución es continua y verificable.'
+  }
+];
+
+let activeBlock = null;
+let showingSynthesis = false;
+let blockData = {};
+
+BLOCKS.forEach(b=>{ blockData[b.id] = ''; });
+
+function init(){
+  renderCanvas();
+  renderSynthesis();
+  updateProgress();
+}
+
+function renderCanvas(){
+  const grid = document.getElementById('canvasGrid');
+  grid.innerHTML = '';
+  BLOCKS.forEach((b,i)=>{
+    const filled = blockData[b.id] && blockData[b.id].trim().length > 0;
+    const isActive = activeBlock === i;
+    const div = document.createElement('div');
+    div.className = 'block' + (filled?' filled':'') + (isActive?' active':'');
+    div.onclick = ()=>openEditor(i);
+    const preview = filled
+      ? `<div class="block-preview">${escHtml(blockData[b.id])}</div>`
+      : `<div class="block-empty-hint">Pulse para completar este bloque</div>`;
+    div.innerHTML = `
+      <div class="block-bg"></div>
+      <span class="block-num">Bloque ${b.num}</span>
+      <div class="block-title">${b.title}</div>
+      <div class="block-tagline">${b.tagline}</div>
+      ${preview}
+      <div class="block-status">
+        <div class="block-status-dot"></div>
+        <span class="block-status-text">${filled?'Completado':'Sin completar'}</span>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function openEditor(idx){
+  activeBlock = idx;
+  const b = BLOCKS[idx];
+  document.getElementById('edNum').textContent = `Bloque ${b.num} de 09  ·  ${b.title}`;
+  document.getElementById('edTitle').textContent = b.title;
+  document.getElementById('edTagline').textContent = b.tagline;
+  document.getElementById('edDescription').textContent = b.description;
+  const qContainer = document.getElementById('edQuestions');
+  qContainer.innerHTML = '';
+  b.questions.forEach((q,i)=>{
+    qContainer.innerHTML += `<div class="editor-question"><span class="eq-num">${i+1}.</span><span class="eq-text">${q}</span></div>`;
+  });
+  const ta = document.getElementById('edTextarea');
+  ta.value = blockData[b.id] || '';
+  ta.placeholder = b.placeholder;
+  updateCharCount();
+  document.getElementById('editorPanel').classList.remove('hidden');
+  document.getElementById('editorPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+  renderCanvas();
+}
+
+function closeEditor(){
+  saveBlock();
+  document.getElementById('editorPanel').classList.add('hidden');
+  activeBlock = null;
+  renderCanvas();
+}
+
+function saveBlock(){
+  if(activeBlock===null) return;
+  const val = document.getElementById('edTextarea').value;
+  blockData[BLOCKS[activeBlock].id] = val;
+  updateProgress();
+  renderSynthesis();
+}
+
+function navigateBlock(dir){
+  saveBlock();
+  const next = activeBlock + dir;
+  if(next>=0 && next<BLOCKS.length){ openEditor(next); }
+}
+
+function onTextareaInput(){
+  updateCharCount();
+}
+
+function updateCharCount(){
+  const len = document.getElementById('edTextarea').value.length;
+  document.getElementById('edCharCount').textContent = `${len} caracteres`;
+}
+
+function updateProgress(){
+  const filled = Object.values(blockData).filter(v=>v&&v.trim().length>0).length;
+  const pct = Math.round((filled/9)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = `${filled} de 9 bloques completados`;
+  renderCanvas();
+}
+
+function toggleSynthesis(){
+  showingSynthesis = !showingSynthesis;
+  const sv = document.getElementById('synthesisView');
+  if(showingSynthesis){
+    saveBlock();
+    sv.classList.add('visible');
+    sv.scrollIntoView({behavior:'smooth'});
+    document.querySelector('.btn-action.outline').textContent = 'Volver al canvas';
+  } else {
+    sv.classList.remove('visible');
+    document.querySelector('.btn-action.outline').textContent = 'Ver síntesis';
+  }
+}
+
+function renderSynthesis(){
+  const company = document.getElementById('companyName').value || '— Sin nombre —';
+  document.getElementById('synthCompany').textContent = company;
+  const grid = document.getElementById('synthesisGrid');
+  grid.innerHTML = '';
+  BLOCKS.forEach(b=>{
+    const content = blockData[b.id] && blockData[b.id].trim();
+    grid.innerHTML += `<div class="synthesis-block">
+      <span class="synthesis-block-num">Bloque ${b.num}</span>
+      <div class="synthesis-block-title">${b.title}</div>
+      ${content
+        ? `<div class="synthesis-block-content">${escHtml(content)}</div>`
+        : `<div class="synthesis-block-empty">Bloque sin completar</div>`}
+    </div>`;
+  });
+  const now = new Date();
+  document.getElementById('synthDate').textContent = now.toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+}
+
+function updateSynthesis(){
+  renderSynthesis();
+}
+
+function resetCanvas(){
+  if(!confirm('¿Desea iniciar un nuevo canvas? Se perderá todo el contenido actual.')) return;
+  BLOCKS.forEach(b=>{ blockData[b.id]=''; });
+  document.getElementById('companyName').value = '';
+  activeBlock = null;
+  document.getElementById('editorPanel').classList.add('hidden');
+  document.getElementById('synthesisView').classList.remove('visible');
+  showingSynthesis = false;
+  document.querySelector('.btn-action.outline').textContent = 'Ver síntesis';
+  updateProgress();
+  renderSynthesis();
+}
+
+function escHtml(t){
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+init();
+</script>
+</body>
+</html>

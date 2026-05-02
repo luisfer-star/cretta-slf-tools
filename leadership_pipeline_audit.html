@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leadership Pipeline Audit™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{--navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.1);--cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;--t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;--r:rgba(196,154,60,0.2);--s4:#1a5c2e;--s4l:rgba(26,92,46,0.12);--s3:#2d7a42;--s3l:rgba(45,122,66,0.1);--s2:#8a5c00;--s2l:rgba(196,140,0,0.1);--s1:#8a1a1a;--s1l:rgba(138,26,26,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+input,textarea{font-family:'Montserrat',sans-serif;outline:none}
+.topbar{background:var(--navy);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.tb-brand{font-size:.53rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-label{font-size:.5rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,236,.3)}
+.btn-print{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(196,154,60,.28);color:var(--gold);cursor:pointer}
+.prog-track{height:2px;background:rgba(196,154,60,.1)}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s ease}
+.shell{max-width:720px;margin:0 auto;padding:0 28px}
+.screen{display:none;padding:38px 0 60px;animation:fi .3s ease}
+.screen.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px}
+.h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,5vw,3rem);font-weight:300;color:var(--navy);line-height:1.12;margin-bottom:8px}
+.h1 em{font-style:italic;color:var(--gold2)}
+.rule{width:32px;height:1px;background:var(--gold);opacity:.5;margin-bottom:18px}
+.lead{font-size:.82rem;color:var(--t2);line-height:1.82;margin-bottom:18px}
+.callout{background:var(--navy);padding:20px 22px;margin-bottom:22px}
+.callout p{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;color:var(--cream);line-height:1.7;font-weight:300}
+.callout strong{color:var(--gold2);font-style:normal;font-weight:400}
+.sec-lbl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.dim-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:26px}
+.dim-card{background:white;padding:14px 15px;border-left:2px solid var(--r)}
+.dc-num{font-size:.46rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.dc-name{font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:2px}
+.dc-desc{font-size:.6rem;color:var(--t3);line-height:1.4}
+.btn-start{background:var(--navy);color:var(--cream);padding:14px 32px;font-size:.64rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;transition:background .15s}
+.btn-start:hover{background:var(--navy3)}
+.dim-prog{display:flex;gap:2px;margin-bottom:20px}
+.dp-item{flex:1;height:3px;background:var(--cream2);border-radius:1px}
+.dp-item.done{background:var(--gold)}.dp-item.active{background:rgba(196,154,60,.5)}
+.dim-hdr{background:var(--navy);padding:20px 22px;margin-bottom:22px}
+.dh-eye{font-size:.48rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:4px}
+.dh-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--cream);margin-bottom:3px}
+.dh-sub{font-size:.58rem;color:rgba(244,241,236,.38);font-style:italic}
+.q-block{background:white;padding:16px 18px;margin-bottom:2px}
+.q-num{font-size:.46rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.q-text{font-size:.78rem;font-weight:600;color:var(--navy);line-height:1.4;margin-bottom:12px}
+.scale-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.sc-btn{padding:10px 6px;border:1px solid var(--r);background:white;cursor:pointer;text-align:center;transition:all .12s}
+.sc-btn:hover{border-color:rgba(196,154,60,.5)}
+.sc-btn .sn{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:300;display:block;line-height:1;margin-bottom:3px}
+.sc-btn .sl{font-size:.44rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.sc-btn[data-s="1"]{background:#fdf3f3}.sc-btn[data-s="1"] .sn{color:var(--s1)}.sc-btn[data-s="1"] .sl{color:var(--s1)}.sc-btn[data-s="1"].sel{border-color:var(--s1);background:var(--s1l)}
+.sc-btn[data-s="2"]{background:#fdf8ed}.sc-btn[data-s="2"] .sn{color:var(--s2)}.sc-btn[data-s="2"] .sl{color:var(--s2)}.sc-btn[data-s="2"].sel{border-color:var(--s2);background:var(--s2l)}
+.sc-btn[data-s="3"]{background:#f3f9f4}.sc-btn[data-s="3"] .sn{color:var(--s3)}.sc-btn[data-s="3"] .sl{color:var(--s3)}.sc-btn[data-s="3"].sel{border-color:var(--s3);background:var(--s3l)}
+.sc-btn[data-s="4"]{background:#f0f8f2}.sc-btn[data-s="4"] .sn{color:var(--s4)}.sc-btn[data-s="4"] .sl{color:var(--s4)}.sc-btn[data-s="4"].sel{border-color:var(--s4);background:var(--s4l)}
+.eval-nav{display:flex;gap:8px;margin-top:18px}
+.btn-back{color:var(--t3);border:1px solid var(--r);padding:10px 16px;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:all .13s}
+.btn-back:hover{border-color:var(--gold);color:var(--navy)}
+.btn-next{background:var(--navy);color:var(--cream);padding:10px 24px;font-size:.58rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.3;pointer-events:none;transition:all .13s}
+.btn-next.ready{opacity:1;pointer-events:all}.btn-next.ready:hover{background:var(--navy3)}
+.calc-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center}
+.calc-lbl{font-size:.54rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.calc-title{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:300;color:var(--navy);margin-bottom:28px;line-height:1.3}
+.calc-bar-bg{width:200px;height:2px;background:rgba(13,27,62,.1);overflow:hidden}
+.calc-bar-fill{height:100%;background:var(--gold);animation:cl 2.2s ease forwards}
+@keyframes cl{from{width:0}to{width:100%}}
+.res-hero{background:var(--navy);padding:28px 26px;margin-bottom:2px;position:relative;overflow:hidden}
+.res-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70%,rgba(196,154,60,.08),transparent 60%);pointer-events:none}
+.rh-eye{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.55);display:block;margin-bottom:8px;position:relative;z-index:1}
+.rh-row{display:flex;align-items:center;gap:18px;position:relative;z-index:1;margin-bottom:8px}
+.rh-score{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;line-height:1}
+.rh-archetype{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--cream);margin-bottom:3px;line-height:1.2}
+.rh-sub{font-size:.5rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,154,60,.5)}
+.rh-def{font-size:.7rem;color:rgba(244,241,236,.5);font-style:italic;line-height:1.65;max-width:540px;position:relative;z-index:1}
+.legend{display:flex;gap:14px;flex-wrap:wrap;padding:12px 20px;background:var(--cream2);margin-bottom:2px}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:.46rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dim-bars{background:white;padding:20px 20px;margin-bottom:2px}
+.dim-bar-item{margin-bottom:13px}
+.dbi-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.dbi-name{font-size:.65rem;font-weight:700;color:var(--navy)}
+.dbi-score{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300}
+.dbi-track{height:8px;background:var(--cream2);border-radius:2px;overflow:hidden}
+.dbi-fill{height:100%;border-radius:2px;transition:width .7s ease}
+.gap-sec{background:var(--cream);padding:18px 20px;margin-bottom:2px}
+.gap-item{background:white;padding:14px 16px;margin-bottom:2px}
+.gap-badge{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;display:inline-block;margin-bottom:5px}
+.gb-crit{background:var(--s1l);color:var(--s1)}.gb-dev{background:var(--s2l);color:var(--s2)}.gb-ok{background:var(--s3l);color:var(--s3)}
+.gap-title{font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.gap-text{font-size:.7rem;color:var(--t2);line-height:1.65;margin-bottom:6px}
+.gap-rec{font-size:.65rem;color:var(--t3);font-style:italic}
+.sum-bar{background:var(--navy2);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:2px}
+.sb-stats{display:flex;gap:18px;flex-wrap:wrap}
+.sb-stat{text-align:center}
+.sb-num{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;display:block;line-height:1}
+.sb-lbl{font-size:.42rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,236,.28)}
+.btn-restart{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(196,154,60,.18);color:rgba(244,241,236,.35);transition:all .15s}
+.btn-restart:hover{border-color:var(--gold);color:var(--cream)}
+.cta-blk{background:var(--navy);padding:30px 26px;text-align:center}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.7;max-width:520px;margin:0 auto 18px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:12px 26px;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.phil{background:var(--navy2);padding:18px 22px}
+.phil p{font-family:'Cormorant Garamond',serif;font-size:.92rem;font-weight:300;font-style:italic;color:rgba(244,241,236,.45);line-height:1.7}
+.phil strong{color:var(--gold2);font-style:normal;font-weight:400}
+@media print{.topbar,.eval-nav,.btn-print,.btn-restart,.btn-cta{display:none!important}body{background:white}}
+@media(max-width:600px){.dim-grid{grid-template-columns:1fr}.scale-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div class="tb-right">
+    <span class="tb-label">Leadership Pipeline Audit™ · Miembro</span>
+    <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+  </div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+<div class="shell">
+
+<div class="screen active" id="sIntro">
+  <span class="eyebrow">Desarrollo de liderazgo · SLF Insights · Miembro</span>
+  <h1 class="h1">Leadership Pipeline <em>Audit™</em></h1>
+  <div class="rule"></div>
+  <p class="lead">El pipeline de liderazgo es el conjunto de personas que tienen el potencial de asumir roles de mayor responsabilidad estratégica en los próximos 2-5 años. Este diagnóstico evalúa si la empresa está construyendo el liderazgo que el siguiente nivel requiere — o si depende de importarlo siempre de afuera.</p>
+  <div class="callout"><p>Las empresas que crecen de forma sostenida no son las que contratan mejor talento externo. Son las que construyen mejor talento interno. <strong>El pipeline de liderazgo es la inversión con mayor retorno compuesto en la empresa mediana — y la más subestimada.</strong></p></div>
+  <span class="sec-lbl">4 dimensiones evaluadas · 16 preguntas · Escala 1–4</span>
+  <div class="dim-grid"><div class="dim-card"><span class="dc-num">D1</span><div class="dc-name">Identificación de Potencial</div><div class="dc-desc">¿Están identificados los líderes potenciales?</div></div><div class="dim-card"><span class="dc-num">D2</span><div class="dc-name">Desarrollo Activo</div><div class="dc-desc">¿Se desarrolla activamente el potencial?</div></div><div class="dim-card"><span class="dc-num">D3</span><div class="dc-name">Retención de Talento Clave</div><div class="dc-desc">¿Retiene a sus mejores?</div></div><div class="dim-card"><span class="dc-num">D4</span><div class="dc-name">Velocidad de Desarrollo</div><div class="dc-desc">¿El desarrollo es suficientemente rápido?</div></div></div>
+  <button class="btn-start" onclick="start()">Iniciar diagnóstico — 16 preguntas →</button>
+</div>
+
+<div class="screen" id="sEval">
+  <div class="dim-prog" id="dimProg"></div>
+  <div class="dim-hdr"><span class="dh-eye" id="dhEye">D1 de 4</span><div class="dh-name" id="dhName"></div><div class="dh-sub" id="dhSub"></div></div>
+  <div id="qCont"></div>
+  <div class="eval-nav">
+    <button class="btn-back" id="btnBack" onclick="goBack()" style="display:none">← Anterior</button>
+    <button class="btn-next" id="btnNext" onclick="goNext()">Siguiente →</button>
+  </div>
+</div>
+
+<div class="screen" id="sCalc">
+  <div class="calc-wrap">
+    <span class="calc-lbl">Evaluando el pipeline de liderazgo</span>
+    <p class="calc-title">Analizando la capacidad<br>de desarrollo de liderazgo</p>
+    <div class="calc-bar-bg"><div class="calc-bar-fill"></div></div>
+  </div>
+</div>
+
+<div class="screen" id="sRes">
+  <div class="res-hero">
+    <span class="rh-eye">Leadership Pipeline Audit™ · Resultado</span>
+    <div class="rh-row"><div class="rh-score" id="rScore"></div><div><div class="rh-archetype" id="rArch"></div><div class="rh-sub" id="rSub"></div></div></div>
+    <div class="rh-def" id="rDef"></div>
+  </div>
+  <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:var(--s1)"></div>1 — Ausente</div><div class="leg-item"><div class="leg-dot" style="background:var(--s2)"></div>2 — Parcial</div><div class="leg-item"><div class="leg-dot" style="background:var(--s3)"></div>3 — Desarrollado</div><div class="leg-item"><div class="leg-dot" style="background:var(--s4)"></div>4 — Robusto</div></div>
+  <div class="dim-bars"><span class="sec-lbl" style="margin-bottom:14px">Resultado por dimensión</span><div id="dimBars"></div></div>
+  <div class="gap-sec"><span class="sec-lbl">Brechas identificadas y acciones prioritarias</span><div id="gapItems"></div></div>
+  <div class="sum-bar"><div class="sb-stats" id="sbStats"></div><button class="btn-restart" onclick="restart()">Nuevo diagnóstico</button></div>
+  <div class="cta-blk">
+    <p class="cta-text">El pipeline de liderazgo es la infraestructura de talento del crecimiento. Cretta puede acompañar el diseño del sistema de desarrollo de liderazgo que la empresa necesita para el siguiente nivel.</p>
+    <button class="btn-cta">Contactar a Cretta →</button>
+  </div>
+  <div class="phil"><p><strong>Pipeline de liderazgo</strong> — No es una lista de personas prometedoras. Es un sistema institucional de identificación, desarrollo y retención que garantiza que la empresa nunca tenga que detener su crecimiento porque no tiene el liderazgo para ejecutarlo.</p></div>
+</div>
+</div>
+<script>
+
+const DIMS=[{"name": "Identificación de Potencial", "sub": "La empresa tiene claridad sobre quién tiene potencial de liderazgo", "desc": "¿Están identificados los líderes potenciales?", "qs": ["¿Hay candidatos internos identificados formalmente para los 3-5 roles de mayor impacto en la organización?", "¿El criterio de identificación va más allá del desempeño actual — incluye potencial, aprendizaje y disposición al liderazgo?", "¿Los candidatos identificados son conocidos por el CEO y el consejo — no solo por sus supervisores directos?", "¿El proceso de identificación se realiza con regularidad — al menos una vez por año?"]}, {"name": "Desarrollo Activo", "sub": "Los candidatos están siendo desarrollados deliberadamente para el siguiente nivel", "desc": "¿Se desarrolla activamente el potencial?", "qs": ["¿Hay planes de desarrollo individualizados para los candidatos de mayor potencial?", "¿Los candidatos están siendo expuestos a decisiones, proyectos y relaciones que los preparan para el siguiente nivel?", "¿El CEO invierte tiempo personal en el desarrollo de al menos 2-3 líderes de siguiente nivel?", "¿Hay retroalimentación formal y regular para los candidatos sobre sus brechas de desarrollo?"]}, {"name": "Retención de Talento Clave", "sub": "La empresa retiene a las personas de mayor potencial estratégico", "desc": "¿Retiene a sus mejores?", "qs": ["¿La empresa tiene mecanismos específicos de retención para el talento de mayor potencial — no solo compensación de mercado?", "¿Los líderes de alto potencial tienen visibilidad de un camino de crecimiento concreto dentro de la empresa?", "¿La tasa de rotación del talento de mayor potencial es inferior a la tasa promedio de la organización?", "¿Hay conversaciones explícitas con el talento clave sobre sus aspiraciones y cómo la empresa puede satisfacerlas?"]}, {"name": "Velocidad de Desarrollo", "sub": "El ritmo de desarrollo interno es suficiente para cubrir las necesidades de la empresa", "desc": "¿El desarrollo es suficientemente rápido?", "qs": ["¿La empresa ha promovido internamente al menos el 60% de sus roles de liderazgo en los últimos 3 años?", "¿El tiempo que tarda un candidato de alto potencial en estar listo para el siguiente nivel es menor que el tiempo en que los roles se quedan vacantes?", "¿Los planes de desarrollo tienen plazos y hitos — no son planes aspiracionales sin fechas?", "¿El aprendizaje en el trabajo es deliberado — asignaciones diseñadas para desarrollar — no solo exposición al trabajo cotidiano?"]}];
+const ARCHETYPES=[{"min": 3.3, "name": "Pipeline de liderazgo sólido", "sub": "LISTO — Construyendo el liderazgo del siguiente nivel", "color": "#1a5c2e", "def": "La empresa tiene un pipeline de liderazgo identificado, en desarrollo activo, retenido y con velocidad suficiente. La dependencia del mercado externo de talento es una elección, no una necesidad."}, {"min": 2.4, "name": "Pipeline en construcción", "sub": "DESARROLLAR — Elementos presentes, sistema incompleto", "color": "#8a5c00", "def": "Hay trabajo en curso pero sin el sistema completo que garantice un pipeline confiable. La empresa puede encontrarse dependiendo del mercado externo más de lo que desea."}, {"min": 1.6, "name": "Pipeline insuficiente", "sub": "ATENCIÓN — Dependencia alta del talento externo", "color": "#7a3c00", "def": "La empresa no está construyendo el liderazgo que necesita. Cada rol de liderazgo vacante requerirá búsqueda externa con costos de tiempo, dinero y adaptación cultural significativos."}, {"min": 0, "name": "Sin pipeline de liderazgo", "sub": "CRÍTICO — El talento es el cuello de botella del crecimiento", "color": "#8a1a1a", "def": "La empresa no tiene pipeline de liderazgo. El crecimiento está limitado por la disponibilidad de talento en el mercado y la capacidad de integrar externos a la velocidad que el negocio requiere."}];
+const GAPS={"0": {"c": "No hay candidatos de siguiente nivel identificados formalmente. El conocimiento de quién puede crecer vive solo en la intuición del CEO.", "d": "Hay candidatos considerados informalmente pero sin proceso ni criterio formal de identificación.", "a": "Implementar una revisión anual de talento: mapear los 5 roles más críticos y los candidatos internos para cada uno, con criterio documentado."}, "1": {"c": "No hay desarrollo activo. Identificar sin desarrollar es una lista, no un pipeline.", "d": "Hay desarrollo informal pero sin la deliberación y la velocidad que el siguiente nivel requiere.", "a": "Diseñar un plan de desarrollo de 12 meses para los 2-3 candidatos de mayor potencial: exposición específica, proyectos de desarrollo y retroalimentación formal."}, "2": {"c": "La empresa no está reteniendo a su talento de mayor potencial. El mercado se los lleva antes de que estén listos.", "d": "La retención existe pero no está activamente gestionada con los mecanismos correctos.", "a": "Diseñar un plan de retención diferenciado para los 5 talentos más críticos: compensación, visibilidad, desarrollo y conversación explícita sobre el futuro."}, "3": {"c": "El ritmo de desarrollo es demasiado lento. Los roles se quedan vacantes antes de que los candidatos internos estén listos.", "d": "El desarrollo existe pero con plazos indefinidos que lo hacen poco confiable como fuente de talento.", "a": "Definir plazos de preparación para cada candidato: cuánto tiempo necesita para estar listo y qué hitos marcará el progreso."}};
+const NDIMS=DIMS.length;
+const NQPD=DIMS[0].qs.length;
+let cur=0,ans={};for(let i=0;i<NDIMS;i++)ans[i]={};
+function start(){document.getElementById('sIntro').classList.remove('active');renderDim(0);document.getElementById('sEval').classList.add('active');updProg();window.scrollTo(0,0)}
+function renderDim(idx){const d=DIMS[idx];document.getElementById('dhEye').textContent=`Dimensión ${idx+1} de ${NDIMS}`;document.getElementById('dhName').textContent=d.name;document.getElementById('dhSub').textContent=d.sub;const dp=document.getElementById('dimProg');dp.innerHTML='';DIMS.forEach((_,i)=>{const el=document.createElement('div');el.className='dp-item'+(i<idx?' done':i===idx?' active':'');dp.appendChild(el)});const qc=document.getElementById('qCont');qc.innerHTML='';d.qs.forEach((q,qi)=>{const sv=ans[idx][qi];const bl=document.createElement('div');bl.className='q-block';let row='<div class="scale-row">';[[4, "Robusto"], [3, "Desarrollado"], [2, "Parcial"], [1, "Ausente"]].forEach(([s,l])=>{row+=`<div class="sc-btn${sv===s?' sel':''}" data-s="${s}" onclick="setA(${idx},${qi},${s},this)"><span class="sn">${s}</span><span class="sl">${l}</span></div>`});row+='</div>';bl.innerHTML=`<span class="q-num">Pregunta ${qi+1} de ${NQPD}</span><div class="q-text">${q}</div>${row}`;qc.appendChild(bl)});document.getElementById('btnBack').style.display=idx===0?'none':'inline-block';document.getElementById('btnNext').textContent=idx===NDIMS-1?'Ver resultado →':'Siguiente dimensión →';updNxt(idx)}
+function setA(d,q,s,el){ans[d][q]=s;el.closest('.scale-row').querySelectorAll('.sc-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');updNxt(d)}
+function updNxt(idx){document.getElementById('btnNext').classList.toggle('ready',DIMS[idx].qs.every((_,i)=>ans[idx][i]!==undefined))}
+function goNext(){if(!DIMS[cur].qs.every((_,i)=>ans[cur][i]!==undefined))return;if(cur===NDIMS-1){showCalc();return}cur++;renderDim(cur);updProg();window.scrollTo(0,0)}
+function goBack(){if(cur===0)return;cur--;renderDim(cur);updProg();window.scrollTo(0,0)}
+function updProg(){const d=Object.keys(ans).filter(i=>DIMS[i].qs.every((_,j)=>ans[i][j]!==undefined)).length;document.getElementById('pFill').style.width=Math.round((d/NDIMS)*100)+'%'}
+function showCalc(){document.getElementById('sEval').classList.remove('active');document.getElementById('sCalc').classList.add('active');setTimeout(showRes,2200)}
+function showRes(){
+  const ds=DIMS.map((_,i)=>{const v=DIMS[i].qs.map((_,j)=>ans[i][j]);return +(v.reduce((s,x)=>s+x,0)/v.length).toFixed(2)});
+  const overall=+(ds.reduce((s,v)=>s+v,0)/NDIMS).toFixed(2);
+  const arch=ARCHETYPES.find(a=>overall>=a.min);
+  document.getElementById('rScore').textContent=overall.toFixed(1);document.getElementById('rScore').style.color=arch.color;
+  document.getElementById('rArch').textContent=arch.name;document.getElementById('rSub').textContent=arch.sub;document.getElementById('rDef').textContent=arch.def;
+  const db=document.getElementById('dimBars');db.innerHTML='';
+  ds.forEach((sc,i)=>{const p=((sc-1)/3)*100;const color=sc<2?'var(--s1)':sc<2.5?'var(--s2)':sc<3.3?'var(--s3)':'var(--s4)';db.innerHTML+=`<div class="dim-bar-item"><div class="dbi-hdr"><span class="dbi-name">${DIMS[i].name}</span><span class="dbi-score" style="color:${color}">${sc.toFixed(1)} / 4.0</span></div><div class="dbi-track"><div class="dbi-fill" style="width:0%;background:${color}" data-w="${p}"></div></div></div>`});
+  setTimeout(()=>document.querySelectorAll('.dbi-fill').forEach(el=>el.style.width=el.dataset.w+'%'),100);
+  const gi=document.getElementById('gapItems');gi.innerHTML='';
+  const gaps=ds.map((sc,i)=>{return {i,sc}}).filter(x=>x.sc<3.2).sort((a,b)=>a.sc-b.sc);
+  if(!gaps.length){gi.innerHTML='<div class="gap-item"><p style="font-size:.75rem;color:var(--t2);font-style:italic;line-height:1.7">Los resultados en todas las dimensiones son sólidos. La prioridad es sostener y escalar esta madurez al ritmo del crecimiento de la empresa.</p></div>'}
+  else{gaps.forEach(g=>{const t=GAPS[g.i];const isCrit=g.sc<2;gi.innerHTML+=`<div class="gap-item"><span class="gap-badge ${isCrit?'gb-crit':'gb-dev'}">${isCrit?'Crítico':'En desarrollo'} · ${g.sc.toFixed(1)}/4.0</span><div class="gap-title">${DIMS[g.i].name}</div><p class="gap-text">${isCrit?t.c:t.d}</p><p class="gap-rec">Primer paso: ${t.a}</p></div>`})}
+  const crit=ds.filter(s=>s<2).length;const dev=ds.filter(s=>s>=2&&s<3).length;const ok=ds.filter(s=>s>=3).length;
+  document.getElementById('sbStats').innerHTML=`<div class="sb-stat"><span class="sb-num" style="color:var(--gold)">${overall.toFixed(1)}</span><span class="sb-lbl">Índice global</span></div><div class="sb-stat"><span class="sb-num" style="color:#5abf7a">${ok}</span><span class="sb-lbl">Dimensiones sólidas</span></div><div class="sb-stat"><span class="sb-num" style="color:#e8b84a">${dev}</span><span class="sb-lbl">En desarrollo</span></div><div class="sb-stat"><span class="sb-num" style="color:#e87a7a">${crit}</span><span class="sb-lbl">Críticas</span></div>`;
+  document.getElementById('sCalc').classList.remove('active');document.getElementById('sRes').classList.add('active');document.getElementById('pFill').style.width='100%';window.scrollTo(0,0);
+}
+function restart(){cur=0;for(let i=0;i<NDIMS;i++)ans[i]={};document.getElementById('sRes').classList.remove('active');document.getElementById('sIntro').classList.add('active');document.getElementById('pFill').style.width='0%';window.scrollTo(0,0)}
+
+</script>
+</body>
+</html>

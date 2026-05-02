@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Competitive Moat Mapper™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{--navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.1);--cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;--t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;--r:rgba(196,154,60,0.2);--s4:#1a5c2e;--s4l:rgba(26,92,46,0.12);--s3:#2d7a42;--s3l:rgba(45,122,66,0.1);--s2:#8a5c00;--s2l:rgba(196,140,0,0.1);--s1:#8a1a1a;--s1l:rgba(138,26,26,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+.topbar{background:var(--navy);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.tb-brand{font-size:.53rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-label{font-size:.5rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,236,.3)}
+.btn-print{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(196,154,60,.28);color:var(--gold);cursor:pointer}
+.prog-track{height:2px;background:rgba(196,154,60,.1)}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s ease}
+.shell{max-width:740px;margin:0 auto;padding:0 28px}
+.screen{display:none;padding:38px 0 60px;animation:fi .3s ease}
+.screen.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px}
+.h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,5vw,3rem);font-weight:300;color:var(--navy);line-height:1.12;margin-bottom:8px}
+.h1 em{font-style:italic;color:var(--gold2)}
+.rule{width:32px;height:1px;background:var(--gold);opacity:.5;margin-bottom:18px}
+.lead{font-size:.82rem;color:var(--t2);line-height:1.82;margin-bottom:18px}
+.callout{background:var(--navy);padding:20px 22px;margin-bottom:22px}
+.callout p{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;color:var(--cream);line-height:1.7;font-weight:300}
+.callout strong{color:var(--gold2);font-style:normal;font-weight:400}
+.sec-lbl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.moat-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:26px}
+.moat-card{background:white;padding:14px 15px;border-left:3px solid var(--r)}
+.mc-num{font-size:.46rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.mc-name{font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:2px}
+.mc-desc{font-size:.6rem;color:var(--t3);line-height:1.4}
+.btn-start{background:var(--navy);color:var(--cream);padding:14px 32px;font-size:.64rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;transition:background .15s}
+.btn-start:hover{background:var(--navy3)}
+.moat-prog{display:flex;gap:2px;margin-bottom:20px}
+.mp-item{flex:1;height:3px;background:var(--cream2);border-radius:1px}
+.mp-item.done{background:var(--gold)}.mp-item.active{background:rgba(196,154,60,.5)}
+.moat-hdr{padding:18px 22px;margin-bottom:22px}
+.mh-eye{font-size:.48rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.mh-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--navy);margin-bottom:3px}
+.mh-desc{font-size:.72rem;color:var(--t2);line-height:1.55;font-style:italic;border-left:2px solid var(--r);padding-left:12px}
+.q-block{background:white;padding:16px 18px;margin-bottom:2px}
+.q-num{font-size:.46rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.q-text{font-size:.78rem;font-weight:600;color:var(--navy);line-height:1.4;margin-bottom:12px}
+.scale-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.sc-btn{padding:10px 6px;border:1px solid var(--r);background:white;cursor:pointer;text-align:center;transition:all .12s}
+.sc-btn:hover{border-color:rgba(196,154,60,.5)}
+.sc-btn .sn{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:300;display:block;line-height:1;margin-bottom:3px}
+.sc-btn .sl{font-size:.44rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.sc-btn[data-s="1"]{background:#fdf3f3}.sc-btn[data-s="1"] .sn{color:var(--s1)}.sc-btn[data-s="1"] .sl{color:var(--s1)}.sc-btn[data-s="1"].sel{border-color:var(--s1);background:var(--s1l)}
+.sc-btn[data-s="2"]{background:#fdf8ed}.sc-btn[data-s="2"] .sn{color:var(--s2)}.sc-btn[data-s="2"] .sl{color:var(--s2)}.sc-btn[data-s="2"].sel{border-color:var(--s2);background:var(--s2l)}
+.sc-btn[data-s="3"]{background:#f3f9f4}.sc-btn[data-s="3"] .sn{color:var(--s3)}.sc-btn[data-s="3"] .sl{color:var(--s3)}.sc-btn[data-s="3"].sel{border-color:var(--s3);background:var(--s3l)}
+.sc-btn[data-s="4"]{background:#f0f8f2}.sc-btn[data-s="4"] .sn{color:var(--s4)}.sc-btn[data-s="4"] .sl{color:var(--s4)}.sc-btn[data-s="4"].sel{border-color:var(--s4);background:var(--s4l)}
+.eval-nav{display:flex;gap:8px;margin-top:18px}
+.btn-back{color:var(--t3);border:1px solid var(--r);padding:10px 16px;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:all .13s}
+.btn-back:hover{border-color:var(--gold);color:var(--navy)}
+.btn-next{background:var(--navy);color:var(--cream);padding:10px 24px;font-size:.58rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.3;pointer-events:none;transition:all .13s}
+.btn-next.ready{opacity:1;pointer-events:all}.btn-next.ready:hover{background:var(--navy3)}
+.calc-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center}
+.calc-lbl{font-size:.54rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.calc-title{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:300;color:var(--navy);margin-bottom:28px;line-height:1.3}
+.calc-bar-bg{width:200px;height:2px;background:rgba(13,27,62,.1);overflow:hidden}
+.calc-bar-fill{height:100%;background:var(--gold);animation:cl 2.2s ease forwards}
+@keyframes cl{from{width:0}to{width:100%}}
+.res-hero{background:var(--navy);padding:28px 26px;margin-bottom:2px;position:relative;overflow:hidden}
+.res-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70%,rgba(196,154,60,.08),transparent 60%);pointer-events:none}
+.rh-eye{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.55);display:block;margin-bottom:8px;position:relative;z-index:1}
+.rh-score-row{display:flex;align-items:center;gap:18px;position:relative;z-index:1;margin-bottom:8px}
+.rh-big{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;line-height:1}
+.rh-archetype{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--cream);margin-bottom:3px;line-height:1.2}
+.rh-sub{font-size:.5rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,154,60,.5)}
+.rh-def{font-size:.7rem;color:rgba(244,241,236,.5);font-style:italic;line-height:1.65;max-width:540px;position:relative;z-index:1}
+.moat-map{background:white;padding:20px 20px;margin-bottom:2px}
+.moat-item{margin-bottom:14px}
+.mi-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.mi-name{font-size:.68rem;font-weight:700;color:var(--navy)}
+.mi-score{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300}
+.mi-track{height:10px;background:var(--cream2);border-radius:3px;overflow:hidden;margin-bottom:3px}
+.mi-fill{height:100%;border-radius:3px;transition:width .7s ease}
+.mi-verdict{font-size:.56rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.moat-recs{background:var(--cream);padding:18px 20px;margin-bottom:2px}
+.moat-rec-item{background:white;padding:14px 16px;margin-bottom:2px}
+.mr-badge{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;display:inline-block;margin-bottom:5px}
+.mr-b-str{background:rgba(26,92,46,.12);color:#1a5c2e}.mr-b-bld{background:rgba(196,140,0,.1);color:#8a5c00}.mr-b-wk{background:rgba(138,26,26,.1);color:#8a1a1a}
+.mr-title{font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.mr-text{font-size:.7rem;color:var(--t2);line-height:1.65;margin-bottom:5px}
+.mr-rec{font-size:.65rem;color:var(--t3);font-style:italic}
+.sum-bar{background:var(--navy2);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:2px}
+.sb-stats{display:flex;gap:18px;flex-wrap:wrap}
+.sb-stat{text-align:center}
+.sb-num{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;display:block;line-height:1}
+.sb-lbl{font-size:.42rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,236,.28)}
+.btn-restart{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(196,154,60,.18);color:rgba(244,241,236,.35);transition:all .15s}
+.btn-restart:hover{border-color:var(--gold);color:var(--cream)}
+.cta-blk{background:var(--navy);padding:30px 26px;text-align:center}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.7;max-width:520px;margin:0 auto 18px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:12px 26px;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.phil{background:var(--navy2);padding:18px 22px}
+.phil p{font-family:'Cormorant Garamond',serif;font-size:.92rem;font-weight:300;font-style:italic;color:rgba(244,241,236,.45);line-height:1.7}
+.phil strong{color:var(--gold2);font-style:normal;font-weight:400}
+@media print{.topbar,.eval-nav,.btn-print,.btn-restart,.btn-cta{display:none!important}body{background:white}}
+@media(max-width:600px){.moat-grid{grid-template-columns:1fr}.scale-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div class="tb-right"><span class="tb-label">Competitive Moat Mapper™ · Miembro</span><button class="btn-print" onclick="window.print()">Exportar PDF</button></div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+<div class="shell">
+
+<div class="screen active" id="sIntro">
+  <span class="eyebrow">Análisis de posición competitiva · SLF Insights · Miembro</span>
+  <h1 class="h1">Competitive Moat <em>Mapper™</em></h1>
+  <div class="rule"></div>
+  <p class="lead">Un moat competitivo es la ventaja estructural que hace a su empresa difícil de desplazar — no en este trimestre, sino en los próximos tres a cinco años. No todas las empresas tienen moats. Las que crecen de forma sostenida tienen al menos uno. Las que dominan sus mercados tienen dos o más que se refuerzan mutuamente.</p>
+  <div class="callout">
+    <p>La mayoría de las empresas medianas creen que su ventaja competitiva es su servicio al cliente, su relación con los clientes o su experiencia. Esas son ventajas <strong>tácticas</strong>. Un moat es estructural: es difícil de copiar, tarda años en construirse y se vuelve más fuerte con el tiempo, no más débil.</p>
+  </div>
+  <p class="lead" style="margin-bottom:28px">Este mapa evalúa cinco tipos de moat competitivo para determinar cuáles tiene su empresa, cuán fuertes son, y cuáles tiene que construir antes de que un competidor llene el vacío.</p>
+  <span class="sec-lbl">Los cinco tipos de moat evaluados · 20 preguntas · Escala 1–4</span>
+  <div class="moat-grid">
+    <div class="moat-card"><span class="mc-num">Moat 1</span><div class="mc-name">Costos de Cambio</div><div class="mc-desc">¿Cuán caro o difícil es para sus clientes cambiarse a un competidor?</div></div>
+    <div class="moat-card"><span class="mc-num">Moat 2</span><div class="mc-name">Activos Intangibles</div><div class="mc-desc">¿Su marca, reputación, patentes o certificaciones le dan ventaja defendible?</div></div>
+    <div class="moat-card"><span class="mc-num">Moat 3</span><div class="mc-name">Ventaja de Costos</div><div class="mc-desc">¿Puede operar con una estructura de costos que sus competidores no pueden igualar?</div></div>
+    <div class="moat-card"><span class="mc-num">Moat 4</span><div class="mc-name">Efecto de Red</div><div class="mc-desc">¿El valor de su producto/servicio aumenta con cada nuevo cliente o usuario?</div></div>
+    <div class="moat-card"><span class="mc-num">Moat 5</span><div class="mc-name">Escala Eficiente</div><div class="mc-desc">¿Su tamaño le da acceso a mercados, precios o capacidades que los más pequeños no pueden igualar?</div></div>
+  </div>
+  <button class="btn-start" onclick="start()">Iniciar mapeo — 20 preguntas →</button>
+</div>
+
+<div class="screen" id="sEval">
+  <div class="moat-prog" id="moatProg"></div>
+  <div class="moat-hdr"><span class="mh-eye" id="mhEye">Moat 1 de 5</span><div class="mh-name" id="mhName"></div><div class="mh-desc" id="mhDesc"></div></div>
+  <div id="qCont"></div>
+  <div class="eval-nav"><button class="btn-back" id="btnBack" onclick="goBack()" style="display:none">← Anterior</button><button class="btn-next" id="btnNext" onclick="goNext()">Siguiente →</button></div>
+</div>
+
+<div class="screen" id="sCalc">
+  <div class="calc-wrap">
+    <span class="calc-lbl">Mapeando ventajas competitivas</span>
+    <p class="calc-title">Construyendo su mapa<br>de moats estratégicos</p>
+    <div class="calc-bar-bg"><div class="calc-bar-fill"></div></div>
+  </div>
+</div>
+
+<div class="screen" id="sRes">
+  <div class="res-hero">
+    <span class="rh-eye">Competitive Moat Mapper™ · Resultado</span>
+    <div class="rh-score-row"><div class="rh-big" id="rScore"></div><div><div class="rh-archetype" id="rArch"></div><div class="rh-sub" id="rSub"></div></div></div>
+    <div class="rh-def" id="rDef"></div>
+  </div>
+  <div class="moat-map"><span class="sec-lbl" style="margin-bottom:14px">Mapa de moats — fortaleza por tipo</span><div id="moatBars"></div></div>
+  <div class="moat-recs"><span class="sec-lbl">Análisis y recomendaciones por moat</span><div id="moatRecs"></div></div>
+  <div class="sum-bar"><div class="sb-stats" id="sbStats"></div><button class="btn-restart" onclick="restart()">Nuevo mapeo</button></div>
+  <div class="cta-blk">
+    <p class="cta-text">Los moats competitivos no se construyen solos — se diseñan deliberadamente como parte de la arquitectura de crecimiento de la empresa. Cretta puede acompañar la construcción de las ventajas competitivas estructurales que el siguiente nivel requiere.</p>
+    <button class="btn-cta">Contactar a Cretta →</button>
+  </div>
+  <div class="phil"><p><strong>Moat competitivo</strong> — Una ventaja que, a diferencia de las tácticas (precio, servicio, relación), es difícil de replicar, se vuelve más fuerte con el tiempo y no depende de que ninguna persona específica siga en la organización. Sin moats, el crecimiento es posible; la sostenibilidad, no.</p></div>
+</div>
+</div>
+
+<script>
+const MOATS=[
+  {name:'Costos de Cambio',desc:'El costo económico, operativo o emocional que enfrenta un cliente al cambiarse a un competidor. Cuanto más alto, más defensible es su posición.',qs:['¿Sus clientes han integrado su producto/servicio en sus procesos de tal manera que cambiarse implica un rediseño operativo significativo?','¿Sus contratos o acuerdos comerciales tienen duraciones que protegen su base de clientes durante períodos relevantes?','¿Ha habido casos en que clientes que intentaron cambiarse regresaron por el costo o complejidad que esto implicó?','¿Sus clientes han invertido tiempo y recursos en aprender a trabajar con usted — lo que hace costosa la curva de aprendizaje con un nuevo proveedor?']},
+  {name:'Activos Intangibles',desc:'Marca, reputación, certificaciones, patentes o posicionamiento de mercado que confieren autoridad y preferencia difíciles de replicar.',qs:['¿Su marca o reputación en el mercado le permite cobrar un precio superior al de competidores con oferta técnicamente similar?','¿Tiene certificaciones, acreditaciones o reconocimientos que sus competidores no tienen o tardarían años en obtener?','¿Sus clientes lo recomiendan activamente por razones que van más allá del precio y la especificación técnica?','¿Su posicionamiento como experto o referente en su industria le genera oportunidades que sus competidores no reciben?']},
+  {name:'Ventaja de Costos',desc:'Estructura de costos que permite operar de forma más eficiente que los competidores, ya sea por escala, proceso, tecnología o acceso a insumos.',qs:['¿Su estructura de costos le permite ser rentable a precios que sus competidores más eficientes no pueden igualar?','¿Tiene acceso a insumos, materiales o proveedores estratégicos con condiciones que sus competidores no pueden replicar?','¿Sus procesos operativos han alcanzado un nivel de eficiencia que requeriría años de inversión para que un competidor nuevo iguale?','¿Su tecnología o sistemas de operación le dan una ventaja de productividad significativa frente al promedio de la industria?']},
+  {name:'Efecto de Red',desc:'El valor de su oferta aumenta para cada cliente existente conforme se suman más clientes, creando un ciclo virtuoso de valor y retención.',qs:['¿El valor de su producto o servicio aumenta para sus clientes cuando su base de clientes o usuarios crece?','¿Sus clientes se benefician de conectarse entre sí — a través de su plataforma, comunidad o ecosistema?','¿Cuanto más tiempo un cliente trabaja con usted, más difícil es para un competidor replicar el valor acumulado?','¿Tiene una red de distribución, socios o integradores cuyo valor crece con cada nuevo participante que se suma?']},
+  {name:'Escala Eficiente',desc:'Ventajas que provienen del tamaño de la operación — acceso a mercados, capacidad de inversión, poder de negociación o presencia geográfica.',qs:['¿Su tamaño le da acceso a clientes, licitaciones o mercados en los que un competidor más pequeño no puede participar?','¿Su volumen de operación le permite negociar con proveedores o socios en condiciones que un competidor de menor escala no obtiene?','¿Su presencia en múltiples regiones, segmentos o canales le da resiliencia que dificulta el desplazamiento por un competidor especializado?','¿Puede absorber costos de innovación, certificación o expansión que para un competidor más pequeño serían prohibitivos?']}
+];
+const ARCHETYPES=[
+  {min:3.3,name:'Posición competitiva fuerte',sub:'MOATS SÓLIDOS — Posición estructuralmente defendible',color:'#1a5c2e',def:'La empresa tiene ventajas competitivas estructurales que hacen su posición difícil de desplazar. El trabajo ahora es mantener y ampliar estos moats mientras el mercado evoluciona.'},
+  {min:2.5,name:'Posición competitiva emergente',sub:'MOATS EN CONSTRUCCIÓN — Ventajas presentes pero no consolidadas',color:'#8a5c00',def:'Hay ventajas competitivas en construcción, pero sin la fortaleza suficiente para considerarlas defensivas. El foco debe estar en consolidar los moats más prometedores antes de que la competencia los alcance.'},
+  {min:1.8,name:'Posición competitiva frágil',sub:'MOATS DÉBILES — Ventajas tácticas sin defensibilidad estructural',color:'#7a3c00',def:'Las ventajas actuales son principalmente tácticas — relaciones, precio o servicio. Son difíciles de sostener en un entorno competitivo que se intensifica. La prioridad es identificar y comenzar a construir al menos un moat estructural.'},
+  {min:0,name:'Sin posición competitiva estructural',sub:'SIN MOATS — Alta vulnerabilidad al desplazamiento',color:'#8a1a1a',def:'La empresa no tiene ventajas competitivas estructurales. Compite en base a factores fácilmente replicables. En un mercado que se consolida o en el que entran nuevos competidores, esta posición es extremadamente vulnerable.'}
+];
+const MOAT_RECS=[
+  {str:'Sus costos de cambio son una fortaleza. Profundice la integración operativa con sus clientes estratégicos y diseñe contratos que extiendan las relaciones en el tiempo.',bld:'Los costos de cambio son moderados. Invertir en integración operativa más profunda: integraciones de sistema, procesos compartidos o programas de desarrollo conjunto que hagan el cambio más costoso.',wk:'Los costos de cambio son bajos — cualquier competidor con precio similar puede desplazarle. Diseñar programas de integración que incrementen la dependencia operativa del cliente de forma que genere valor para ambas partes.'},
+  {str:'Sus activos intangibles son un moat consolidado. Inversión activa en mantener y comunicar la reputación y el posicionamiento de autoridad.',bld:'Los activos intangibles están en desarrollo. Priorizar una o dos certificaciones o posicionamientos de autoridad que sean difíciles de replicar para competidores de menor trayectoria.',wk:'La empresa carece de activos intangibles defensibles. Identificar el ángulo de autoridad más auténtico y construir una estrategia de posicionamiento de 24 meses.'},
+  {str:'Su ventaja de costos es estructural. Mantener la inversión en eficiencia operativa y proteger el acceso a insumos o proveedores estratégicos.',bld:'La ventaja de costos existe pero es estrecha. Invertir en un proceso o tecnología que le dé una ventaja de productividad sostenible que los competidores no puedan replicar en menos de 3 años.',wk:'No hay ventaja de costos significativa. Identificar el proceso o insumo más crítico para la estructura de costos y diseñar una estrategia de eficiencia o acceso diferencial.'},
+  {str:'Su efecto de red es un activo estratégico diferencial. Continuar invirtiendo en el ecosistema y las conexiones entre clientes, usuarios o socios.',bld:'El efecto de red existe pero no es suficientemente fuerte todavía. Diseñar mecánicas explícitas de red: referencias, comunidades, programas de co-desarrollo o marketplaces.',wk:'No hay efecto de red significativo. Evaluar si el modelo de negocio permite construirlo — no todos los negocios tienen esta oportunidad, pero muchos más de los que lo intentan podrían lograrlo.'},
+  {str:'Su ventaja de escala es consolidada. Capitalizar el acceso a mercados y clientes que la escala permite, y protegerlo con relaciones y capacidades que solo su tamaño puede sostener.',bld:'La escala es relevante pero aún no produce ventajas competitivas claras. Identificar los dos o tres beneficios de escala más defensibles y construir alrededor de ellos.',wk:'La escala actual no genera ventajas competitivas. Evaluar si el crecimiento proyectado permitirá alcanzar una masa crítica que cambie esta situación, o si el modelo requiere especialización en lugar de escala.'}
+];
+let cur=0,ans={};for(let i=0;i<5;i++)ans[i]={};
+function start(){document.getElementById('sIntro').classList.remove('active');renderMoat(0);document.getElementById('sEval').classList.add('active');updProg();window.scrollTo(0,0)}
+function renderMoat(idx){const m=MOATS[idx];document.getElementById('mhEye').textContent=`Moat ${idx+1} de 5`;document.getElementById('mhName').textContent=m.name;document.getElementById('mhDesc').textContent=m.desc;const mp=document.getElementById('moatProg');mp.innerHTML='';MOATS.forEach((_,i)=>{const el=document.createElement('div');el.className='mp-item'+(i<idx?' done':i===idx?' active':'');mp.appendChild(el)});const qc=document.getElementById('qCont');qc.innerHTML='';m.qs.forEach((q,qi)=>{const sv=ans[idx][qi];const bl=document.createElement('div');bl.className='q-block';let row='<div class="scale-row">';[[4,'Fuerte'],[3,'Presente'],[2,'Débil'],[1,'Ausente']].forEach(([s,l])=>{row+=`<div class="sc-btn${sv===s?' sel':''}" data-s="${s}" onclick="setA(${idx},${qi},${s},this)"><span class="sn">${s}</span><span class="sl">${l}</span></div>`});row+='</div>';bl.innerHTML=`<span class="q-num">Pregunta ${qi+1} de 4</span><div class="q-text">${q}</div>${row}`;qc.appendChild(bl)});document.getElementById('btnBack').style.display=idx===0?'none':'inline-block';document.getElementById('btnNext').textContent=idx===4?'Ver mapa →':'Siguiente moat →';updNxt(idx)}
+function setA(d,q,s,el){ans[d][q]=s;el.closest('.scale-row').querySelectorAll('.sc-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');updNxt(d)}
+function updNxt(idx){document.getElementById('btnNext').classList.toggle('ready',MOATS[idx].qs.every((_,i)=>ans[idx][i]!==undefined))}
+function goNext(){if(!MOATS[cur].qs.every((_,i)=>ans[cur][i]!==undefined))return;if(cur===4){showCalc();return}cur++;renderMoat(cur);updProg();window.scrollTo(0,0)}
+function goBack(){if(cur===0)return;cur--;renderMoat(cur);updProg();window.scrollTo(0,0)}
+function updProg(){const d=Object.keys(ans).filter(i=>MOATS[i].qs.every((_,j)=>ans[i][j]!==undefined)).length;document.getElementById('pFill').style.width=Math.round((d/5)*100)+'%'}
+function showCalc(){document.getElementById('sEval').classList.remove('active');document.getElementById('sCalc').classList.add('active');setTimeout(showRes,2200)}
+function showRes(){
+  const ms=MOATS.map((_,i)=>{const v=MOATS[i].qs.map((_,j)=>ans[i][j]);return +(v.reduce((s,x)=>s+x,0)/v.length).toFixed(2)});
+  const overall=+(ms.reduce((s,v)=>s+v,0)/5).toFixed(2);
+  const arch=ARCHETYPES.find(a=>overall>=a.min);
+  document.getElementById('rScore').textContent=overall.toFixed(1);document.getElementById('rScore').style.color=arch.color;
+  document.getElementById('rArch').textContent=arch.name;document.getElementById('rSub').textContent=arch.sub;document.getElementById('rDef').textContent=arch.def;
+  const mb=document.getElementById('moatBars');mb.innerHTML='';
+  const colors=['var(--navy)','#1a6b6e','#8a5c1a','#c49000','#6a6a6a'];
+  ms.forEach((sc,i)=>{const p=((sc-1)/3)*100;const verdictColor=sc>=3.3?'var(--s4)':sc>=2.5?'var(--s3)':sc>=1.8?'var(--s2)':'var(--s1)';const verdict=sc>=3.3?'Moat fuerte':sc>=2.5?'En construcción':sc>=1.8?'Moat débil':'Ausente';mb.innerHTML+=`<div class="moat-item"><div class="mi-hdr"><span class="mi-name">${MOATS[i].name}</span><span class="mi-score" style="color:${verdictColor}">${sc.toFixed(1)} / 4.0</span></div><div class="mi-track"><div class="mi-fill" style="width:0%;background:${colors[i]};opacity:.8" data-w="${p}"></div></div><div class="mi-verdict" style="color:${verdictColor}">${verdict}</div></div>`});
+  setTimeout(()=>document.querySelectorAll('.mi-fill').forEach(el=>el.style.width=el.dataset.w+'%'),100);
+  const mr=document.getElementById('moatRecs');mr.innerHTML='';
+  const sorted=[...ms.map((sc,i)=>({i,sc}))].sort((a,b)=>b.sc-a.sc);
+  sorted.forEach(({i,sc})=>{const r=MOAT_RECS[i];const isStr=sc>=3.3;const isBld=sc>=2&&sc<3.3;const cls=isStr?'mr-b-str':isBld?'mr-b-bld':'mr-b-wk';const badge=isStr?'Moat fuerte — sostener':isBld?'En construcción — priorizar':'Moat ausente — construir';mr.innerHTML+=`<div class="moat-rec-item"><span class="mr-badge ${cls}">${badge} · ${sc.toFixed(1)}/4.0</span><div class="mr-title">${MOATS[i].name}</div><p class="mr-text">${isStr?r.str:isBld?r.bld:r.wk}</p></div>`});
+  const strong=ms.filter(s=>s>=3.3).length;const bld=ms.filter(s=>s>=2&&s<3.3).length;const wk=ms.filter(s=>s<2).length;
+  document.getElementById('sbStats').innerHTML=`<div class="sb-stat"><span class="sb-num" style="color:var(--gold)">${overall.toFixed(1)}</span><span class="sb-lbl">Índice de moats</span></div><div class="sb-stat"><span class="sb-num" style="color:#5abf7a">${strong}</span><span class="sb-lbl">Moats fuertes</span></div><div class="sb-stat"><span class="sb-num" style="color:#e8b84a">${bld}</span><span class="sb-lbl">En construcción</span></div><div class="sb-stat"><span class="sb-num" style="color:#e87a7a">${wk}</span><span class="sb-lbl">Ausentes</span></div>`;
+  document.getElementById('sCalc').classList.remove('active');document.getElementById('sRes').classList.add('active');document.getElementById('pFill').style.width='100%';window.scrollTo(0,0);
+}
+function restart(){cur=0;for(let i=0;i<5;i++)ans[i]={};document.getElementById('sRes').classList.remove('active');document.getElementById('sIntro').classList.add('active');document.getElementById('pFill').style.width='0%';window.scrollTo(0,0)}
+</script>
+</body>
+</html>

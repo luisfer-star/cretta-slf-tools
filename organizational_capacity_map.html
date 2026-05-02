@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organizational Capacity Map™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{
+  --navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;
+  --gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.12);
+  --cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;
+  --t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;
+  --r:rgba(196,154,60,0.22);
+  --green:#2a6b3c;--green-l:rgba(42,107,60,0.1);
+  --amber:#8a5c00;--amber-l:rgba(196,140,0,0.1);
+  --red:#8a1a1a;--red-l:rgba(138,26,26,0.1);
+  --green-bar:#3a8a50;--amber-bar:#c49a00;--red-bar:#c43c3c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+input,select,textarea{font-family:'Montserrat',sans-serif;outline:none}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.tb-brand{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-label{font-size:.5rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,241,236,.35)}
+.btn-print{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;background:transparent;color:var(--gold);border:1px solid rgba(196,154,60,.3);cursor:pointer;transition:all .18s}
+.btn-print:hover{border-color:var(--gold)}
+.prog-bar{height:2px;background:rgba(196,154,60,.15)}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s ease}
+
+/* ── SHELL ── */
+.shell{max-width:800px;margin:0 auto;padding:0 20px}
+
+/* ── SCREENS ── */
+.screen{display:none;padding:36px 0 56px;animation:fi .3s ease}
+.screen.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── EYEBROW / LABELS ── */
+.eyebrow{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:14px}
+.label-sm{font-size:.5rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:8px}
+
+/* ── TITLES ── */
+.h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:300;color:var(--navy);line-height:1.15;margin-bottom:10px}
+.h1 em{font-style:italic;color:var(--gold2)}
+.h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3vw,1.9rem);font-weight:300;color:var(--navy);line-height:1.2;margin-bottom:8px}
+.rule{width:36px;height:1px;background:var(--gold);opacity:.55;margin-bottom:22px}
+.lead{font-size:.88rem;color:var(--t2);line-height:1.8;margin-bottom:24px}
+
+/* ── INTRO ── */
+.intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:24px}
+.istat{background:var(--navy);padding:16px 14px}
+.istat-num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--gold2);display:block;margin-bottom:2px}
+.istat-label{font-size:.48rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,236,.4)}
+.intro-note{font-size:.75rem;color:var(--t3);line-height:1.7;padding:14px 18px;border-left:2px solid var(--r);margin-bottom:28px}
+
+/* ── AMBITION SELECTOR ── */
+.ambition-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:28px}
+.ambition-card{background:white;padding:18px 16px;cursor:pointer;border:1px solid transparent;transition:all .18s;text-align:left}
+.ambition-card:hover{border-color:var(--r)}
+.ambition-card.selected{border-color:var(--gold);background:var(--golda)}
+.ac-pct{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--navy);margin-bottom:4px;display:block}
+.ac-label{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
+.ac-desc{font-size:.72rem;color:var(--t3);line-height:1.5}
+.ambition-card.selected .ac-pct{color:var(--navy)}
+
+/* ── COMPANY INPUT ── */
+.company-field{margin-bottom:28px}
+.company-input{width:100%;border:none;border-bottom:1px solid var(--r);background:transparent;font-size:.88rem;color:var(--t1);padding:8px 0;transition:border-color .2s}
+.company-input:focus{border-color:var(--gold)}
+.company-input::placeholder{color:var(--t3)}
+
+/* ── DIMENSION PROGRESS ── */
+.dim-progress{display:flex;gap:2px;margin-bottom:28px}
+.dp-item{flex:1;height:3px;background:var(--cream2);border-radius:1px;transition:background .3s}
+.dp-item.done{background:var(--gold)}
+.dp-item.active{background:rgba(196,154,60,.5)}
+.dim-labels{display:flex;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:4px}
+.dl-item{font-size:.46rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);opacity:.5;transition:opacity .2s}
+.dl-item.active{opacity:1;color:var(--navy)}
+.dl-item.done{opacity:.7;color:var(--gold)}
+
+/* ── QUESTION CARD ── */
+.dim-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--r)}
+.dim-num-badge{background:var(--navy);color:var(--gold);font-size:.52rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:6px 10px;flex-shrink:0}
+.dim-info-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--navy);margin-bottom:2px}
+.dim-info-tag{font-size:.68rem;color:var(--t3);font-style:italic}
+
+.question-block{margin-bottom:20px}
+.q-label{font-size:.5rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;display:block}
+.q-text{font-size:.88rem;color:var(--navy);line-height:1.6;margin-bottom:12px;font-weight:500}
+.q-options{display:flex;flex-direction:column;gap:2px}
+.q-opt{background:white;padding:12px 14px;cursor:pointer;border:1px solid transparent;transition:all .15s;display:flex;align-items:flex-start;gap:10px;text-align:left}
+.q-opt:hover{border-color:rgba(196,154,60,.4);background:rgba(196,154,60,.02)}
+.q-opt.selected{border-color:var(--gold);background:var(--golda)}
+.q-opt-letter{font-size:.54rem;font-weight:700;color:var(--gold);flex-shrink:0;width:13px;margin-top:2px}
+.q-opt-text{font-size:.78rem;color:var(--t2);line-height:1.55}
+.q-opt.selected .q-opt-text{color:var(--navy)}
+
+/* ── NAV ── */
+.dim-nav{display:flex;gap:8px;align-items:center;margin-top:24px}
+.btn-back{color:var(--t3);border:1px solid var(--r);padding:10px 16px;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:all .15s}
+.btn-back:hover{border-color:var(--gold);color:var(--navy)}
+.btn-next{background:var(--navy);color:var(--cream);padding:10px 24px;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.3;pointer-events:none;transition:all .15s}
+.btn-next.ready{opacity:1;pointer-events:all}
+.btn-next.ready:hover{background:var(--navy3)}
+.btn-start{background:var(--navy);color:var(--cream);padding:13px 32px;font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transition:background .18s}
+.btn-start:hover{background:var(--navy3)}
+.dim-complete-hint{font-size:.65rem;color:var(--t3);margin-top:8px;font-style:italic}
+
+/* ── CALCULATING ── */
+.calc-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center}
+.calc-label{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.calc-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--navy);margin-bottom:32px;line-height:1.3}
+.calc-bar-bg{width:240px;height:2px;background:rgba(13,27,62,.12);border-radius:2px;overflow:hidden;margin:0 auto}
+.calc-bar-fill{height:100%;background:var(--gold);animation:cl 2s ease forwards}
+@keyframes cl{from{width:0}to{width:100%}}
+
+/* ── RESULTS ── */
+.results-header{background:var(--navy);padding:32px 28px;margin-bottom:2px;position:relative;overflow:hidden}
+.results-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 50%,rgba(196,154,60,.07),transparent 60%);pointer-events:none}
+.rh-eyebrow{font-size:.5rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,154,60,.65);display:block;margin-bottom:8px;position:relative;z-index:1}
+.rh-company{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:rgba(244,241,236,.55);font-style:italic;display:block;margin-bottom:4px;position:relative;z-index:1}
+.rh-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,3.5vw,2rem);font-weight:300;color:var(--cream);line-height:1.2;position:relative;z-index:1;margin-bottom:10px}
+.rh-ambition{font-size:.52rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(196,154,60,.5);position:relative;z-index:1}
+
+/* ── GAP MAP ── */
+.gap-map{background:white;padding:28px 24px;margin-bottom:2px}
+.gm-title{font-size:.55rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:20px;display:block}
+.gm-legend{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.gm-legend-item{display:flex;align-items:center;gap:6px;font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ld-green{background:var(--green-bar)}
+.ld-amber{background:var(--amber-bar)}
+.ld-red{background:var(--red-bar)}
+.ld-req{width:2px;height:12px;background:var(--navy);border-radius:1px}
+
+.dim-row{margin-bottom:16px}
+.dr-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.dr-name{font-size:.65rem;font-weight:700;letter-spacing:.06em;color:var(--navy)}
+.dr-scores{font-size:.58rem;color:var(--t3)}
+.dr-scores span{font-weight:600}
+.bar-track{height:10px;background:var(--cream2);border-radius:1px;position:relative;overflow:visible}
+.bar-fill{height:100%;border-radius:1px;transition:width 1s ease .2s}
+.bar-fill.green{background:var(--green-bar)}
+.bar-fill.amber{background:var(--amber-bar)}
+.bar-fill.red{background:var(--red-bar)}
+.req-marker{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--navy);border-radius:1px;z-index:2;transition:left 1s ease .2s}
+.dr-gap-tag{display:inline-block;margin-top:5px;font-size:.48rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px}
+.tag-ok{background:var(--green-l);color:var(--green)}
+.tag-am{background:var(--amber-l);color:var(--amber)}
+.tag-re{background:var(--red-l);color:var(--red)}
+
+/* ── ROADMAP ── */
+.roadmap{background:var(--cream);padding:28px 24px;margin-bottom:2px}
+.rm-title{font-size:.55rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:20px;display:block}
+.rm-item{background:white;padding:18px 18px;margin-bottom:2px;display:flex;gap:16px;align-items:flex-start}
+.rm-prio{flex-shrink:0;text-align:center}
+.rm-prio-badge{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;display:block;margin-bottom:3px}
+.prio-a{background:var(--red-l);color:var(--red)}
+.prio-b{background:var(--amber-l);color:var(--amber)}
+.prio-c{background:var(--green-l);color:var(--green)}
+.rm-prio-dim{font-size:.5rem;font-weight:700;color:var(--t3)}
+.rm-content{}
+.rm-brecha-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--navy);margin-bottom:5px}
+.rm-diag{font-size:.78rem;color:var(--t2);line-height:1.6;margin-bottom:8px}
+.rm-actions{font-size:.72rem;color:var(--t3);line-height:1.65}
+.rm-action-item{display:flex;gap:8px;margin-bottom:3px}
+.rm-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px}
+.rm-no-gap{background:white;padding:16px 18px;margin-bottom:2px}
+.rm-no-gap p{font-size:.78rem;color:var(--t2);line-height:1.6;font-style:italic}
+
+/* ── SUMMARY BAR ── */
+.summary-bar{background:var(--navy2);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.sb-scores{display:flex;gap:20px;flex-wrap:wrap}
+.sb-score{text-align:center}
+.sb-score-num{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--gold);display:block;line-height:1}
+.sb-score-label{font-size:.45rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,241,236,.3)}
+.btn-restart{font-size:.55rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:8px 16px;border:1px solid rgba(196,154,60,.2);color:rgba(244,241,236,.4);transition:all .18s}
+.btn-restart:hover{border-color:var(--gold);color:var(--cream)}
+
+/* ── CTA ── */
+.cta-block{background:var(--navy);padding:32px 24px;text-align:center}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.6;max-width:520px;margin:0 auto 20px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:13px 28px;font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;transition:background .18s}
+.btn-cta:hover{background:var(--gold2)}
+
+/* ── PRINT ── */
+@media print{
+  .topbar,.dim-nav,.btn-print,.btn-restart,.btn-cta,.cta-block{display:none!important}
+  body{background:white}
+  .bar-fill,.req-marker{transition:none}
+}
+
+@media(max-width:540px){
+  .ambition-grid,.intro-stats{grid-template-columns:1fr}
+  .results-header,.gap-map,.roadmap,.summary-bar,.cta-block{padding-left:16px;padding-right:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div class="tb-right">
+    <span class="tb-label">Organizational Capacity Map™ · Miembro Exclusivo</span>
+    <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+  </div>
+</div>
+<div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+<div class="shell">
+
+<!-- ══ INTRO ══ -->
+<div class="screen active" id="sIntro">
+  <span class="eyebrow">Herramienta Exclusiva · Miembro SLF Insights</span>
+  <h1 class="h1">Organizational<br>Capacity <em>Map</em>™</h1>
+  <div class="rule"></div>
+  <p class="lead">La brecha más costosa en una empresa en crecimiento no está en el mercado ni en el capital — está entre la ambición estratégica y la capacidad organizacional real para sostenerla. Esta herramienta la mide, la visualiza y genera la hoja de ruta para cerrarla.</p>
+
+  <div class="intro-stats">
+    <div class="istat"><span class="istat-num">5</span><span class="istat-label">Dimensiones de capacidad</span></div>
+    <div class="istat"><span class="istat-num">15</span><span class="istat-label">Preguntas de evaluación</span></div>
+    <div class="istat"><span class="istat-num">35'</span><span class="istat-label">Tiempo estimado</span></div>
+  </div>
+
+  <p class="intro-note">El mapa evalúa cinco dimensiones: Talento y Liderazgo Directivo, Arquitectura de Procesos, Estructura Organizacional, Sistemas e Información, y Gobierno y Decisión. El resultado cruza su capacidad actual con la capacidad requerida por su ambición de crecimiento — y produce un mapa visual de brechas con una hoja de ruta priorizada.</p>
+
+  <div class="company-field">
+    <span class="label-sm">Empresa que se evalúa (opcional)</span>
+    <input class="company-input" type="text" id="companyInput" placeholder="Nombre de la empresa">
+  </div>
+
+  <span class="label-sm">Ambición de crecimiento en los próximos 3 años</span>
+  <div class="ambition-grid" id="ambitionGrid">
+    <div class="ambition-card" onclick="selectAmbition(0)">
+      <span class="ac-pct">10 – 25%</span>
+      <span class="ac-label">Crecimiento moderado</span>
+      <span class="ac-desc">Consolidación y eficiencia. La empresa busca crecer con solidez sin cambiar fundamentalmente su modelo.</span>
+    </div>
+    <div class="ambition-card" onclick="selectAmbition(1)">
+      <span class="ac-pct">25 – 75%</span>
+      <span class="ac-label">Crecimiento acelerado</span>
+      <span class="ac-desc">Expansión deliberada. Nuevos mercados, nuevos clientes o nuevas líneas requieren capacidades mayores.</span>
+    </div>
+    <div class="ambition-card" onclick="selectAmbition(2)">
+      <span class="ac-pct">75%+</span>
+      <span class="ac-label">Escala significativa</span>
+      <span class="ac-desc">Transformación de escala. Adquisiciones, expansión regional o rediseño del modelo de negocio.</span>
+    </div>
+  </div>
+
+  <button class="btn-start" id="btnStart" onclick="startAssessment()" style="opacity:.3;pointer-events:none">Iniciar evaluación →</button>
+</div>
+
+<!-- ══ DIMENSION ══ -->
+<div class="screen" id="sDimension">
+  <div class="dim-progress" id="dimProgress"></div>
+  <div class="dim-labels" id="dimLabels"></div>
+  <div class="dim-header">
+    <div class="dim-num-badge" id="dNumBadge">D1</div>
+    <div>
+      <div class="dim-info-title" id="dTitle"></div>
+      <div class="dim-info-tag" id="dTag"></div>
+    </div>
+  </div>
+  <div id="questionsContainer"></div>
+  <div class="dim-nav">
+    <button class="btn-back" id="btnBack" onclick="goBack()">← Anterior</button>
+    <button class="btn-next" id="btnNext" onclick="goNext()">Siguiente dimensión →</button>
+  </div>
+  <p class="dim-complete-hint" id="completeHint" style="display:none">Responda las tres preguntas para continuar.</p>
+</div>
+
+<!-- ══ CALCULATING ══ -->
+<div class="screen" id="sCalc">
+  <div class="calc-wrap">
+    <span class="calc-label">Procesando evaluación</span>
+    <p class="calc-title">Mapeando capacidad organizacional<br>vs. ambición de crecimiento</p>
+    <div class="calc-bar-bg"><div class="calc-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- ══ RESULTS ══ -->
+<div class="screen" id="sResults">
+  <div class="results-header">
+    <span class="rh-eyebrow">Organizational Capacity Map™ · Resultado</span>
+    <span class="rh-company" id="rCompany"></span>
+    <div class="rh-title" id="rTitle"></div>
+    <span class="rh-ambition" id="rAmbition"></span>
+  </div>
+
+  <div class="gap-map">
+    <span class="gm-title">Mapa de brechas por dimensión — Capacidad actual vs. requerida</span>
+    <div class="gm-legend">
+      <div class="gm-legend-item"><div class="legend-dot ld-green"></div>Capacidad suficiente</div>
+      <div class="gm-legend-item"><div class="legend-dot ld-amber"></div>Brecha menor</div>
+      <div class="gm-legend-item"><div class="legend-dot ld-red"></div>Brecha significativa</div>
+      <div class="gm-legend-item"><div class="legend-dot ld-req"></div>Umbral requerido</div>
+    </div>
+    <div id="gapMapRows"></div>
+  </div>
+
+  <div class="roadmap">
+    <span class="rm-title">Hoja de ruta priorizada — Cierre de brechas de capacidad</span>
+    <div id="roadmapItems"></div>
+  </div>
+
+  <div class="summary-bar">
+    <div class="sb-scores" id="sbScores"></div>
+    <button class="btn-restart" onclick="restart()">Nueva evaluación</button>
+  </div>
+
+  <div class="cta-block">
+    <p class="cta-text">Las brechas que este mapa identifica no se cierran con más información. Se cierran con liderazgo estratégico que asuma la responsabilidad de ejecutar la arquitectura de capacidad que el crecimiento requiere.</p>
+    <button class="btn-cta">Contactar a Cretta →</button>
+  </div>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+const DIMS = [
+  {
+    id:'talent', label:'Talento y Liderazgo',
+    title:'Talento y Liderazgo Directivo',
+    tag:'Capacidad del equipo directivo para llevar a la empresa al siguiente nivel',
+    questions:[
+      {text:'¿El equipo directivo actual tiene las competencias para ejecutar la agenda de crecimiento que viene — no la que llevó a la empresa hasta aquí, sino la que requiere el siguiente nivel?',
+       opts:['Sí, con plena confianza. Las competencias y la energía están instaladas para el siguiente nivel.','En su mayoría. Hay fortalezas claras aunque también brechas específicas que requieren atención.','Con dudas importantes. El equipo funciona bien hoy, pero el crecimiento exige capacidades que no están instaladas.','No. El equipo directivo es mi principal preocupación para la agenda de crecimiento.']},
+      {text:'¿La empresa tiene capacidad real para atraer, retener y desarrollar el talento directivo que el crecimiento demandará en los próximos tres años?',
+       opts:['Sí. La empresa es un destino atractivo para talento directivo de alto nivel y tiene mecanismos de retención sólidos.','Moderada. Puede atraer talento competente, pero compite en desventaja con empresas más grandes o mejor posicionadas.','Limitada. La atracción de talento directivo es un desafío activo que frecuentemente no se resuelve a tiempo.','Crítica. Tenemos problemas recurrentes para encontrar y retener el talento directivo que la empresa necesita.']},
+      {text:'¿Existe un "bench" de talento — personas dentro de la organización que pueden asumir roles de mayor responsabilidad cuando el crecimiento lo exija?',
+       opts:['Sí. Tenemos identificados y desarrollando a los sucesores naturales para los roles críticos.','Parcialmente. Hay algunas personas con potencial pero el bench no está estructurado formalmente.','Escaso. Dependemos excesivamente de las personas actuales y no tenemos plan de sucesión claro.','Inexistente. La organización es muy dependiente de individuos específicos sin alternativas desarrolladas.']}
+    ]
+  },
+  {
+    id:'process', label:'Arquitectura de Procesos',
+    title:'Arquitectura de Procesos',
+    tag:'Madurez de los procesos operativos y estratégicos para escalar sin colapsar',
+    questions:[
+      {text:'¿Los procesos críticos de la empresa están suficientemente documentados y estandarizados para que el crecimiento no dependa de la memoria o el criterio de personas específicas?',
+       opts:['Sí. Los procesos críticos están documentados, actualizados y operan de forma consistente.','En proceso. Tenemos documentación en las áreas principales pero hay brechas relevantes en áreas críticas.','Insuficiente. La operación depende en exceso del conocimiento no documentado de personas clave.','No. Los procesos existen informalmente pero no están documentados ni estandarizados de forma sistemática.']},
+      {text:'¿La organización tiene capacidad de mejorar sus procesos de forma sistemática, o los cambios ocurren principalmente en respuesta a crisis o presiones del cliente?',
+       opts:['Sistemática. Hay mecanismos de mejora continua que operan proactivamente y producen mejoras medibles.','Parcialmente sistemática. Hay esfuerzos de mejora, aunque la reactividad domina sobre la proactividad.','Principalmente reactiva. Los procesos se mejoran cuando algo falla, no como práctica de gestión deliberada.','Reactiva total. Los cambios de proceso son respuestas a crisis, no un proceso de mejora gestionado.']},
+      {text:'¿La operación actual podría manejar el doble del volumen actual sin un colapso de calidad, tiempo de entrega o experiencia del cliente?',
+       opts:['Sí, con ajustes menores. La operación tiene capacidad instalada y procesos escalables.','Probablemente, aunque requeriría inversiones significativas en procesos y personas antes de llegar ahí.','Con dificultad. El escalamiento del volumen actual revelaría fragilidades significativas en la operación.','No. El modelo operativo actual ya está al límite de su capacidad con el volumen presente.']}
+    ]
+  },
+  {
+    id:'structure', label:'Estructura Organizacional',
+    title:'Estructura Organizacional',
+    tag:'Diseño de la organización para soportar la estrategia de crecimiento',
+    questions:[
+      {text:'¿El diseño organizacional actual refleja la estrategia de crecimiento futura, o refleja la historia de cómo fue construyéndose la empresa a lo largo del tiempo?',
+       opts:['Refleja la estrategia futura. La estructura fue diseñada para soportar la dirección en la que va la empresa.','Está en transición. La estructura está siendo adaptada pero aún convive con elementos del modelo histórico.','Refleja principalmente la historia. La estructura se fue construyendo orgánicamente y no está alineada con la estrategia.','Refleja exclusivamente la historia. La estructura es un producto acumulado de decisiones pasadas sin lógica estratégica actual.']},
+      {text:'¿Los roles y responsabilidades están claramente definidos, con accountability explícita sobre resultados — no solo sobre actividades?',
+       opts:['Sí. Los roles tienen mandatos claros con accountability sobre resultados medibles y verificables.','En la mayoría de los casos. Hay claridad en los roles principales, aunque hay zonas grises en algunas áreas.','Con frecuentes ambigüedades. La accountability por resultados es difusa en varios niveles de la organización.','No. Los roles son principalmente descripciones de actividades sin accountability clara sobre resultados.']},
+      {text:'¿La estructura organizacional facilita la velocidad de decisión o la frena con capas de aprobación que dilatan la ejecución?',
+       opts:['Facilita. Las decisiones fluyen con agilidad a través de la organización con mandatos claros.','Moderadamente. Hay agilidad en algunos niveles aunque ciertos tipos de decisiones son más lentos de lo deseable.','La frena. Las capas de aprobación y la falta de mandatos claros hacen que las decisiones tarden más de lo que el mercado permite.','La frena significativamente. La velocidad de decisión es un problema activo que está costando oportunidades.']}
+    ]
+  },
+  {
+    id:'systems', label:'Sistemas e Información',
+    title:'Sistemas e Infraestructura de Información',
+    tag:'Capacidad tecnológica y de información para sostener el crecimiento',
+    questions:[
+      {text:'¿La empresa cuenta con los sistemas tecnológicos necesarios para operar, gestionar y reportar a la escala que el crecimiento proyectado requerirá?',
+       opts:['Sí. Los sistemas actuales tienen la capacidad y la escalabilidad necesarias para el crecimiento proyectado.','Parcialmente. Los sistemas cubren las necesidades actuales pero requerirán inversión y actualización para escalar.','Con brechas importantes. Hay sistemas críticos que ya son insuficientes para el volumen y la complejidad actuales.','No. Los sistemas son un cuello de botella activo que está limitando la operación y la capacidad de gestión.']},
+      {text:'¿La alta dirección tiene acceso oportuno y confiable a la información que necesita para tomar decisiones estratégicas — no solo reportes de gestión operativa?',
+       opts:['Sí. La dirección tiene dashboards e informes que permiten decisiones estratégicas con datos oportunos y confiables.','Parcialmente. Hay información disponible pero su oportunidad, formato o nivel de análisis no siempre es suficiente.','Con dificultades. Obtener la información necesaria para decisiones estratégicas requiere esfuerzo adicional y tiempo.','No. La toma de decisiones estratégicas opera con información incompleta, tardía o de confiabilidad cuestionable.']},
+      {text:'¿La infraestructura tecnológica actual puede integrarse con nuevas capacidades — nuevos sistemas, nuevos proveedores, nuevas geografías — sin requerir una transformación total como condición del crecimiento?',
+       opts:['Sí. La arquitectura tecnológica es abierta e integrable, permitiendo crecer sin depender de una transformación completa.','Con trabajo. La integración es posible pero requiere esfuerzo significativo en cada nueva incorporación.','Con dificultad. La arquitectura es cerrada y la integración de nuevas capacidades es costosa y lenta.','Prácticamente no. La tecnología actual es una restricción que limitará activamente las opciones de crecimiento.']}
+    ]
+  },
+  {
+    id:'governance', label:'Gobierno y Decisión',
+    title:'Gobierno y Velocidad de Decisión',
+    tag:'Arquitectura de las decisiones que determinan la velocidad y calidad del crecimiento',
+    questions:[
+      {text:'¿Los mandatos de decisión están claramente establecidos — quién decide qué, con qué criterio y en qué tiempo máximo — a través de todos los niveles relevantes de la organización?',
+       opts:['Sí. Los mandatos están formalizados y operan de forma consistente con claridad y accountability.','En los niveles principales. Hay claridad en la cima pero los mandatos son más ambiguos en niveles medios.','Con frecuentes conflictos. Los mandatos se solapan o son poco claros, generando conflictos de autoridad.','No. La autoridad de decisión es informal y situacional, lo que genera confusión y parálisis frecuentes.']},
+      {text:'¿La organización toma decisiones estratégicas importantes en tiempos compatibles con la velocidad que el mercado y las oportunidades de crecimiento requieren?',
+       opts:['Sí. Las decisiones estratégicas se toman con la agilidad necesaria sin sacrificar calidad de criterio.','Generalmente. Hay algunos tipos de decisiones que son más lentos, pero en general la velocidad es aceptable.','Con frecuencia no. Las decisiones estratégicas toman más tiempo del que las oportunidades del mercado permiten.','No. La lentitud en la toma de decisiones estratégicas es un problema activo que está costando oportunidades.']},
+      {text:'¿El gobierno corporativo — consejo de administración, comités ejecutivos, dirección general — añade velocidad y calidad a las decisiones estratégicas, o añade principalmente fricción y complejidad?',
+       opts:['Añade valor real. El consejo y los órganos de gobierno contribuyen con criterio que mejora las decisiones estratégicas.','Neutral. El gobierno no agrega ni resta de forma significativa a la calidad o velocidad de las decisiones.','Añade fricción. Los procesos de gobierno dilatan las decisiones sin compensar con calidad de criterio equivalente.','Es un obstáculo activo. El gobierno corporativo es percibido como un freno burocrático más que como un activo estratégico.']}
+    ]
+  }
+];
+
+const AMBITION_LABELS = ['Crecimiento moderado (10–25%)', 'Crecimiento acelerado (25–75%)', 'Escala significativa (75%+)'];
+// Required scores per dimension per ambition [moderado, acelerado, escala]
+const REQUIRED = {
+  talent:   [2.5, 3.2, 4.0],
+  process:  [2.2, 3.0, 3.8],
+  structure:[2.2, 3.0, 3.8],
+  systems:  [2.0, 2.8, 3.5],
+  governance:[2.5, 3.2, 4.0]
+};
+
+const ROADMAP_DATA = {
+  talent:{
+    title:'Talento y Liderazgo Directivo',
+    sig:{diag:'El equipo directivo representa la brecha más crítica para el crecimiento. La ambición proyectada excede significativamente la capacidad instalada en liderazgo.',
+     actions:['Evaluar formalmente las brechas de competencia del equipo directivo frente a los requerimientos del crecimiento proyectado.','Definir el perfil del talento directivo que debe incorporarse en los próximos 6 meses — roles, competencias y mandatos.','Iniciar el diseño del bench de talento: identificar personas con potencial y diseñar planes de desarrollo concretos.']},
+    men:{diag:'Hay brechas específicas en el equipo directivo que, si no se cierran, se convertirán en cuellos de botella cuando el crecimiento acelere.',
+     actions:['Identificar los 2-3 puestos directivos con mayor brecha de competencia frente al crecimiento proyectado.','Diseñar planes de incorporación o desarrollo focalizado en esas posiciones específicas.','Formalizar un plan de bench de talento para posiciones críticas con horizonte de 12-18 meses.']}
+  },
+  process:{
+    title:'Arquitectura de Procesos',
+    sig:{diag:'Los procesos actuales no están en condiciones de soportar el crecimiento proyectado sin generar pérdida de calidad, velocidad o control.',
+     actions:['Mapear los 5 procesos más críticos para la ejecución del crecimiento y evaluar su nivel de documentación y estandarización.','Diseñar un programa de formalización de procesos con prioridad en los que soportan el motor de crecimiento.','Establecer un mecanismo de mejora continua que opere de forma sistemática, no reactiva.']},
+    men:{diag:'Los procesos tienen una madurez aceptable pero requieren fortalecimiento antes de que el crecimiento los exponga.',
+     actions:['Identificar los procesos con mayor riesgo de fractura ante el aumento de volumen proyectado.','Documentar y estandarizar esos procesos prioritarios en los próximos 90 días.','Definir indicadores de capacidad operativa que alerten cuando un proceso se acerca a su límite.']}
+  },
+  structure:{
+    title:'Estructura Organizacional',
+    sig:{diag:'La estructura actual es un obstáculo para el crecimiento. Refleja la historia de la empresa, no su estrategia futura, y está generando fricción de decisión y ambigüedad de roles.',
+     actions:['Diseñar la estructura organizacional que la empresa necesita para ejecutar su estrategia de crecimiento — no la que tiene hoy.','Clarificar los mandatos de decisión en todos los niveles relevantes con accountability explícita sobre resultados.','Definir un plan de transición estructural que permita migrar del diseño actual al diseño futuro sin disrumpir la operación.']},
+    men:{diag:'La estructura tiene elementos que facilitan el crecimiento, pero hay zonas de ambigüedad y fricción que deben resolverse.',
+     actions:['Mapear los roles con mayor ambigüedad de mandato y clarificar su accountability sobre resultados.','Identificar las capas de aprobación que están dilantando decisiones sin agregar valor proporcional.','Revisar si la estructura actual está alineada con el motor de crecimiento proyectado.']}
+  },
+  systems:{
+    title:'Sistemas e Infraestructura de Información',
+    sig:{diag:'La infraestructura tecnológica y de información es insuficiente para soportar el crecimiento proyectado. Es un riesgo activo, no solo una brecha futura.',
+     actions:['Realizar un inventario de los sistemas críticos y su capacidad real frente al volumen y complejidad proyectados.','Diseñar un roadmap tecnológico que priorice las inversiones por impacto en la capacidad de crecimiento.','Establecer los mínimos de información estratégica que la dirección necesita para tomar decisiones de calidad.']},
+    men:{diag:'Los sistemas son funcionales para el presente pero requerirán inversión y actualización antes de que el crecimiento acelere.',
+     actions:['Identificar qué sistemas específicos serán insuficientes primero en el horizonte de crecimiento proyectado.','Planificar las inversiones tecnológicas necesarias con un horizonte de 12-24 meses.','Mejorar el formato y la frecuencia de los reportes estratégicos para que soporten la toma de decisiones de alta dirección.']}
+  },
+  governance:{
+    title:'Gobierno y Decisión',
+    sig:{diag:'La arquitectura de gobierno y decisión es insuficiente para el crecimiento proyectado. La lentitud o confusión en las decisiones está costando oportunidades y generando fricción organizacional.',
+     actions:['Formalizar los mandatos de decisión en todos los niveles relevantes — quién decide qué, con qué criterio y en qué plazo máximo.','Evaluar el gobierno corporativo actual y diseñar el fortalecimiento necesario para que actúe como un activo estratégico.','Establecer un proceso de decisión estratégica que opere con la agilidad que el crecimiento requiere sin sacrificar calidad.']},
+    men:{diag:'El gobierno y la toma de decisiones funcionan, pero hay ineficiencias que se amplificarán con el crecimiento.',
+     actions:['Clarificar los 3-5 tipos de decisiones que generan mayor fricción o lentitud y diseñar un protocolo específico para cada uno.','Evaluar si el consejo o los órganos de gobierno están añadiendo valor estratégico real o solo cumpliendo una función formal.','Fortalecer la cadencia y el formato de las sesiones estratégicas para que produzcan decisiones, no solo discusiones.']}
+  }
+};
+
+let ambition = -1;
+let currentDim = 0;
+let answers = {}; // {dimId: [score1, score2, score3]}
+DIMS.forEach(d => { answers[d.id] = [null, null, null]; });
+
+function selectAmbition(idx){
+  ambition = idx;
+  document.querySelectorAll('.ambition-card').forEach((c,i)=>c.classList.toggle('selected',i===idx));
+  checkStartReady();
+}
+
+function checkStartReady(){
+  const btn = document.getElementById('btnStart');
+  if(ambition>=0){ btn.style.opacity='1'; btn.style.pointerEvents='all'; }
+}
+
+function startAssessment(){
+  if(ambition<0) return;
+  document.getElementById('sIntro').classList.remove('active');
+  currentDim = 0;
+  renderDimension(0);
+  document.getElementById('sDimension').classList.add('active');
+  updateProgress();
+}
+
+function renderDimension(idx){
+  const d = DIMS[idx];
+  document.getElementById('dNumBadge').textContent = `D${idx+1}`;
+  document.getElementById('dTitle').textContent = d.title;
+  document.getElementById('dTag').textContent = d.tag;
+
+  // Progress bars
+  const pb = document.getElementById('dimProgress');
+  pb.innerHTML = '';
+  DIMS.forEach((_,i)=>{
+    const el = document.createElement('div');
+    el.className = 'dp-item' + (i<idx?' done':i===idx?' active':'');
+    pb.appendChild(el);
+  });
+
+  // Labels
+  const dl = document.getElementById('dimLabels');
+  dl.innerHTML = '';
+  DIMS.forEach((dim,i)=>{
+    const el = document.createElement('span');
+    el.className = 'dl-item' + (i<idx?' done':i===idx?' active':'');
+    el.textContent = dim.label;
+    dl.appendChild(el);
+  });
+
+  // Questions
+  const qc = document.getElementById('questionsContainer');
+  qc.innerHTML = '';
+  d.questions.forEach((q,qi)=>{
+    const block = document.createElement('div');
+    block.className = 'question-block';
+    block.innerHTML = `<span class="q-label">Pregunta ${qi+1} de 3</span><div class="q-text">${q.text}</div><div class="q-options" id="opts_${qi}"></div>`;
+    qc.appendChild(block);
+    const saved = answers[d.id][qi];
+    q.opts.forEach((opt,oi)=>{
+      const el = document.createElement('div');
+      el.className = 'q-opt' + (saved===oi?' selected':'');
+      el.innerHTML = `<span class="q-opt-letter">${['A','B','C','D'][oi]}</span><span class="q-opt-text">${opt}</span>`;
+      el.onclick = ()=>selectOpt(idx,qi,oi);
+      document.getElementById(`opts_${qi}`).appendChild(el);
+    });
+  });
+
+  document.getElementById('btnBack').style.display = idx===0?'none':'inline-block';
+  const isLast = idx===DIMS.length-1;
+  document.getElementById('btnNext').textContent = isLast?'Ver mi mapa →':'Siguiente dimensión →';
+  updateNextBtn(idx);
+}
+
+function selectOpt(dimIdx,qIdx,optIdx){
+  // Score: A=4, B=3, C=2, D=1
+  answers[DIMS[dimIdx].id][qIdx] = 3-optIdx; // 3,2,1,0 → +1 → 4,3,2,1
+  const container = document.getElementById(`opts_${qIdx}`);
+  container.querySelectorAll('.q-opt').forEach((el,i)=>el.classList.toggle('selected',i===optIdx));
+  updateNextBtn(dimIdx);
+}
+
+function updateNextBtn(dimIdx){
+  const d = DIMS[dimIdx];
+  const allAnswered = answers[d.id].every(a=>a!==null);
+  const btn = document.getElementById('btnNext');
+  btn.classList.toggle('ready', allAnswered);
+}
+
+function goNext(){
+  const d = DIMS[currentDim];
+  if(!answers[d.id].every(a=>a!==null)) return;
+  if(currentDim===DIMS.length-1){ showCalc(); return; }
+  currentDim++;
+  renderDimension(currentDim);
+  updateProgress();
+  window.scrollTo(0,0);
+}
+
+function goBack(){
+  if(currentDim===0) return;
+  currentDim--;
+  renderDimension(currentDim);
+  updateProgress();
+  window.scrollTo(0,0);
+}
+
+function updateProgress(){
+  const filled = DIMS.filter(d=>answers[d.id].every(a=>a!==null)).length;
+  const pct = Math.round((filled/DIMS.length)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+}
+
+function showCalc(){
+  document.getElementById('sDimension').classList.remove('active');
+  document.getElementById('sCalc').classList.add('active');
+  setTimeout(showResults, 2200);
+}
+
+function showResults(){
+  // Compute scores
+  const scores = {};
+  DIMS.forEach(d=>{
+    const raw = answers[d.id].reduce((s,v)=>s+(v+1),0); // 1-4 per question, sum 3-12
+    scores[d.id] = parseFloat((raw/3).toFixed(2)); // avg 1-4
+  });
+
+  const req = {};
+  DIMS.forEach(d=>{ req[d.id] = REQUIRED[d.id][ambition]; });
+
+  // Header
+  document.getElementById('rCompany').textContent = document.getElementById('companyInput').value || '—';
+  document.getElementById('rTitle').textContent = 'Organizational Capacity Map™';
+  document.getElementById('rAmbition').textContent = `Ambición evaluada: ${AMBITION_LABELS[ambition]}`;
+
+  // Gap Map
+  const gmRows = document.getElementById('gapMapRows');
+  gmRows.innerHTML = '';
+  DIMS.forEach(d=>{
+    const cur = scores[d.id];
+    const r = req[d.id];
+    const gap = parseFloat((r - cur).toFixed(2));
+    const pctCur = Math.round((cur/4)*100);
+    const pctReq = Math.round((r/4)*100);
+    let cls, tagCls, tagLabel;
+    if(gap<=0){ cls='green'; tagCls='tag-ok'; tagLabel='Capacidad suficiente'; }
+    else if(gap<1){ cls='amber'; tagCls='tag-am'; tagLabel=`Brecha menor (${gap.toFixed(1)} pts)`; }
+    else{ cls='red'; tagCls='tag-re'; tagLabel=`Brecha significativa (${gap.toFixed(1)} pts)`; }
+
+    const row = document.createElement('div');
+    row.className = 'dim-row';
+    row.innerHTML = `
+      <div class="dr-header">
+        <span class="dr-name">${d.title}</span>
+        <span class="dr-scores">Actual: <span>${cur.toFixed(1)}</span> / 4 · Requerido: <span>${r.toFixed(1)}</span> / 4</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill ${cls}" style="width:0%" data-w="${pctCur}%"></div>
+        <div class="req-marker" style="left:0%" data-l="${pctReq}%"></div>
+      </div>
+      <span class="dr-gap-tag ${tagCls}">${tagLabel}</span>`;
+    gmRows.appendChild(row);
+  });
+
+  // Animate bars after DOM insert
+  setTimeout(()=>{
+    document.querySelectorAll('.bar-fill[data-w]').forEach(el=>{el.style.width=el.dataset.w});
+    document.querySelectorAll('.req-marker[data-l]').forEach(el=>{el.style.left=el.dataset.l});
+  },100);
+
+  // Roadmap — sorted by gap severity
+  const gapped = DIMS.map(d=>{
+    const cur = scores[d.id];
+    const r = req[d.id];
+    const gap = parseFloat((r-cur).toFixed(2));
+    return {d, cur, r, gap};
+  }).sort((a,b)=>b.gap-a.gap);
+
+  const rmItems = document.getElementById('roadmapItems');
+  rmItems.innerHTML = '';
+  let hasBreach = false;
+
+  gapped.forEach((item,idx)=>{
+    const {d, gap} = item;
+    if(gap<=0) return;
+    hasBreach = true;
+    const isSig = gap>=1;
+    const prio = idx===0?'A':idx===1?'B':'B';
+    const prioLabel = isSig?'Alta':'Media';
+    const prioCls = isSig?'prio-a':'prio-b';
+    const rd = ROADMAP_DATA[d.id];
+    const content = isSig ? rd.sig : rd.men;
+
+    const el = document.createElement('div');
+    el.className = 'rm-item';
+    el.innerHTML = `
+      <div class="rm-prio">
+        <span class="rm-prio-badge ${prioCls}">${prioLabel}</span>
+        <span class="rm-prio-dim">D${DIMS.indexOf(d)+1}</span>
+      </div>
+      <div class="rm-content">
+        <div class="rm-brecha-title">${rd.title}</div>
+        <p class="rm-diag">${content.diag}</p>
+        <div class="rm-actions">${content.actions.map(a=>`<div class="rm-action-item"><div class="rm-dot"></div><span>${a}</span></div>`).join('')}</div>
+      </div>`;
+    rmItems.appendChild(el);
+  });
+
+  if(!hasBreach){
+    rmItems.innerHTML = `<div class="rm-no-gap"><p>La evaluación no identificó brechas significativas frente a la ambición de crecimiento proyectada. La organización tiene la capacidad instalada para ejecutar su agenda. El siguiente paso es asegurar que el liderazgo estratégico esté igualmente preparado para conducir el crecimiento con el mandato y la arquitectura que el siguiente nivel requiere.</p></div>`;
+  }
+
+  // Summary bar
+  const sb = document.getElementById('sbScores');
+  const overall = parseFloat((Object.values(scores).reduce((s,v)=>s+v,0)/DIMS.length).toFixed(1));
+  const reqAvg = parseFloat((DIMS.reduce((s,d)=>s+req[d.id],0)/DIMS.length).toFixed(1));
+  const gapCount = DIMS.filter(d=>(req[d.id]-scores[d.id])>0).length;
+  sb.innerHTML = `
+    <div class="sb-score"><span class="sb-score-num">${overall.toFixed(1)}</span><span class="sb-score-label">Capacidad promedio (de 4.0)</span></div>
+    <div class="sb-score"><span class="sb-score-num">${reqAvg.toFixed(1)}</span><span class="sb-score-label">Umbral requerido promedio</span></div>
+    <div class="sb-score"><span class="sb-score-num">${gapCount}</span><span class="sb-score-label">Dimensiones con brecha</span></div>`;
+
+  document.getElementById('sCalc').classList.remove('active');
+  document.getElementById('sResults').classList.add('active');
+  document.getElementById('progFill').style.width='100%';
+  window.scrollTo(0,0);
+}
+
+function restart(){
+  DIMS.forEach(d=>{ answers[d.id]=[null,null,null]; });
+  ambition=-1;
+  currentDim=0;
+  document.querySelectorAll('.ambition-card').forEach(c=>c.classList.remove('selected'));
+  const btn=document.getElementById('btnStart');
+  btn.style.opacity='.3';btn.style.pointerEvents='none';
+  document.getElementById('companyInput').value='';
+  document.getElementById('sResults').classList.remove('active');
+  document.getElementById('sIntro').classList.add('active');
+  document.getElementById('progFill').style.width='0%';
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

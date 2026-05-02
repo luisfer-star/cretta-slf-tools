@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Initiative Accountability Tracker™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{
+  --navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--navy4:#0a1530;
+  --gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,.1);
+  --cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;
+  --t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;
+  --r:rgba(196,154,60,.18);
+  --on:#1a6b3c;--onl:rgba(26,107,60,.12);--on-bg:#f0f9f3;
+  --risk:#b56a00;--riskl:rgba(181,106,0,.12);--risk-bg:#fdf6ec;
+  --behind:#9a1f1f;--behindl:rgba(154,31,31,.12);--behind-bg:#fdf2f2;
+  --done:#2d5a8e;--donel:rgba(45,90,142,.12);--done-bg:#f0f4fa;
+  --hold:#5a5a6e;--holdl:rgba(90,90,110,.12);--hold-bg:#f4f4f6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;scroll-behavior:smooth}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+input,textarea,select{font-family:'Montserrat',sans-serif;outline:none}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--navy4);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(196,154,60,.12)}
+.tb-brand{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-right{display:flex;align-items:center;gap:10px}
+.tb-label{font-size:.44rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,236,.22)}
+.tb-btn{font-size:.46rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border:1px solid rgba(196,154,60,.25);color:var(--gold);transition:all .13s}
+.tb-btn:hover{background:var(--golda)}
+.tb-btn-primary{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.tb-btn-primary:hover{background:var(--gold2)}
+
+/* ── NAV TABS ── */
+.nav-tabs{background:white;border-bottom:1px solid var(--r);display:flex;padding:0 24px}
+.nav-tab{padding:11px 16px;font-size:.48rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);border-bottom:2px solid transparent;cursor:pointer;transition:all .15s;white-space:nowrap}
+.nav-tab.active{color:var(--navy);border-bottom-color:var(--gold)}
+.nav-tab:hover{color:var(--navy)}
+
+/* ── VIEWS ── */
+.view{display:none;padding:22px 24px 60px;max-width:1100px;margin:0 auto}
+.view.active{display:block}
+
+/* ── TYPOGRAPHY ── */
+.view-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:300;color:var(--navy);margin-bottom:3px}
+.view-title em{font-style:italic;color:var(--gold2)}
+.view-sub{font-size:.65rem;color:var(--t3);margin-bottom:18px;line-height:1.6}
+.sec-lbl{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--r)}
+
+/* ── DASHBOARD STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:20px}
+.stat-card{background:white;padding:14px 14px}
+.sc-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;display:block;line-height:1;margin-bottom:3px}
+.sc-lbl{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.sc-on .sc-num{color:var(--on)}.sc-risk .sc-num{color:var(--risk)}.sc-behind .sc-num{color:var(--behind)}.sc-done .sc-num{color:var(--done)}.sc-total .sc-num{color:var(--navy)}
+
+/* ── HEALTH BAR ── */
+.health-bar-wrap{background:white;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.hb-label{font-size:.48rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);white-space:nowrap}
+.hb-track{flex:1;height:6px;background:var(--cream2);border-radius:3px;overflow:hidden}
+.hb-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--on));transition:width .6s ease}
+.hb-pct{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--navy);min-width:40px;text-align:right}
+.hb-desc{font-size:.56rem;color:var(--t3);font-style:italic;white-space:nowrap}
+
+/* ── INITIATIVE CARDS ── */
+.initiatives-grid{display:flex;flex-direction:column;gap:3px}
+.init-card{background:white;padding:0;overflow:hidden;transition:box-shadow .15s}
+.init-card:hover{box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.ic-header{display:flex;align-items:stretch;gap:0}
+.ic-status-bar{width:4px;flex-shrink:0}
+.ic-status-bar.on{background:var(--on)}.ic-status-bar.risk{background:var(--risk)}.ic-status-bar.behind{background:var(--behind)}.ic-status-bar.done{background:var(--done)}.ic-status-bar.hold{background:var(--hold)}
+.ic-main{flex:1;padding:13px 16px;display:flex;align-items:flex-start;gap:14px}
+.ic-meta{flex:1}
+.ic-name{font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:3px}
+.ic-detail{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+.ic-badge{font-size:.42rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;display:inline-block;border-radius:0}
+.ic-badge.on{background:var(--onl);color:var(--on)}.ic-badge.risk{background:var(--riskl);color:var(--risk)}.ic-badge.behind{background:var(--behindl);color:var(--behind)}.ic-badge.done{background:var(--donel);color:var(--done)}.ic-badge.hold{background:var(--holdl);color:var(--hold)}
+.ic-category{font-size:.44rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);background:var(--cream2);padding:2px 7px}
+.ic-owner{font-size:.56rem;color:var(--t3)}
+.ic-owner strong{color:var(--t2);font-weight:600}
+.ic-progress{min-width:140px}
+.icp-track{height:5px;background:var(--cream2);border-radius:2px;overflow:hidden;margin-bottom:3px}
+.icp-fill{height:100%;border-radius:2px;transition:width .5s ease}
+.icp-fill.on{background:var(--on)}.icp-fill.risk{background:var(--risk)}.icp-fill.behind{background:var(--behind)}.icp-fill.done{background:var(--done)}.icp-fill.hold{background:var(--hold)}
+.icp-labels{display:flex;justify-content:space-between;align-items:baseline}
+.icp-pct{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:300;color:var(--navy)}
+.icp-deadline{font-size:.44rem;color:var(--t3)}
+.icp-deadline.overdue{color:var(--behind);font-weight:700}
+.ic-actions{display:flex;gap:4px;padding:13px 12px;align-items:flex-start;flex-shrink:0}
+.ia-btn{font-size:.44rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:5px 9px;border:1px solid var(--r);color:var(--t3);transition:all .12s}
+.ia-btn:hover{border-color:var(--gold);color:var(--navy)}
+.ia-btn.delete:hover{border-color:var(--behind);color:var(--behind)}
+.ic-last-update{padding:7px 20px;background:var(--cream3);font-size:.58rem;color:var(--t3);font-style:italic;border-top:1px solid rgba(196,154,60,.07)}
+.ic-last-update strong{color:var(--t2);font-style:normal;font-weight:600}
+
+/* ── UPDATE LOG (expanded) ── */
+.ic-log{display:none;border-top:1px solid var(--r)}
+.ic-log.open{display:block}
+.log-header{padding:10px 20px;background:var(--cream2);display:flex;justify-content:space-between;align-items:center}
+.log-title{font-size:.46rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.log-entries{max-height:220px;overflow-y:auto}
+.log-entry{padding:9px 20px;border-bottom:1px solid var(--r);display:grid;grid-template-columns:80px 80px 1fr;gap:10px;align-items:start}
+.log-entry:last-child{border-bottom:none}
+.le-date{font-size:.56rem;color:var(--t3);font-weight:600}
+.le-badge{display:inline-block}
+.le-note{font-size:.62rem;color:var(--t2);line-height:1.55}
+.log-empty{padding:12px 20px;font-size:.62rem;color:var(--t3);font-style:italic}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,21,48,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:white;width:100%;max-width:580px;max-height:90vh;overflow-y:auto}
+.modal-header{background:var(--navy);padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
+.mh-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--cream)}
+.mh-title em{font-style:italic;color:var(--gold2)}
+.modal-close{font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,241,236,.4);transition:color .13s}
+.modal-close:hover{color:var(--cream)}
+.modal-body{padding:22px 24px}
+.modal-footer{padding:14px 24px;background:var(--cream2);display:flex;gap:8px;justify-content:flex-end}
+.field{margin-bottom:14px}
+.field-label{font-size:.58rem;font-weight:700;color:var(--navy);display:block;margin-bottom:5px}
+.field-hint{font-size:.52rem;color:var(--t3);font-style:italic;display:block;margin-bottom:4px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input[type=text],input[type=date],input[type=number],select,textarea{width:100%;padding:9px 11px;border:1px solid var(--r);font-size:.72rem;color:var(--t1);background:white;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+input::placeholder,textarea::placeholder{color:var(--t3);font-style:italic}
+textarea{resize:vertical;min-height:64px;line-height:1.6}
+.btn-cancel{font-size:.54rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;border:1px solid var(--r);color:var(--t3);transition:all .13s}
+.btn-cancel:hover{border-color:var(--gold);color:var(--navy)}
+.btn-save{background:var(--navy);color:var(--cream);padding:9px 22px;font-size:.54rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .13s}
+.btn-save:hover{background:var(--navy3)}
+
+/* ── FILTERS ── */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.filter-btn{padding:5px 12px;border:1px solid var(--r);font-size:.48rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);background:white;transition:all .12s}
+.filter-btn:hover,.filter-btn.active{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.filter-sep{width:1px;height:18px;background:var(--r);margin:0 2px}
+.search-input{padding:6px 11px;border:1px solid var(--r);font-size:.66rem;color:var(--t1);background:white;min-width:180px}
+.search-input:focus{border-color:var(--gold)}
+
+/* ── EMPTY STATE ── */
+.empty-state{background:white;padding:50px 30px;text-align:center}
+.es-icon{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--r);display:block;margin-bottom:12px}
+.es-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--navy);margin-bottom:6px}
+.es-text{font-size:.7rem;color:var(--t3);line-height:1.7;max-width:360px;margin:0 auto 18px}
+.es-btn{background:var(--navy);color:var(--cream);padding:10px 22px;font-size:.56rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+
+/* ── REPORT VIEW ── */
+.report-header{background:var(--navy);padding:26px 28px;margin-bottom:2px;position:relative;overflow:hidden}
+.report-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(196,154,60,.1),transparent 55%)}
+.rh-eye{font-size:.44rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:8px;position:relative;z-index:1}
+.rh-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:300;color:var(--cream);position:relative;z-index:1;margin-bottom:3px}
+.rh-title em{font-style:italic;color:var(--gold2)}
+.rh-meta{font-size:.5rem;color:rgba(244,241,236,.35);position:relative;z-index:1}
+.report-section{background:white;padding:18px 22px;margin-bottom:3px}
+.rs-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;color:var(--navy);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.report-table{width:100%;border-collapse:collapse}
+.report-table th{font-size:.44rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);padding:7px 10px;text-align:left;border-bottom:1px solid var(--r);background:var(--cream3)}
+.report-table td{font-size:.68rem;color:var(--t2);padding:9px 10px;border-bottom:1px solid rgba(196,154,60,.07);vertical-align:top;line-height:1.5}
+.report-table tr:last-child td{border-bottom:none}
+.rt-progress{display:flex;align-items:center;gap:7px}
+.rt-pct{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:300;color:var(--navy);min-width:36px}
+.rt-bar{flex:1;height:4px;background:var(--cream2);border-radius:2px;overflow:hidden}
+.rt-fill{height:100%;border-radius:2px}
+.report-callout{background:var(--navy);padding:14px 18px;margin-bottom:3px}
+.rc-text{font-family:'Cormorant Garamond',serif;font-size:.88rem;font-style:italic;color:rgba(244,241,236,.5);line-height:1.65}
+.rc-text strong{color:var(--gold2);font-style:normal;font-weight:400}
+
+/* ── PHIL ── */
+.phil-strip{background:var(--navy2);padding:14px 22px}
+.phil-strip p{font-family:'Cormorant Garamond',serif;font-size:.84rem;font-weight:300;font-style:italic;color:rgba(244,241,236,.35);line-height:1.65}
+.phil-strip strong{color:var(--gold2);font-style:normal;font-weight:400}
+
+@media print{
+  .topbar,.nav-tabs,.filters,.ic-actions,.tb-right,.tb-btn,.modal-overlay{display:none!important}
+  body{background:white}
+  .view{display:block!important;padding:0}
+  .init-card{break-inside:avoid}
+}
+@media(max-width:700px){
+  .stats-row{grid-template-columns:repeat(3,1fr)}
+  .field-row{grid-template-columns:1fr}
+  .ic-main{flex-direction:column;gap:8px}
+  .ic-progress{min-width:auto;width:100%}
+  .log-entry{grid-template-columns:70px 70px 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Initiative Accountability Tracker™</span>
+  <div class="tb-right">
+    <span class="tb-label">Seguimiento de iniciativas estratégicas</span>
+    <button class="tb-btn" onclick="window.print()">Imprimir</button>
+    <button class="tb-btn tb-btn-primary" onclick="openModal('add')">+ Nueva iniciativa</button>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showView('dashboard')">Dashboard</div>
+  <div class="nav-tab" onclick="showView('initiatives')">Iniciativas</div>
+  <div class="nav-tab" onclick="showView('report')">Reporte ejecutivo</div>
+</div>
+
+<!-- ============================================================ DASHBOARD -->
+<div class="view active" id="view-dashboard">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+    <h1 class="view-title">Portfolio de <em>Iniciativas Estratégicas</em></h1>
+    <span style="font-size:.5rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3)" id="dashPeriod"></span>
+  </div>
+  <p class="view-sub">Vista consolidada del estado de accountability sobre todas las iniciativas activas.</p>
+
+  <div class="stats-row" id="statsRow"></div>
+  <div class="health-bar-wrap" id="healthBar"></div>
+
+  <span class="sec-lbl">Atención requerida — Iniciativas en riesgo o retrasadas</span>
+  <div class="initiatives-grid" id="dashAlerts"></div>
+
+  <div style="margin-top:20px">
+    <span class="sec-lbl">Todas las iniciativas activas</span>
+    <div class="initiatives-grid" id="dashAll"></div>
+  </div>
+
+  <div class="phil-strip" style="margin-top:20px">
+    <p><strong>Accountability</strong> — No es hacer un reporte. Es que alguien específico responda con su nombre por un resultado específico, en una fecha específica. Sin esa precisión, el seguimiento es teatro.</p>
+  </div>
+</div>
+
+<!-- ============================================================ INITIATIVES -->
+<div class="view" id="view-initiatives">
+  <h1 class="view-title">Gestión de <em>Iniciativas</em></h1>
+  <p class="view-sub">Administrar el catálogo completo de iniciativas estratégicas con sus métricas, responsables y plazos.</p>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all',this)">Todas</button>
+    <button class="filter-btn" onclick="setFilter('on',this)">En marcha</button>
+    <button class="filter-btn" onclick="setFilter('risk',this)">En riesgo</button>
+    <button class="filter-btn" onclick="setFilter('behind',this)">Retrasadas</button>
+    <button class="filter-btn" onclick="setFilter('done',this)">Completadas</button>
+    <button class="filter-btn" onclick="setFilter('hold',this)">En pausa</button>
+    <div class="filter-sep"></div>
+    <input class="search-input" type="text" placeholder="Buscar iniciativa o responsable..." oninput="renderAll()" id="searchInput">
+  </div>
+
+  <div class="initiatives-grid" id="initList"></div>
+</div>
+
+<!-- ============================================================ REPORT -->
+<div class="view" id="view-report">
+  <div class="report-header">
+    <span class="rh-eye">Initiative Accountability Tracker™ · CRETTA Strategic Leadership Firm</span>
+    <div class="rh-title">Reporte Ejecutivo de <em>Iniciativas Estratégicas</em></div>
+    <div class="rh-meta" id="reportMeta"></div>
+  </div>
+
+  <div class="report-section" id="reportSummary"></div>
+  <div class="report-section" id="reportTable"></div>
+  <div class="report-callout" id="reportCallout"></div>
+  <div class="report-section" id="reportAtRisk"></div>
+  <div class="report-section" id="reportCompleted"></div>
+</div>
+
+<!-- ============================================================ MODAL: ADD / EDIT -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="mh-title" id="modalTitle">Nueva <em>Iniciativa</em></div>
+      <button class="modal-close" onclick="closeModal()">Cerrar ×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <span class="field-label">Nombre de la iniciativa</span>
+        <input type="text" id="f-name" placeholder="Nombre claro y específico de la iniciativa estratégica">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <span class="field-label">Categoría</span>
+          <select id="f-category">
+            <option value="Estrategia">Estrategia</option>
+            <option value="Crecimiento">Crecimiento</option>
+            <option value="Operaciones">Operaciones</option>
+            <option value="Talento">Talento</option>
+            <option value="Gobierno">Gobierno</option>
+            <option value="Capital">Capital</option>
+            <option value="Transformación">Transformación</option>
+            <option value="Mercado">Mercado</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="field">
+          <span class="field-label">Responsable (Owner)</span>
+          <input type="text" id="f-owner" placeholder="Nombre del responsable único">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <span class="field-label">Fecha de inicio</span>
+          <input type="date" id="f-start">
+        </div>
+        <div class="field">
+          <span class="field-label">Fecha límite</span>
+          <input type="date" id="f-deadline">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <span class="field-label">Métrica objetivo</span>
+          <span class="field-hint">¿Cómo se mide el éxito de esta iniciativa?</span>
+          <input type="text" id="f-metric" placeholder="Ej: Ingresos, Clientes nuevos, % margen">
+        </div>
+        <div class="field">
+          <span class="field-label">Valor objetivo</span>
+          <input type="text" id="f-target" placeholder="Ej: $5M, 20 clientes, 35%">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <span class="field-label">Estado actual</span>
+          <select id="f-status">
+            <option value="on">En marcha — On Track</option>
+            <option value="risk">En riesgo — At Risk</option>
+            <option value="behind">Retrasada — Behind</option>
+            <option value="done">Completada</option>
+            <option value="hold">En pausa</option>
+          </select>
+        </div>
+        <div class="field">
+          <span class="field-label">Progreso actual (%)</span>
+          <input type="number" id="f-progress" min="0" max="100" placeholder="0–100">
+        </div>
+      </div>
+      <div class="field">
+        <span class="field-label">Nota de actualización</span>
+        <span class="field-hint">Contexto, bloqueos, o razón del estado actual</span>
+        <textarea id="f-note" placeholder="¿Qué está pasando con esta iniciativa? ¿Hay bloqueos? ¿Qué cambió desde la última actualización?"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveInitiative()">Guardar iniciativa</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ MODAL: UPDATE -->
+<div class="modal-overlay" id="updateOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="mh-title">Actualizar <em>Iniciativa</em></div>
+      <button class="modal-close" onclick="closeUpdate()">Cerrar ×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field" style="margin-bottom:8px">
+        <span class="field-label" id="uModalName" style="font-size:.75rem;color:var(--navy)"></span>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <span class="field-label">Nuevo estado</span>
+          <select id="u-status">
+            <option value="on">En marcha — On Track</option>
+            <option value="risk">En riesgo — At Risk</option>
+            <option value="behind">Retrasada — Behind</option>
+            <option value="done">Completada</option>
+            <option value="hold">En pausa</option>
+          </select>
+        </div>
+        <div class="field">
+          <span class="field-label">Progreso (%)</span>
+          <input type="number" id="u-progress" min="0" max="100">
+        </div>
+      </div>
+      <div class="field">
+        <span class="field-label">Nota de actualización</span>
+        <textarea id="u-note" placeholder="¿Qué cambió? ¿Hay bloqueos? ¿Qué viene a continuación?"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeUpdate()">Cancelar</button>
+      <button class="btn-save" onclick="saveUpdate()">Registrar actualización</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+// STORAGE
+// ================================================================
+const STORE_KEY = 'cretta_iat_v1';
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+  catch { return []; }
+}
+
+function save(data) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+}
+
+let initiatives = load();
+let editId = null;
+let updateId = null;
+let activeFilter = 'all';
+
+// ================================================================
+// STATUS CONFIG
+// ================================================================
+const STATUS = {
+  on:     { label: 'En marcha',  cls: 'on',     color: 'var(--on)' },
+  risk:   { label: 'En riesgo',  cls: 'risk',   color: 'var(--risk)' },
+  behind: { label: 'Retrasada',  cls: 'behind', color: 'var(--behind)' },
+  done:   { label: 'Completada', cls: 'done',   color: 'var(--done)' },
+  hold:   { label: 'En pausa',   cls: 'hold',   color: 'var(--hold)' },
+};
+
+// ================================================================
+// VIEW NAVIGATION
+// ================================================================
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  const tabs = document.querySelectorAll('.nav-tab');
+  const map = { dashboard: 0, initiatives: 1, report: 2 };
+  tabs[map[id]]?.classList.add('active');
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'initiatives') renderAll();
+  if (id === 'report') renderReport();
+}
+
+// ================================================================
+// UTILS
+// ================================================================
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function today() { return new Date().toISOString().slice(0, 10); }
+function fmt(dateStr) {
+  if (!dateStr) return '—';
+  const [y, m, d] = dateStr.split('-');
+  return `${d}/${m}/${y}`;
+}
+function daysLeft(deadline) {
+  if (!deadline) return null;
+  const diff = new Date(deadline) - new Date(today());
+  return Math.ceil(diff / 86400000);
+}
+function deadlineLabel(deadline, status) {
+  if (status === 'done') return '<span class="icp-deadline">Completada</span>';
+  if (!deadline) return '<span class="icp-deadline">Sin fecha límite</span>';
+  const d = daysLeft(deadline);
+  if (d < 0) return `<span class="icp-deadline overdue">Vencida hace ${Math.abs(d)} días</span>`;
+  if (d === 0) return `<span class="icp-deadline overdue">Vence hoy</span>`;
+  if (d <= 7) return `<span class="icp-deadline overdue">${d} días restantes</span>`;
+  return `<span class="icp-deadline">${fmt(deadline)}</span>`;
+}
+
+// ================================================================
+// RENDER CARD
+// ================================================================
+function renderCard(init, showLog) {
+  const st = STATUS[init.status] || STATUS.on;
+  const logs = init.log || [];
+  const last = logs[logs.length - 1];
+  const pct = Math.min(100, Math.max(0, parseInt(init.progress) || 0));
+
+  const logHtml = logs.length ? logs.slice().reverse().map(l => `
+    <div class="log-entry">
+      <span class="le-date">${fmt(l.date)}</span>
+      <span class="le-badge"><span class="ic-badge ${STATUS[l.status]?.cls || 'on'}">${STATUS[l.status]?.label || ''}</span></span>
+      <span class="le-note">${l.note || '<em>Sin nota</em>'}</span>
+    </div>`).join('') : '<div class="log-empty">Sin actualizaciones registradas.</div>';
+
+  return `
+<div class="init-card" id="card-${init.id}">
+  <div class="ic-header">
+    <div class="ic-status-bar ${st.cls}"></div>
+    <div class="ic-main">
+      <div class="ic-meta">
+        <div class="ic-name">${init.name || 'Iniciativa sin nombre'}</div>
+        <div class="ic-detail">
+          <span class="ic-badge ${st.cls}">${st.label}</span>
+          <span class="ic-category">${init.category || 'Sin categoría'}</span>
+          <span class="ic-owner">Responsable: <strong>${init.owner || 'No asignado'}</strong></span>
+          ${init.metric ? `<span class="ic-owner">Objetivo: <strong>${init.target || '—'} ${init.metric}</strong></span>` : ''}
+        </div>
+      </div>
+      <div class="ic-progress">
+        <div class="icp-track"><div class="icp-fill ${st.cls}" style="width:${pct}%"></div></div>
+        <div class="icp-labels">
+          <span class="icp-pct">${pct}%</span>
+          ${deadlineLabel(init.deadline, init.status)}
+        </div>
+      </div>
+    </div>
+    <div class="ic-actions">
+      <button class="ia-btn" onclick="openUpdate('${init.id}')">Actualizar</button>
+      <button class="ia-btn" onclick="toggleLog('${init.id}')">Historial</button>
+      <button class="ia-btn" onclick="openModal('edit','${init.id}')">Editar</button>
+      <button class="ia-btn delete" onclick="deleteInit('${init.id}')">×</button>
+    </div>
+  </div>
+  ${last ? `<div class="ic-last-update"><strong>${fmt(last.date)}</strong> — ${last.note || 'Sin nota'}</div>` : ''}
+  <div class="ic-log" id="log-${init.id}">
+    <div class="log-header">
+      <span class="log-title">Historial de actualizaciones · ${logs.length} registros</span>
+    </div>
+    <div class="log-entries">${logHtml}</div>
+  </div>
+</div>`;
+}
+
+// ================================================================
+// DASHBOARD
+// ================================================================
+function renderDashboard() {
+  const all = initiatives;
+  const counts = { on: 0, risk: 0, behind: 0, done: 0, hold: 0, total: all.length };
+  all.forEach(i => { if (counts[i.status] !== undefined) counts[i.status]++; });
+
+  const now = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('dashPeriod').textContent = now;
+
+  // Stats
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card sc-total"><span class="sc-num">${counts.total}</span><span class="sc-lbl">Total iniciativas</span></div>
+    <div class="stat-card sc-on"><span class="sc-num">${counts.on}</span><span class="sc-lbl">En marcha</span></div>
+    <div class="stat-card sc-risk"><span class="sc-num">${counts.risk}</span><span class="sc-lbl">En riesgo</span></div>
+    <div class="stat-card sc-behind"><span class="sc-num">${counts.behind}</span><span class="sc-lbl">Retrasadas</span></div>
+    <div class="stat-card sc-done"><span class="sc-num">${counts.done}</span><span class="sc-lbl">Completadas</span></div>`;
+
+  // Health bar
+  const active = counts.on + counts.risk + counts.behind + counts.hold;
+  const onTrackPct = active > 0 ? Math.round((counts.on / active) * 100) : 0;
+  const healthDesc = onTrackPct >= 75 ? 'Portfolio saludable' : onTrackPct >= 50 ? 'Portfolio bajo monitoreo' : 'Portfolio en riesgo — atención requerida';
+  document.getElementById('healthBar').innerHTML = `
+    <span class="hb-label">Índice de salud del portfolio</span>
+    <div class="hb-track"><div class="hb-fill" style="width:${onTrackPct}%"></div></div>
+    <span class="hb-pct">${onTrackPct}%</span>
+    <span class="hb-desc">${healthDesc}</span>`;
+
+  // Alerts
+  const alerts = all.filter(i => i.status === 'risk' || i.status === 'behind');
+  const alertEl = document.getElementById('dashAlerts');
+  alertEl.innerHTML = alerts.length
+    ? alerts.map(i => renderCard(i)).join('')
+    : '<div style="background:white;padding:14px 18px;font-size:.68rem;color:var(--t3);font-style:italic">No hay iniciativas en riesgo o retrasadas. Portfolio en buen estado.</div>';
+
+  // All active
+  const activeAll = all.filter(i => i.status !== 'done');
+  document.getElementById('dashAll').innerHTML = activeAll.length
+    ? activeAll.map(i => renderCard(i)).join('')
+    : emptyState();
+}
+
+// ================================================================
+// ALL INITIATIVES VIEW
+// ================================================================
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+function renderAll() {
+  const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  let list = initiatives.filter(i => {
+    const matchFilter = activeFilter === 'all' || i.status === activeFilter;
+    const matchSearch = !q || i.name?.toLowerCase().includes(q) || i.owner?.toLowerCase().includes(q) || i.category?.toLowerCase().includes(q);
+    return matchFilter && matchSearch;
+  });
+  const el = document.getElementById('initList');
+  el.innerHTML = list.length ? list.map(i => renderCard(i)).join('') : emptyState();
+}
+
+function emptyState() {
+  return `<div class="empty-state">
+    <span class="es-icon">◇</span>
+    <div class="es-title">Sin iniciativas registradas</div>
+    <p class="es-text">Las iniciativas estratégicas con accountability definido aparecerán aquí. Agregar la primera para comenzar el seguimiento.</p>
+    <button class="es-btn" onclick="openModal('add')">+ Agregar primera iniciativa</button>
+  </div>`;
+}
+
+// ================================================================
+// REPORT
+// ================================================================
+function renderReport() {
+  const all = initiatives;
+  const now = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('reportMeta').textContent = `Generado el ${now} · ${all.length} iniciativas en el sistema`;
+
+  const counts = { on: 0, risk: 0, behind: 0, done: 0, hold: 0 };
+  all.forEach(i => { if (counts[i.status] !== undefined) counts[i.status]++; });
+  const active = counts.on + counts.risk + counts.behind + counts.hold;
+  const pct = active > 0 ? Math.round((counts.on / active) * 100) : 0;
+
+  document.getElementById('reportSummary').innerHTML = `
+    <div class="rs-title">Resumen ejecutivo del período</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:14px">
+      <div style="background:var(--cream3);padding:12px 13px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--navy)">${all.length}</div>
+        <div style="font-size:.42rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)">Total</div>
+      </div>
+      <div style="background:var(--on-bg);padding:12px 13px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--on)">${counts.on}</div>
+        <div style="font-size:.42rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--on)">En marcha</div>
+      </div>
+      <div style="background:var(--risk-bg);padding:12px 13px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--risk)">${counts.risk}</div>
+        <div style="font-size:.42rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--risk)">En riesgo</div>
+      </div>
+      <div style="background:var(--behind-bg);padding:12px 13px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--behind)">${counts.behind}</div>
+        <div style="font-size:.42rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--behind)">Retrasadas</div>
+      </div>
+      <div style="background:var(--done-bg);padding:12px 13px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--done)">${counts.done}</div>
+        <div style="font-size:.42rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--done)">Completadas</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;background:var(--cream3)">
+      <span style="font-size:.46rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);white-space:nowrap">Salud del portfolio</span>
+      <div style="flex:1;height:5px;background:var(--cream2);border-radius:2px;overflow:hidden"><div style="height:100%;border-radius:2px;background:var(--on);width:${pct}%"></div></div>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;color:var(--navy);min-width:38px;text-align:right">${pct}%</span>
+    </div>`;
+
+  const rows = all.filter(i => i.status !== 'done').map(i => {
+    const st = STATUS[i.status] || STATUS.on;
+    const pct2 = Math.min(100, parseInt(i.progress) || 0);
+    const logs = i.log || [];
+    const last = logs[logs.length - 1];
+    return `<tr>
+      <td><strong>${i.name || '—'}</strong><br><span style="font-size:.56rem;color:var(--t3)">${i.category || ''}</span></td>
+      <td>${i.owner || '—'}</td>
+      <td><span class="ic-badge ${st.cls}">${st.label}</span></td>
+      <td><div class="rt-progress"><span class="rt-pct">${pct2}%</span><div class="rt-bar"><div class="rt-fill ${st.cls}" style="width:${pct2}%;background:${st.color}"></div></div></div></td>
+      <td>${fmt(i.deadline)}</td>
+      <td style="max-width:200px">${last?.note || '<em style="color:var(--t3)">Sin actualización</em>'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('reportTable').innerHTML = `
+    <div class="rs-title">Estado detallado de iniciativas activas</div>
+    <table class="report-table">
+      <thead><tr><th>Iniciativa</th><th>Responsable</th><th>Estado</th><th>Progreso</th><th>Fecha límite</th><th>Última actualización</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="6" style="font-style:italic;color:var(--t3)">Sin iniciativas activas registradas.</td></tr>'}</tbody>
+    </table>`;
+
+  const atRisk = all.filter(i => i.status === 'risk' || i.status === 'behind');
+  document.getElementById('reportAtRisk').innerHTML = atRisk.length ? `
+    <div class="rs-title" style="color:var(--behind)">Iniciativas que requieren atención inmediata</div>
+    ${atRisk.map(i => {
+      const logs = i.log || [];
+      const last = logs[logs.length - 1];
+      return `<div style="background:var(--behind-bg);padding:11px 14px;margin-bottom:3px;border-left:3px solid var(--behind)">
+        <div style="font-size:.72rem;font-weight:700;color:var(--behind);margin-bottom:3px">${i.name}</div>
+        <div style="font-size:.62rem;color:var(--t2)">Responsable: ${i.owner || '—'} · Progreso: ${i.progress || 0}% · Fecha límite: ${fmt(i.deadline)}</div>
+        ${last ? `<div style="font-size:.62rem;color:var(--t3);margin-top:4px;font-style:italic">"${last.note}"</div>` : ''}
+      </div>`;
+    }).join('')}` : '<div class="rs-title">Sin iniciativas en riesgo o retrasadas</div><p style="font-size:.7rem;color:var(--t3);font-style:italic">Todas las iniciativas activas están en marcha o en pausa.</p>';
+
+  const done = all.filter(i => i.status === 'done');
+  document.getElementById('reportCompleted').innerHTML = done.length ? `
+    <div class="rs-title" style="color:var(--done)">Iniciativas completadas</div>
+    ${done.map(i => `<div style="padding:9px 13px;margin-bottom:2px;background:var(--done-bg);border-left:3px solid var(--done)">
+      <span style="font-size:.7rem;font-weight:700;color:var(--done)">${i.name}</span>
+      <span style="font-size:.6rem;color:var(--t3);margin-left:10px">Responsable: ${i.owner || '—'}</span>
+    </div>`).join('')}` : '';
+
+  document.getElementById('reportCallout').innerHTML = `
+    <p class="rc-text">El accountability no es el reporte. Es la conversación que produce el reporte — la que ocurre entre el responsable de la iniciativa y quien le da seguimiento, donde se revisa con honestidad qué está funcionando, qué no, y qué cambia. <strong>Sin esa conversación, el tracker es burocracia. Con ella, es gobierno.</strong></p>`;
+}
+
+// ================================================================
+// MODAL: ADD / EDIT
+// ================================================================
+function openModal(mode, id) {
+  editId = null;
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-owner').value = '';
+  document.getElementById('f-category').value = 'Estrategia';
+  document.getElementById('f-start').value = today();
+  document.getElementById('f-deadline').value = '';
+  document.getElementById('f-metric').value = '';
+  document.getElementById('f-target').value = '';
+  document.getElementById('f-status').value = 'on';
+  document.getElementById('f-progress').value = '0';
+  document.getElementById('f-note').value = '';
+
+  if (mode === 'edit' && id) {
+    const init = initiatives.find(i => i.id === id);
+    if (!init) return;
+    editId = id;
+    document.getElementById('modalTitle').innerHTML = 'Editar <em>Iniciativa</em>';
+    document.getElementById('f-name').value = init.name || '';
+    document.getElementById('f-owner').value = init.owner || '';
+    document.getElementById('f-category').value = init.category || 'Estrategia';
+    document.getElementById('f-start').value = init.start || today();
+    document.getElementById('f-deadline').value = init.deadline || '';
+    document.getElementById('f-metric').value = init.metric || '';
+    document.getElementById('f-target').value = init.target || '';
+    document.getElementById('f-status').value = init.status || 'on';
+    document.getElementById('f-progress').value = init.progress || '0';
+  } else {
+    document.getElementById('modalTitle').innerHTML = 'Nueva <em>Iniciativa</em>';
+  }
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  editId = null;
+}
+
+function saveInitiative() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { alert('El nombre de la iniciativa es obligatorio.'); return; }
+
+  const note = document.getElementById('f-note').value.trim();
+  const status = document.getElementById('f-status').value;
+  const progress = document.getElementById('f-progress').value;
+
+  if (editId) {
+    const idx = initiatives.findIndex(i => i.id === editId);
+    if (idx !== -1) {
+      const prev = initiatives[idx];
+      initiatives[idx] = {
+        ...prev,
+        name, owner: document.getElementById('f-owner').value.trim(),
+        category: document.getElementById('f-category').value,
+        start: document.getElementById('f-start').value,
+        deadline: document.getElementById('f-deadline').value,
+        metric: document.getElementById('f-metric').value.trim(),
+        target: document.getElementById('f-target').value.trim(),
+        status, progress,
+        updatedAt: today(),
+        log: note ? [...(prev.log || []), { date: today(), status, progress, note }] : (prev.log || []),
+      };
+    }
+  } else {
+    initiatives.push({
+      id: uid(), name,
+      owner: document.getElementById('f-owner').value.trim(),
+      category: document.getElementById('f-category').value,
+      start: document.getElementById('f-start').value,
+      deadline: document.getElementById('f-deadline').value,
+      metric: document.getElementById('f-metric').value.trim(),
+      target: document.getElementById('f-target').value.trim(),
+      status, progress,
+      createdAt: today(), updatedAt: today(),
+      log: note ? [{ date: today(), status, progress, note }] : [],
+    });
+  }
+
+  save(initiatives);
+  closeModal();
+  refreshCurrentView();
+}
+
+// ================================================================
+// MODAL: UPDATE
+// ================================================================
+function openUpdate(id) {
+  const init = initiatives.find(i => i.id === id);
+  if (!init) return;
+  updateId = id;
+  document.getElementById('uModalName').textContent = init.name;
+  document.getElementById('u-status').value = init.status || 'on';
+  document.getElementById('u-progress').value = init.progress || '0';
+  document.getElementById('u-note').value = '';
+  document.getElementById('updateOverlay').classList.add('open');
+}
+
+function closeUpdate() {
+  document.getElementById('updateOverlay').classList.remove('open');
+  updateId = null;
+}
+
+function saveUpdate() {
+  if (!updateId) return;
+  const note = document.getElementById('u-note').value.trim();
+  const status = document.getElementById('u-status').value;
+  const progress = document.getElementById('u-progress').value;
+  const idx = initiatives.findIndex(i => i.id === updateId);
+  if (idx !== -1) {
+    initiatives[idx].status = status;
+    initiatives[idx].progress = progress;
+    initiatives[idx].updatedAt = today();
+    if (!initiatives[idx].log) initiatives[idx].log = [];
+    initiatives[idx].log.push({ date: today(), status, progress, note });
+  }
+  save(initiatives);
+  closeUpdate();
+  refreshCurrentView();
+}
+
+// ================================================================
+// LOG TOGGLE
+// ================================================================
+function toggleLog(id) {
+  const el = document.getElementById('log-' + id);
+  if (el) el.classList.toggle('open');
+}
+
+// ================================================================
+// DELETE
+// ================================================================
+function deleteInit(id) {
+  const init = initiatives.find(i => i.id === id);
+  if (!init) return;
+  if (!confirm(`¿Eliminar la iniciativa "${init.name}"? Esta acción no puede deshacerse.`)) return;
+  initiatives = initiatives.filter(i => i.id !== id);
+  save(initiatives);
+  refreshCurrentView();
+}
+
+// ================================================================
+// REFRESH
+// ================================================================
+function refreshCurrentView() {
+  const active = document.querySelector('.nav-tab.active');
+  const tabs = document.querySelectorAll('.nav-tab');
+  const idx = [...tabs].indexOf(active);
+  if (idx === 0) renderDashboard();
+  if (idx === 1) renderAll();
+  if (idx === 2) renderReport();
+}
+
+// ================================================================
+// INIT
+// ================================================================
+renderDashboard();
+</script>
+</body>
+</html>

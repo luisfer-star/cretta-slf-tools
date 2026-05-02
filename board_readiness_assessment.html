@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Readiness Assessment™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{--navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.1);--cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;--t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;--r:rgba(196,154,60,0.2);--s4c:#1a5c2e;--s4l:rgba(26,92,46,0.12);--s3c:#2d7a42;--s3l:rgba(45,122,66,0.1);--s2c:#8a5c00;--s2l:rgba(196,140,0,0.1);--s1c:#8a1a1a;--s1l:rgba(138,26,26,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+.topbar{background:var(--navy);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.tb-brand{font-size:.53rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-label{font-size:.5rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,236,.3)}
+.btn-print{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(196,154,60,.28);color:var(--gold);cursor:pointer;transition:all .18s}
+.btn-print:hover{border-color:var(--gold)}
+.prog-track{height:2px;background:rgba(196,154,60,.1)}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s ease}
+.shell{max-width:740px;margin:0 auto;padding:0 28px}
+.screen{display:none;padding:38px 0 60px;animation:fi .3s ease}
+.screen.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px}
+.h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,5vw,3rem);font-weight:300;color:var(--navy);line-height:1.12;margin-bottom:8px}
+.h1 em{font-style:italic;color:var(--gold2)}
+.rule{width:32px;height:1px;background:var(--gold);opacity:.5;margin-bottom:18px}
+.lead{font-size:.82rem;color:var(--t2);line-height:1.82;margin-bottom:18px}
+.callout{background:var(--navy);padding:20px 22px;margin-bottom:22px}
+.callout p{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;color:var(--cream);line-height:1.7;font-weight:300}
+.callout strong{color:var(--gold2);font-style:normal;font-weight:400}
+.sec-lbl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.dim-intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:26px}
+.dim-intro-card{background:white;padding:14px 15px;border-left:2px solid var(--r)}
+.dic-num{font-size:.46rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.dic-name{font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:3px}
+.dic-desc{font-size:.64rem;color:var(--t3);line-height:1.45}
+.btn-start{background:var(--navy);color:var(--cream);padding:14px 32px;font-size:.64rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;transition:background .15s}
+.btn-start:hover{background:var(--navy3)}
+.dim-prog{display:flex;gap:2px;margin-bottom:20px}
+.dp-item{flex:1;height:3px;background:var(--cream2);border-radius:1px;transition:background .3s}
+.dp-item.done{background:var(--gold)}.dp-item.active{background:rgba(196,154,60,.5)}
+.dim-header{background:var(--navy);padding:20px 22px;margin-bottom:22px}
+.dh-eye{font-size:.48rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:4px}
+.dh-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--cream);margin-bottom:3px}
+.dh-sub{font-size:.58rem;color:rgba(244,241,236,.38);font-style:italic}
+.q-block{background:white;padding:16px 18px;margin-bottom:2px}
+.q-num{font-size:.46rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.q-text{font-size:.78rem;font-weight:600;color:var(--navy);line-height:1.4;margin-bottom:12px}
+.scale-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.scale-btn{padding:10px 6px;border:1px solid var(--r);background:white;cursor:pointer;text-align:center;transition:all .12s}
+.scale-btn:hover{border-color:rgba(196,154,60,.5)}
+.scale-btn .sn{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:300;display:block;line-height:1;margin-bottom:3px}
+.scale-btn .sl{font-size:.44rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;line-height:1.2;color:var(--t3)}
+.scale-btn[data-s="1"]{background:#fdf3f3}.scale-btn[data-s="1"] .sn{color:var(--s1c)}.scale-btn[data-s="1"].sel{border-color:var(--s1c);background:var(--s1l)}
+.scale-btn[data-s="2"]{background:#fdf8ed}.scale-btn[data-s="2"] .sn{color:var(--s2c)}.scale-btn[data-s="2"].sel{border-color:var(--s2c);background:var(--s2l)}
+.scale-btn[data-s="3"]{background:#f3f9f4}.scale-btn[data-s="3"] .sn{color:var(--s3c)}.scale-btn[data-s="3"].sel{border-color:var(--s3c);background:var(--s3l)}
+.scale-btn[data-s="4"]{background:#f0f8f2}.scale-btn[data-s="4"] .sn{color:var(--s4c)}.scale-btn[data-s="4"].sel{border-color:var(--s4c);background:var(--s4l)}
+.scale-btn.sel .sl{font-weight:700}
+.eval-nav{display:flex;gap:8px;margin-top:18px}
+.btn-back{color:var(--t3);border:1px solid var(--r);padding:10px 16px;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:all .13s}
+.btn-back:hover{border-color:var(--gold);color:var(--navy)}
+.btn-next{background:var(--navy);color:var(--cream);padding:10px 24px;font-size:.58rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.3;pointer-events:none;transition:all .13s}
+.btn-next.ready{opacity:1;pointer-events:all}.btn-next.ready:hover{background:var(--navy3)}
+.calc-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center}
+.calc-lbl{font-size:.54rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.calc-title{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:300;color:var(--navy);margin-bottom:28px;line-height:1.3}
+.calc-bar-bg{width:200px;height:2px;background:rgba(13,27,62,.1);overflow:hidden}
+.calc-bar-fill{height:100%;background:var(--gold);animation:cl 2.2s ease forwards}
+@keyframes cl{from{width:0}to{width:100%}}
+.results-hero{background:var(--navy);padding:28px 26px;margin-bottom:2px;position:relative;overflow:hidden}
+.results-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70%,rgba(196,154,60,.08),transparent 60%);pointer-events:none}
+.rh-eye{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.55);display:block;margin-bottom:8px;position:relative;z-index:1}
+.rh-score-row{display:flex;align-items:center;gap:20px;margin-bottom:10px;position:relative;z-index:1}
+.rh-big-score{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;line-height:1}
+.rh-archetype{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--cream);line-height:1.2;margin-bottom:3px}
+.rh-arch-sub{font-size:.5rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,154,60,.5)}
+.rh-def{font-size:.7rem;color:rgba(244,241,236,.5);font-style:italic;line-height:1.65;max-width:540px;position:relative;z-index:1}
+.legend{display:flex;gap:14px;flex-wrap:wrap;padding:12px 20px;background:var(--cream2);margin-bottom:2px}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:.46rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.ld1{background:var(--s1c)}.ld2{background:var(--s2c)}.ld3{background:var(--s3c)}.ld4{background:var(--s4c)}
+.dim-bars-section{background:white;padding:20px 20px;margin-bottom:2px}
+.dim-bar-item{margin-bottom:13px}
+.dbi-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.dbi-name{font-size:.65rem;font-weight:700;color:var(--navy)}
+.dbi-score{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300}
+.dbi-track{height:8px;background:var(--cream2);border-radius:2px;overflow:hidden}
+.dbi-fill{height:100%;border-radius:2px;transition:width .7s ease}
+.bar-s1{background:var(--s1c)}.bar-s2{background:var(--s2c)}.bar-s3{background:var(--s3c)}.bar-s4{background:var(--s4c)}
+.gap-section{background:var(--cream);padding:18px 20px;margin-bottom:2px}
+.gap-item{background:white;padding:14px 16px;margin-bottom:2px}
+.gap-badge{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;display:inline-block;margin-bottom:6px}
+.gb-crit{background:var(--s1l);color:var(--s1c)}.gb-dev{background:var(--s2l);color:var(--s2c)}.gb-ok{background:var(--s3l);color:var(--s3c)}
+.gap-title{font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.gap-text{font-size:.7rem;color:var(--t2);line-height:1.65;margin-bottom:6px}
+.gap-action{font-size:.65rem;color:var(--t3);font-style:italic}
+.summary-bar{background:var(--navy2);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.sb-stats{display:flex;gap:20px;flex-wrap:wrap}
+.sb-stat{text-align:center}
+.sb-num{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;display:block;line-height:1}
+.sb-lbl{font-size:.42rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,236,.28)}
+.btn-restart{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(196,154,60,.18);color:rgba(244,241,236,.35);transition:all .15s}
+.btn-restart:hover{border-color:var(--gold);color:var(--cream)}
+.pkg-block{background:var(--navy);padding:28px 26px;margin-bottom:2px}
+.pkg-eye{font-size:.48rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(196,154,60,.55);display:block;margin-bottom:8px}
+.pkg-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;color:var(--cream);line-height:1.6;margin-bottom:16px;max-width:540px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:12px 26px;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:background .15s}
+.btn-cta:hover{background:var(--gold2)}
+.philosophy{background:var(--navy2);padding:18px 22px}
+.philosophy p{font-family:'Cormorant Garamond',serif;font-size:.92rem;font-weight:300;font-style:italic;color:rgba(244,241,236,.45);line-height:1.7}
+.philosophy strong{color:var(--gold2);font-style:normal;font-weight:400}
+@media print{.topbar,.eval-nav,.btn-print,.btn-restart,.btn-cta{display:none!important}body{background:white}}
+@media(max-width:640px){.dim-intro-grid{grid-template-columns:1fr}.scale-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div class="tb-right">
+    <span class="tb-label">Board Readiness Assessment™ · Exclusivo</span>
+    <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+  </div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+<div class="shell">
+
+<div class="screen active" id="sIntro">
+  <span class="eyebrow">Evaluación de gobierno · SLF Insights · Exclusivo</span>
+  <h1 class="h1">Board Readiness <em>Assessment™</em></h1>
+  <div class="rule"></div>
+  <p class="lead">Un Consejo de Administración bien estructurado es uno de los activos estratégicos más poderosos que una empresa mediana puede instalar. Uno mal instalado — en el momento equivocado o sin la arquitectura correcta — es una carga de gobierno que consume tiempo y no produce valor.</p>
+  <div class="callout">
+    <p>La pregunta no es si su empresa necesita un Consejo. La pregunta es si su empresa está lista para que ese Consejo <strong>funcione</strong>. La diferencia entre las dos preguntas es la diferencia entre gobierno estratégico y teatro de gobierno.</p>
+  </div>
+  <p class="lead" style="margin-bottom:28px">Este diagnóstico evalúa seis dimensiones de madurez de gobierno para determinar en qué arquetipo de preparación se encuentra su empresa — y qué debe resolver antes de instalar o evolucionar su Consejo.</p>
+  <span class="sec-lbl">Las seis dimensiones evaluadas · 30 preguntas · Escala 1–4</span>
+  <div class="dim-intro-grid">
+    <div class="dim-intro-card"><span class="dic-num">Dimensión 1</span><div class="dic-name">Claridad Estratégica</div><div class="dic-desc">Estrategia articulada, objetivos cuantificables y tesis de crecimiento definida.</div></div>
+    <div class="dim-intro-card"><span class="dic-num">Dimensión 2</span><div class="dic-name">Madurez Financiera</div><div class="dic-desc">Reportes, forecast y controles financieros de nivel board.</div></div>
+    <div class="dim-intro-card"><span class="dic-num">Dimensión 3</span><div class="dic-name">Liderazgo del CEO</div><div class="dic-desc">Disposición y capacidad del CEO para operar con gobierno externo.</div></div>
+    <div class="dim-intro-card"><span class="dic-num">Dimensión 4</span><div class="dic-name">Arquitectura Organizacional</div><div class="dic-desc">Estructura directiva, mandatos y capacidad de delegación.</div></div>
+    <div class="dim-intro-card"><span class="dic-num">Dimensión 5</span><div class="dic-name">Procesos e Institucionalidad</div><div class="dic-desc">Disciplina de procesos, documentación y hábitos de gobierno.</div></div>
+    <div class="dim-intro-card"><span class="dic-num">Dimensión 6</span><div class="dic-name">Propiedad y Capital</div><div class="dic-desc">Estructura accionaria, acuerdos de socios y alineación estratégica.</div></div>
+  </div>
+  <button class="btn-start" onclick="startAssessment()">Iniciar evaluación — 30 preguntas →</button>
+</div>
+
+<div class="screen" id="sEval">
+  <div class="dim-prog" id="dimProg"></div>
+  <div class="dim-header">
+    <span class="dh-eye" id="dhEye">Dimensión 1 de 6</span>
+    <div class="dh-name" id="dhName"></div>
+    <div class="dh-sub" id="dhSub"></div>
+  </div>
+  <div id="qContainer"></div>
+  <div class="eval-nav">
+    <button class="btn-back" id="btnBack" onclick="goBack()" style="display:none">← Anterior</button>
+    <button class="btn-next" id="btnNext" onclick="goNext()">Siguiente dimensión →</button>
+  </div>
+</div>
+
+<div class="screen" id="sCalc">
+  <div class="calc-wrap">
+    <span class="calc-lbl">Evaluando madurez de gobierno</span>
+    <p class="calc-title">Analizando la preparación<br>para el Consejo de Administración</p>
+    <div class="calc-bar-bg"><div class="calc-bar-fill"></div></div>
+  </div>
+</div>
+
+<div class="screen" id="sResults">
+  <div class="results-hero">
+    <span class="rh-eye">Board Readiness Assessment™ · Resultado de gobierno</span>
+    <div class="rh-score-row">
+      <div class="rh-big-score" id="rScore"></div>
+      <div><div class="rh-archetype" id="rArchetype"></div><div class="rh-arch-sub" id="rArchSub"></div></div>
+    </div>
+    <div class="rh-def" id="rDef"></div>
+  </div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot ld1"></div>1 — No existe</div>
+    <div class="leg-item"><div class="leg-dot ld2"></div>2 — Parcial / En construcción</div>
+    <div class="leg-item"><div class="leg-dot ld3"></div>3 — Existe y funciona</div>
+    <div class="leg-item"><div class="leg-dot ld4"></div>4 — Robusto y documentado</div>
+  </div>
+  <div class="dim-bars-section">
+    <span class="sec-lbl" style="margin-bottom:16px">Madurez de gobierno por dimensión</span>
+    <div id="dimBars"></div>
+  </div>
+  <div class="gap-section">
+    <span class="sec-lbl">Brechas prioritarias y acciones de gobierno</span>
+    <div id="gapItems"></div>
+  </div>
+  <div class="summary-bar">
+    <div class="sb-stats" id="sbStats"></div>
+    <button class="btn-restart" onclick="restart()">Nueva evaluación</button>
+  </div>
+  <div class="pkg-block">
+    <span class="pkg-eye">Cretta · PKG04 — Board Governance Authority™</span>
+    <div class="pkg-title">El diseño e instalación de un Consejo de Administración de alto impacto requiere arquitectura de gobierno, selección de consejeros con criterio estratégico y un mandato claro para cada sesión. Cretta lidera este proceso desde la posición de liderazgo estratégico — con accountability sobre los resultados, no como facilitador externo.</div>
+    <button class="btn-cta">Contactar a Cretta sobre el PKG04 →</button>
+  </div>
+  <div class="philosophy">
+    <p><strong>Gobierno estratégico</strong> — Un Consejo no es un requisito formal ni una audiencia para el CEO. Es el mecanismo por el cual la empresa se obliga a pensar con criterio externo, a rendir cuentas frente a compromisos declarados y a tomar decisiones de largo plazo sin la presión del corto plazo. Su valor es directamente proporcional a la madurez de la empresa que lo instala.</p>
+  </div>
+</div>
+
+</div>
+<script>
+const DIMS=[{name:'Claridad Estratégica',sub:'Estrategia, objetivos y tesis de crecimiento articulados',qs:['¿Tiene la empresa una estrategia articulada y documentada para los próximos 3 años?','¿Existen objetivos cuantificables que un Consejo pueda monitorear y desafiar?','¿Hay una tesis de crecimiento clara: por qué esta empresa, en este mercado, con este modelo?','¿El CEO puede presentar la estrategia con claridad ejecutiva en menos de 20 minutos?','¿Los directivos clave conocen y pueden articular la estrategia de la empresa?']},{name:'Madurez Financiera',sub:'Reportes, forecast y controles financieros board-ready',qs:['¿La empresa cuenta con estados financieros mensuales confiables y oportunos?','¿Existe un forecast de 12 meses actualizado y fundamentado en supuestos reales?','¿Hay un modelo financiero que muestre escenarios de crecimiento y sensibilidades?','¿EBITDA, flujo de caja y KPIs financieros se reportan formal y regularmente?','¿La empresa ha tenido una auditoría externa o revisión contable formal en los últimos 2 años?']},{name:'Liderazgo del CEO',sub:'Disposición y capacidad del CEO para operar bajo gobierno externo',qs:['¿El CEO está dispuesto a ser cuestionado y desafiado por consejeros externos?','¿El CEO tiene la capacidad de preparar reportes de dirección de calidad board-ready?','¿El CEO distingue claramente entre su rol operativo y su rol estratégico?','¿El CEO puede separar su identidad personal del rendimiento financiero de la empresa?','¿El CEO ha participado en consejos o comités formales como miembro o presentador?']},{name:'Arquitectura Organizacional',sub:'Estructura directiva, mandatos y capacidad de delegación',qs:['¿La empresa tiene un equipo directivo con mandatos claros y diferenciados?','¿Existe un organigrama formal con niveles de autoridad y decisión definidos?','¿El CEO puede delegar decisiones operativas para liberar tiempo para el gobierno?','¿Hay procesos documentados en las áreas críticas del negocio?','¿La empresa puede operar sin la presencia física del CEO durante dos semanas?']},{name:'Procesos e Institucionalidad',sub:'Disciplina de proceso, documentación y hábitos de gobierno',qs:['¿La empresa tiene actas o registros formales de decisiones importantes?','¿Existen políticas documentadas de compras, contratación y gastos relevantes?','¿Hay un sistema de objetivos o KPIs que se revisa formalmente con el equipo directivo?','¿Los contratos y acuerdos comerciales clave están debidamente formalizados?','¿La empresa tiene un mecanismo de identificación y gestión de riesgos relevantes?']},{name:'Propiedad y Capital',sub:'Estructura accionaria, acuerdos y alineación entre socios',qs:['¿La estructura accionaria está clara, documentada y sin disputas pendientes?','¿Existen acuerdos de socios o estatutos que regulen las decisiones de gobierno?','¿Los socios o accionistas están alineados sobre la dirección estratégica de la empresa?','¿La empresa tiene claridad sobre sus necesidades de capital para los próximos 3 años?','¿La empresa ha tenido o está abierta a deuda institucional o capital externo estructurado?']}];
+const SCALE=[{s:1,lbl:'No existe'},{s:2,lbl:'Parcial'},{s:3,lbl:'Existe'},{s:4,lbl:'Robusto'}];
+const ARCHETYPES=[{min:1,max:1.99,name:'No está lista para un Consejo',sub:'CONSTRUIR PRIMERO — Instalar gobierno sería teatro',color:'#c43c3c',def:'Las condiciones fundamentales de gobierno no están en su lugar. Instalar un Consejo ahora produciría reuniones sin sustancia y un CEO sin la madurez institucional para aprovecharlo. La prioridad es construir las bases — estrategia, finanzas, estructura — antes de diseñar el gobierno.'},{min:2,max:2.49,name:'Preparación emergente',sub:'DISEÑAR — Aún no instalar',color:'#c49000',def:'Hay elementos en su lugar, pero las brechas son lo suficientemente significativas para que un Consejo no funcione con efectividad estratégica todavía. El trabajo ahora es diseñar la arquitectura de gobierno y cerrar las brechas críticas. En 6–12 meses, el Consejo puede instalarse con solidez.'},{min:2.5,max:3.19,name:'Preparación condicional',sub:'INSTALAR CON CONDICIONES — Diseño antes de fecha',color:'#c49000',def:'La empresa está en condiciones de instalar un Consejo si se resuelven las brechas identificadas y se define una arquitectura de gobierno correcta. Proceder sin esa arquitectura produce un Consejo que funciona como formalidad, no como activo estratégico.'},{min:3.2,max:4,name:'Preparación estratégica',sub:'INSTALAR — Condiciones favorables de gobierno',color:'#1a5c2e',def:'La empresa tiene la madurez institucional para instalar un Consejo de Administración que genere valor estratégico real. Las condiciones de gobierno, liderazgo y estructura están suficientemente desarrolladas. El siguiente paso es el diseño: perfil de consejeros, agenda, mandato y protocolo de sesión.'}];
+const GT={0:{c:'No existe una estrategia articulada que un Consejo pueda gobernar. El primer movimiento no es instalar el Consejo — es construir la estrategia.',d:'La estrategia existe pero no está suficientemente articulada para sesiones de Consejo.',a:'Construir el documento estratégico de 3 años con tesis de crecimiento, objetivos cuantificables y supuestos explícitos.'},1:{c:'Sin reportes financieros confiables, un Consejo no tiene insumos para gobernar.',d:'El sistema financiero necesita evolucionar hacia estándares board-ready.',a:'Implementar el paquete de reportes de dirección mensual: P&L, flujo de caja, balance, forecast 12 meses y KPIs críticos.'},2:{c:'El CEO no está preparado para operar bajo gobierno externo. Instalar un Consejo ahora crearía fricción destructiva.',d:'Hay disposición pero faltan las capacidades o la experiencia práctica de operar con un cuerpo de gobierno externo.',a:'Preparar al CEO con exposición a dinámicas de consejo y práctica de la presentación board-ready.'},3:{c:'Sin arquitectura organizacional, el CEO no puede separarse del día a día para presidir sesiones con profundidad.',d:'La estructura existe pero la capacidad de delegación es insuficiente.',a:'Diseñar los mandatos del equipo directivo y el esquema de delegación que permita al CEO dedicar tiempo de calidad al Consejo.'},4:{c:'Sin procesos ni institucionalidad, el Consejo no tiene material para gobernar.',d:'Los procesos existen parcialmente pero no con la consistencia que un Consejo requiere.',a:'Implementar el stack de gobierno básico: actas de sesiones ejecutivas, matriz de decisiones por nivel y reporte de gestión mensual estandarizado.'},5:{c:'Una estructura accionaria no resuelta convierte al Consejo en campo de batalla entre socios.',d:'La propiedad está clara, pero los acuerdos de gobierno entre socios necesitan formalización.',a:'Formalizar el pacto de accionistas con los capítulos de gobierno: quórum, mayorías, mecanismos de resolución y estructura del Consejo.'}};
+let curDim=0,answers={};for(let i=0;i<6;i++){answers[i]={}}
+function startAssessment(){document.getElementById('sIntro').classList.remove('active');renderDim(0);document.getElementById('sEval').classList.add('active');updProg();window.scrollTo(0,0)}
+function renderDim(idx){const dim=DIMS[idx];document.getElementById('dhEye').textContent=`Dimensión ${idx+1} de 6`;document.getElementById('dhName').textContent=dim.name;document.getElementById('dhSub').textContent=dim.sub;const dp=document.getElementById('dimProg');dp.innerHTML='';DIMS.forEach((_,i)=>{const el=document.createElement('div');el.className='dp-item'+(i<idx?' done':i===idx?' active':'');dp.appendChild(el)});const qc=document.getElementById('qContainer');qc.innerHTML='';dim.qs.forEach((q,qi)=>{const sv=answers[idx][qi];const bl=document.createElement('div');bl.className='q-block';let row='<div class="scale-row">';SCALE.slice().reverse().forEach(sc=>{row+=`<div class="scale-btn${sv===sc.s?' sel':''}" data-s="${sc.s}" onclick="setA(${idx},${qi},${sc.s},this)"><span class="sn">${sc.s}</span><span class="sl">${sc.lbl}</span></div>`});row+='</div>';bl.innerHTML=`<span class="q-num">Pregunta ${qi+1} de 5</span><div class="q-text">${q}</div>${row}`;qc.appendChild(bl)});document.getElementById('btnBack').style.display=idx===0?'none':'inline-block';document.getElementById('btnNext').textContent=idx===5?'Ver diagnóstico →':'Siguiente dimensión →';updNxt(idx)}
+function setA(dIdx,qIdx,score,el){answers[dIdx][qIdx]=score;el.closest('.scale-row').querySelectorAll('.scale-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');updNxt(dIdx)}
+function updNxt(idx){document.getElementById('btnNext').classList.toggle('ready',DIMS[idx].qs.every((_,i)=>answers[idx][i]!==undefined))}
+function goNext(){if(!DIMS[curDim].qs.every((_,i)=>answers[curDim][i]!==undefined))return;if(curDim===5){showCalc();return}curDim++;renderDim(curDim);updProg();window.scrollTo(0,0)}
+function goBack(){if(curDim===0)return;curDim--;renderDim(curDim);updProg();window.scrollTo(0,0)}
+function updProg(){const d=Object.keys(answers).filter(i=>DIMS[i].qs.every((_,j)=>answers[i][j]!==undefined)).length;document.getElementById('pFill').style.width=Math.round((d/6)*100)+'%'}
+function showCalc(){document.getElementById('sEval').classList.remove('active');document.getElementById('sCalc').classList.add('active');setTimeout(showResults,2200)}
+function showResults(){
+  const ds=DIMS.map((_,i)=>{const v=DIMS[i].qs.map((_,j)=>answers[i][j]);return +(v.reduce((s,x)=>s+x,0)/v.length).toFixed(2)});
+  const overall=+(ds.reduce((s,v)=>s+v,0)/6).toFixed(2);
+  const arch=ARCHETYPES.find(a=>overall>=a.min&&overall<=a.max);
+  document.getElementById('rScore').textContent=overall.toFixed(1);document.getElementById('rScore').style.color=arch.color;
+  document.getElementById('rArchetype').textContent=arch.name;document.getElementById('rArchSub').textContent=arch.sub;document.getElementById('rDef').textContent=arch.def;
+  const db=document.getElementById('dimBars');db.innerHTML='';
+  ds.forEach((sc,i)=>{const p=((sc-1)/3)*100;const cls=sc<2?'bar-s1':sc<2.5?'bar-s2':sc<3.2?'bar-s3':'bar-s4';const color=sc<2?'var(--s1c)':sc<2.5?'var(--s2c)':sc<3.2?'var(--s3c)':'var(--s4c)';db.innerHTML+=`<div class="dim-bar-item"><div class="dbi-header"><span class="dbi-name">${DIMS[i].name}</span><span class="dbi-score" style="color:${color}">${sc.toFixed(1)} / 4.0</span></div><div class="dbi-track"><div class="dbi-fill ${cls}" style="width:0%" data-w="${p}"></div></div></div>`});
+  setTimeout(()=>document.querySelectorAll('.dbi-fill').forEach(el=>el.style.width=el.dataset.w+'%'),100);
+  const gi=document.getElementById('gapItems');gi.innerHTML='';
+  const gaps=ds.map((sc,i)=>({i,sc})).filter(x=>x.sc<3).sort((a,b)=>a.sc-b.sc);
+  const str=ds.map((sc,i)=>({i,sc})).filter(x=>x.sc>=3.5);
+  if(gaps.length===0){gi.innerHTML='<div class="gap-item"><p style="font-size:.75rem;color:var(--t2);font-style:italic;line-height:1.7">La empresa presenta madurez de gobierno en todas las dimensiones evaluadas. Las condiciones están dadas para diseñar e instalar un Consejo de alto impacto. El siguiente paso es la arquitectura: perfil de consejeros, agenda modelo y protocolo de sesión.</p></div>'}
+  else{gaps.forEach(g=>{const isCrit=g.sc<2;const t=GT[g.i];gi.innerHTML+=`<div class="gap-item"><span class="gap-badge ${isCrit?'gb-crit':'gb-dev'}">${isCrit?'Brecha crítica':'En desarrollo'} · ${g.sc.toFixed(1)}/4.0</span><div class="gap-title">${DIMS[g.i].name}</div><p class="gap-text">${isCrit?t.c:t.d}</p><p class="gap-action">Primer paso: ${t.a}</p></div>`})}
+  if(str.length>0)str.slice(0,2).forEach(g=>{gi.innerHTML+=`<div class="gap-item"><span class="gap-badge gb-ok">Fortaleza · ${g.sc.toFixed(1)}/4.0</span><div class="gap-title">${DIMS[g.i].name}</div><p class="gap-text">Esta dimensión está suficientemente madura para operar bajo gobierno externo. Sostenerla y convertirla en un aporte activo al Consejo.</p></div>`});
+  const crit=ds.filter(s=>s<2).length;const dev=ds.filter(s=>s>=2&&s<3).length;const ok=ds.filter(s=>s>=3).length;
+  document.getElementById('sbStats').innerHTML=`<div class="sb-stat"><span class="sb-num" style="color:#5abf7a">${ok}</span><span class="sb-lbl">Dimensiones listas</span></div><div class="sb-stat"><span class="sb-num" style="color:#e8b84a">${dev}</span><span class="sb-lbl">En desarrollo</span></div><div class="sb-stat"><span class="sb-num" style="color:#e87a7a">${crit}</span><span class="sb-lbl">Brechas críticas</span></div><div class="sb-stat"><span class="sb-num" style="color:var(--gold)">${overall.toFixed(1)}</span><span class="sb-lbl">Índice global / 4.0</span></div>`;
+  document.getElementById('sCalc').classList.remove('active');document.getElementById('sResults').classList.add('active');document.getElementById('pFill').style.width='100%';window.scrollTo(0,0);
+}
+function restart(){curDim=0;for(let i=0;i<6;i++){answers[i]={}}document.getElementById('sResults').classList.remove('active');document.getElementById('sIntro').classList.add('active');document.getElementById('pFill').style.width='0%';window.scrollTo(0,0)}
+</script>
+</body>
+</html>

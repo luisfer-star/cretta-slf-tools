@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCA Framework™ — Guía de Aplicación · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+:root{
+  --navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--navy4:#0a1530;
+  --gold:#C49A3C;--gold2:#d4ab50;--gold3:#e8c068;--golda:rgba(196,154,60,0.12);
+  --cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;--cream4:#faf8f4;
+  --t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;--t4:#9a9a9a;
+  --r:rgba(196,154,60,0.2);--rh:rgba(196,154,60,0.4);
+  --axis-pos:#1a3a5c;--axis-arc:#0d2b1e;--axis-mom:#2d1a00;--axis-risk:#3a0d0d;--axis-cla:#1a0d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--cream4);color:var(--t1);font-family:'Crimson Pro',Georgia,serif;font-weight:300;line-height:1.8;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:300;color:var(--navy);line-height:1.2}
+p{margin-bottom:1.5rem}
+p:last-child{margin-bottom:0}
+strong{font-weight:500;color:var(--navy)}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy4);padding:12px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:200}
+.tb-brand{font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.tb-right{display:flex;align-items:center;gap:16px}
+.tb-label{font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,241,236,.35)}
+.btn-print{font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:7px 16px;background:transparent;color:var(--gold);border:1px solid rgba(196,154,60,.3);cursor:pointer;transition:all .18s}
+.btn-print:hover{border-color:var(--gold);background:rgba(196,154,60,.08)}
+
+/* ── COVER ── */
+.cover{background:var(--navy);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 80%,rgba(196,154,60,.07) 0%,transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(196,154,60,.05) 0%,transparent 50%);pointer-events:none}
+.cover-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:80px 72px;position:relative;z-index:1;max-width:900px}
+.cover-eyebrow{font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:28px;display:block}
+.cover-framework{font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(244,241,236,.2);margin-bottom:16px;display:block}
+.cover-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,6vw,5rem);font-weight:300;color:var(--cream);line-height:1.05;margin-bottom:8px}
+.cover-title em{font-style:italic;color:var(--gold2)}
+.cover-subtitle{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:300;font-style:italic;color:rgba(244,241,236,.5);margin-bottom:52px;line-height:1.4}
+.cover-rule{width:56px;height:1px;background:var(--gold);margin-bottom:36px;opacity:.5}
+.cover-lead{font-family:'Crimson Pro',serif;font-size:1.15rem;color:rgba(244,241,236,.6);line-height:1.75;max-width:600px;margin-bottom:60px}
+.cover-meta-grid{display:grid;grid-template-columns:repeat(4,auto);gap:0;border-top:1px solid rgba(196,154,60,.15);padding-top:32px;width:fit-content}
+.cover-meta-item{padding-right:40px}
+.cover-meta-label{font-family:'Montserrat',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:5px}
+.cover-meta-val{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;color:rgba(244,241,236,.7)}
+.cover-footer{background:rgba(0,0,0,.2);padding:20px 72px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:relative;z-index:1}
+.cover-footer span{font-family:'Montserrat',sans-serif;font-size:.5rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,241,236,.2)}
+.cover-footer .cf-gold{color:rgba(196,154,60,.5)}
+
+/* ── NAV INDEX ── */
+.nav-index{background:var(--cream2);padding:52px 72px;border-bottom:1px solid var(--r)}
+.nav-index-label{font-family:'Montserrat',sans-serif;font-size:.56rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:28px;display:block}
+.nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2px}
+.nav-item{background:white;padding:16px 18px;cursor:pointer;text-decoration:none;display:block;border:1px solid transparent;transition:all .18s}
+.nav-item:hover{border-color:var(--rh)}
+.nav-item-num{font-family:'Montserrat',sans-serif;font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.6;display:block;margin-bottom:4px}
+.nav-item-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:600;color:var(--navy);line-height:1.2}
+
+/* ── CONTENT SECTION ── */
+.content-section{padding:72px 72px;border-bottom:1px solid var(--r)}
+.content-section:nth-child(even){background:var(--cream)}
+.content-section:nth-child(odd){background:var(--cream4)}
+.section-inner{max-width:780px;margin:0 auto}
+
+/* ── SECTION HEADER ── */
+.section-eyebrow{font-family:'Montserrat',sans-serif;font-size:.54rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px}
+.section-num{font-family:'Cormorant Garamond',serif;font-size:.8rem;font-weight:300;color:var(--t4);display:block;margin-bottom:4px}
+.section-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:300;color:var(--navy);margin-bottom:12px;line-height:1.15}
+.section-h2 em{font-style:italic;color:var(--gold2)}
+.section-rule{width:40px;height:1px;background:var(--gold);margin-bottom:32px;opacity:.5}
+.section-lead{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;font-style:italic;color:var(--navy);border-left:2px solid var(--gold);padding-left:24px;line-height:1.6;margin-bottom:36px}
+
+/* ── PULLQUOTE ── */
+.pullquote{background:var(--navy);padding:40px 48px;margin:44px 0;position:relative;overflow:hidden}
+.pullquote::before{content:'\201C';font-family:'Cormorant Garamond',serif;font-size:9rem;color:var(--gold);opacity:.1;position:absolute;top:-20px;left:28px;line-height:1;pointer-events:none}
+.pullquote p{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.65;margin:0;position:relative;z-index:1}
+.pullquote .pq-source{font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(196,154,60,.6);margin-top:14px;display:block;position:relative;z-index:1}
+
+/* ── FRAMEWORK OVERVIEW ── */
+.framework-map{margin:44px 0;display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.fw-axis{padding:24px 22px;position:relative;overflow:hidden}
+.fw-axis-full{grid-column:1/-1}
+.fw-axis.pos{background:#1a3a5c}
+.fw-axis.arc{background:#0d2b1e}
+.fw-axis.mom{background:#2d1a00}
+.fw-axis.risk{background:#3a0d0d}
+.fw-axis.cla{background:var(--navy);border:1px solid rgba(196,154,60,.3)}
+.fw-axis-letter{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;opacity:.08;position:absolute;top:-8px;right:12px;color:white;line-height:1}
+.fw-axis-num{font-family:'Montserrat',sans-serif;font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,154,60,.55);display:block;margin-bottom:8px}
+.fw-axis-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--cream);margin-bottom:6px}
+.fw-axis-tag{font-size:.78rem;color:rgba(244,241,236,.45);font-style:italic;line-height:1.5;margin-bottom:12px;font-family:'Crimson Pro',serif}
+.fw-axis-output{font-family:'Montserrat',sans-serif;font-size:.5rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(196,154,60,.5);padding:5px 10px;border:1px solid rgba(196,154,60,.2);display:inline-block}
+.fw-axis.cla .fw-axis-name{color:var(--gold2)}
+.fw-axis.cla .fw-axis-tag{color:rgba(244,241,236,.55)}
+
+/* ── AXIS DETAIL ── */
+.axis-detail{margin:52px 0;padding:36px 0;border-top:1px solid var(--r)}
+.axis-detail-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:28px}
+.axis-color-bar{width:3px;flex-shrink:0;height:auto;align-self:stretch;border-radius:0}
+.axis-detail.pos .axis-color-bar{background:#4a8abf}
+.axis-detail.arc .axis-color-bar{background:#2a8a5c}
+.axis-detail.mom .axis-color-bar{background:#c49a3c}
+.axis-detail.risk .axis-color-bar{background:#bf4a4a}
+.axis-detail.cla .axis-color-bar{background:var(--gold)}
+.axis-detail-meta{}
+.axis-eje-label{font-family:'Montserrat',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.axis-name{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--navy);margin-bottom:4px}
+.axis-tagline{font-family:'Crimson Pro',serif;font-size:.95rem;color:var(--t3);font-style:italic}
+.axis-body p{font-size:1rem;color:var(--t2)}
+
+/* ── QUESTION BLOCK ── */
+.question-block{background:var(--cream2);padding:28px 28px;margin:28px 0;border-left:2px solid var(--r)}
+.qb-label{font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block}
+.question-item{display:flex;gap:14px;margin-bottom:10px;align-items:flex-start}
+.question-item:last-child{margin-bottom:0}
+.qi-num{font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:700;color:var(--gold);flex-shrink:0;width:18px;margin-top:2px}
+.qi-text{font-family:'Crimson Pro',serif;font-size:.95rem;color:var(--t2);line-height:1.65}
+
+/* ── OUTPUT BOX ── */
+.output-box{background:var(--navy);padding:24px 28px;margin:24px 0}
+.ob-label{font-family:'Montserrat',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.6);margin-bottom:8px;display:block}
+.ob-output{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.55}
+
+/* ── PRINCIPLES ── */
+.principles{margin:36px 0}
+.principle{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--r);align-items:flex-start}
+.principle:last-child{border-bottom:none}
+.pr-diamond{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;margin-top:8px}
+.pr-content{}
+.pr-title{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.06em;color:var(--navy);margin-bottom:4px}
+.pr-text{font-family:'Crimson Pro',serif;font-size:.95rem;color:var(--t2);line-height:1.65}
+
+/* ── CONTRAST BLOCK ── */
+.contrast-block{border-top:1px solid var(--gold);border-bottom:1px solid var(--gold);padding:24px 0;margin:36px 0}
+.contrast-block p{font-family:'Montserrat',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.03em;color:var(--navy);line-height:1.7}
+.contrast-block strong{color:var(--gold)}
+
+/* ── ERROR TABLE ── */
+.error-table{width:100%;border-collapse:collapse;margin:28px 0}
+.error-table th{font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-align:left;padding:10px 14px;border-bottom:1px solid var(--rh);background:var(--navy);white-space:nowrap}
+.error-table td{font-family:'Crimson Pro',serif;font-size:.88rem;color:var(--t2);padding:12px 14px;border-bottom:1px solid var(--r);line-height:1.6;vertical-align:top}
+.error-table tr:last-child td{border-bottom:none}
+.error-table td:first-child{color:var(--navy);font-weight:400}
+
+/* ── CTA BLOCK ── */
+.cta-block{background:var(--navy);padding:60px 72px;margin-top:2px}
+.cta-inner{max-width:680px;margin:0 auto;text-align:center}
+.cta-eyebrow{font-family:'Montserrat',sans-serif;font-size:.56rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,154,60,.7);display:block;margin-bottom:20px}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--cream);line-height:1.2;margin-bottom:16px}
+.cta-title em{font-style:italic;color:var(--gold2)}
+.cta-lead{font-family:'Crimson Pro',serif;font-size:1.05rem;color:rgba(244,241,236,.55);line-height:1.75;margin-bottom:40px;font-style:italic}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-cta-primary{background:var(--gold);color:var(--navy);padding:15px 36px;font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border:none;transition:background .18s}
+.btn-cta-primary:hover{background:var(--gold2)}
+.btn-cta-secondary{background:transparent;color:rgba(244,241,236,.5);padding:15px 28px;font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(196,154,60,.2);cursor:pointer;transition:all .18s}
+.btn-cta-secondary:hover{border-color:var(--gold);color:var(--cream)}
+
+/* ── DOC FOOTER ── */
+.doc-footer{background:var(--navy2);padding:24px 72px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.df-brand{font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.df-note{font-family:'Montserrat',sans-serif;font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,236,.25)}
+
+/* ── PRINT ── */
+@media print{
+  .topbar,.btn-print,.cta-buttons{display:none!important}
+  .cover{min-height:auto;page-break-after:always}
+  .content-section{padding:40px 48px}
+  body{background:white}
+  .axis-detail{page-break-inside:avoid}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .cover-body,.content-section,.cta-block,.doc-footer,.nav-index{padding-left:28px;padding-right:28px}
+  .cover-footer{padding:16px 28px}
+  .framework-map{grid-template-columns:1fr}
+  .fw-axis-full{grid-column:1}
+  .cover-meta-grid{grid-template-columns:1fr 1fr;gap:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div class="tb-right">
+    <span class="tb-label">SCA Framework™ · Guía de Aplicación · Acceso Abierto</span>
+    <button class="btn-print" onclick="window.print()">Descargar PDF</button>
+  </div>
+</div>
+
+<!-- COVER -->
+<div class="cover" id="cover">
+  <div class="cover-body">
+    <span class="cover-eyebrow">SLF Insights · Documento de Referencia Estratégica</span>
+    <span class="cover-framework">SCA Framework™ · Strategic Clarity Architecture</span>
+    <h1 class="cover-title">La arquitectura<br>de la <em>claridad</em></h1>
+    <p class="cover-subtitle">Guía completa de aplicación del SCA Framework™</p>
+    <div class="cover-rule"></div>
+    <p class="cover-lead">El problema más frecuente en la alta dirección no es la falta de información. Es la falta de claridad sobre qué hacer con ella. El SCA Framework™ es la metodología propietaria con la que Cretta convierte la complejidad estratégica en claridad ejecutable — identificando, con precisión quirúrgica, las decisiones y los movimientos que tienen mayor capacidad de desbloquear el valor de una empresa.</p>
+    <div class="cover-meta-grid">
+      <div class="cover-meta-item"><span class="cover-meta-label">Framework</span><span class="cover-meta-val">SCA™ v2.0</span></div>
+      <div class="cover-meta-item"><span class="cover-meta-label">Ejes de análisis</span><span class="cover-meta-val">Cinco</span></div>
+      <div class="cover-meta-item"><span class="cover-meta-label">Aplicación</span><span class="cover-meta-val">Alta Dirección</span></div>
+      <div class="cover-meta-item"><span class="cover-meta-label">Acceso</span><span class="cover-meta-val">Abierto · SLF Insights</span></div>
+    </div>
+  </div>
+  <div class="cover-footer">
+    <span class="cf-gold">CRETTA SLF · México · LATAM · USA</span>
+    <span>© 2025 CRETTA Strategic Leadership Firm · Todos los derechos reservados</span>
+  </div>
+</div>
+
+<!-- INDEX -->
+<div class="nav-index">
+  <span class="nav-index-label">Contenido de esta guía</span>
+  <div class="nav-grid">
+    <a href="#intro" class="nav-item"><span class="nav-item-num">01</span><span class="nav-item-title">Por qué existe el SCA Framework™</span></a>
+    <a href="#filosofia" class="nav-item"><span class="nav-item-num">02</span><span class="nav-item-title">Filosofía y principios operativos</span></a>
+    <a href="#mapa" class="nav-item"><span class="nav-item-num">03</span><span class="nav-item-title">Los cinco ejes del framework</span></a>
+    <a href="#position" class="nav-item"><span class="nav-item-num">04</span><span class="nav-item-title">Eje I · Position</span></a>
+    <a href="#architecture" class="nav-item"><span class="nav-item-num">05</span><span class="nav-item-title">Eje II · Architecture</span></a>
+    <a href="#momentum" class="nav-item"><span class="nav-item-num">06</span><span class="nav-item-title">Eje III · Momentum</span></a>
+    <a href="#risk" class="nav-item"><span class="nav-item-num">07</span><span class="nav-item-title">Eje IV · Risk</span></a>
+    <a href="#clarity" class="nav-item"><span class="nav-item-num">08</span><span class="nav-item-title">Eje V · Clarity</span></a>
+    <a href="#aplicacion" class="nav-item"><span class="nav-item-num">09</span><span class="nav-item-title">Cómo se aplica el SCA™</span></a>
+    <a href="#errores" class="nav-item"><span class="nav-item-num">10</span><span class="nav-item-title">Los errores más frecuentes</span></a>
+  </div>
+</div>
+
+<!-- SECCIÓN 01 — INTRO -->
+<div class="content-section" id="intro">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 01</span>
+    <h2 class="section-h2">Por qué existe el SCA Framework™</h2>
+    <div class="section-rule"></div>
+    <p class="section-lead">Las organizaciones de alto potencial no fracasan por falta de ambición. Fracasan porque la ambición no tiene arquitectura — y sin arquitectura, toda energía estratégica se dispersa antes de producir movimiento real.</p>
+
+    <p>Existe un supuesto implícito que domina la forma en que la mayoría de las empresas medianas abordan sus decisiones estratégicas: la idea de que el problema es la falta de información. Que si hubiera más datos, más análisis, más benchmarks, más reportes — la decisión correcta se volvería evidente.</p>
+
+    <p>Veinticinco años de trabajo al nivel de la alta dirección en México y América Latina demuestran que ese supuesto es incorrecto. El problema no es la falta de información. En la mayoría de las organizaciones hay abundancia de datos, de opiniones, de diagnósticos previos, de planes estratégicos bien encuadernados que nadie implementó. El problema es la falta de <strong>claridad</strong> — claridad sobre qué es lo que realmente importa, en qué orden importa, y qué decisiones específicas, tomadas ahora, tienen la mayor capacidad de mover a la empresa hacia donde debe estar.</p>
+
+    <p>El SCA Framework™ — Strategic Clarity Architecture — nació de esa constatación. No es una metodología de diagnóstico. No es un proceso de planificación estratégica. Es una arquitectura de claridad: un sistema de cinco ejes que identifica, estructura y ordena la información estratégica de mayor relevancia para que el directivo pueda actuar con certeza, no con hipótesis.</p>
+
+    <div class="pullquote">
+      <p>El SCA no produce más información. Produce la claridad que permite que la información existente se convierta en decisión. Esa es la diferencia entre un diagnóstico y una arquitectura de claridad.</p>
+      <span class="pq-source">Principio fundacional del SCA Framework™ · CRETTA SLF</span>
+    </div>
+
+    <p>La distinción importa porque tiene consecuencias prácticas profundas. Un diagnóstico bien construido puede describir con precisión la posición de una empresa, sus fortalezas y sus vulnerabilidades. Pero la descripción, por sí sola, no mueve nada. Lo que mueve a las organizaciones son las decisiones tomadas con criterio claro y ejecutadas con mandato real. El SCA Framework™ está diseñado exactamente para producir eso: claridad que se convierte en movimiento.</p>
+  </div>
+</div>
+
+<!-- SECCIÓN 02 — FILOSOFÍA -->
+<div class="content-section" id="filosofia">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 02</span>
+    <h2 class="section-h2">Filosofía y principios <em>operativos</em></h2>
+    <div class="section-rule"></div>
+    <p class="section-lead">Un framework no es un conjunto de pasos. Es una forma de pensar — y la forma de pensar del SCA™ tiene tres principios que lo distinguen de cualquier metodología convencional de análisis estratégico.</p>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="pr-diamond"></div>
+        <div class="pr-content">
+          <div class="pr-title">Criterio sobre volumen</div>
+          <p class="pr-text">El SCA Framework™ no produce cientos de hallazgos. Produce los hallazgos que importan. La profundidad de análisis no se mide por el número de páginas del reporte ni por la cantidad de variables analizadas. Se mide por la precisión con la que identifica las 3 a 5 decisiones o movimientos que tienen mayor capacidad de transformar la trayectoria de la empresa. Más análisis no es sinónimo de más claridad — con frecuencia es su opuesto.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="pr-diamond"></div>
+        <div class="pr-content">
+          <div class="pr-title">Profundidad selectiva</div>
+          <p class="pr-text">El análisis no se distribuye de manera uniforme sobre todos los aspectos de la empresa. Se concentra donde hay mayor tensión, mayor oportunidad o mayor riesgo — independientemente de dónde esté disponible la mayor cantidad de información. Las zonas con abundancia de datos no son necesariamente las zonas con mayor relevancia estratégica. La profundidad selectiva requiere criterio ejecutivo, no metodología mecánica.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="pr-diamond"></div>
+        <div class="pr-content">
+          <div class="pr-title">Conversación antes que cuestionario</div>
+          <p class="pr-text">El principal instrumento de análisis del SCA Framework™ es la sesión ejecutiva de alta calidad — no la encuesta, no el cuestionario, no la revisión de documentos. La información estratégica más relevante de cualquier organización no está en los reportes financieros ni en los planes de negocios: está en la mente del CEO, del fundador y de los directivos que toman las decisiones que realmente determinan el rumbo. El SCA extrae esa información a través de conversaciones diseñadas para ir donde los documentos no llegan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contrast-block">
+      <p>La distinción entre el SCA Framework™ y un proceso de planificación estratégica convencional es esta: <strong>el proceso de planificación parte de lo que la empresa quiere ser.</strong> El SCA Framework™ parte de lo que la empresa es realmente — y desde esa honestidad, genera la claridad que hace que lo que quiere ser sea alcanzable, no aspiracional.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 03 — MAPA -->
+<div class="content-section" id="mapa">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 03</span>
+    <h2 class="section-h2">Los cinco ejes del <em>framework</em></h2>
+    <div class="section-rule"></div>
+    <p>El SCA Framework™ organiza el análisis estratégico en cinco ejes que se aplican en secuencia, pero que no son independientes entre sí. Cada eje alimenta al siguiente — y la síntesis de los cinco produce la claridad que ninguno puede generar por separado.</p>
+
+    <div class="framework-map">
+      <div class="fw-axis pos">
+        <span class="fw-axis-letter">P</span>
+        <span class="fw-axis-num">Eje I</span>
+        <div class="fw-axis-name">Position</div>
+        <div class="fw-axis-tag">¿Dónde está realmente la empresa? ¿Cómo la percibe el mercado? ¿Cuál es su ventaja real y qué tan sostenible es?</div>
+        <span class="fw-axis-output">Output: Mapa de posición competitiva</span>
+      </div>
+      <div class="fw-axis arc">
+        <span class="fw-axis-letter">A</span>
+        <span class="fw-axis-num">Eje II</span>
+        <div class="fw-axis-name">Architecture</div>
+        <div class="fw-axis-tag">¿Cómo están diseñadas las estructuras de decisión, gobierno, capacidades institucionales y liderazgo?</div>
+        <span class="fw-axis-output">Output: Diagnóstico de gobierno y arquitectura de poder</span>
+      </div>
+      <div class="fw-axis mom">
+        <span class="fw-axis-letter">M</span>
+        <span class="fw-axis-num">Eje III</span>
+        <div class="fw-axis-name">Momentum</div>
+        <div class="fw-axis-tag">¿Qué impulsa el negocio y qué lo frena? ¿Cuáles son los motores reales del crecimiento y dónde están los cuellos de botella?</div>
+        <span class="fw-axis-output">Output: Análisis de momentum y cuellos de botella</span>
+      </div>
+      <div class="fw-axis risk">
+        <span class="fw-axis-letter">R</span>
+        <span class="fw-axis-num">Eje IV</span>
+        <div class="fw-axis-name">Risk</div>
+        <div class="fw-axis-tag">¿Cuáles son los riesgos estratégicos visibles e invisibles? ¿Operacionales, competitivos, de liderazgo, de contexto?</div>
+        <span class="fw-axis-output">Output: Mapa de riesgos estratégicos priorizados</span>
+      </div>
+      <div class="fw-axis cla fw-axis-full">
+        <span class="fw-axis-letter">C</span>
+        <span class="fw-axis-num">Eje V · Síntesis</span>
+        <div class="fw-axis-name">Clarity</div>
+        <div class="fw-axis-tag">Las 3–5 decisiones o movimientos que tienen mayor capacidad de desbloquear el potencial de la empresa. La síntesis que ninguno de los cuatro ejes anteriores puede producir por separado.</div>
+        <span class="fw-axis-output">Output: Mapa de claridad estratégica y First Moves</span>
+      </div>
+    </div>
+
+    <p>Los cuatro primeros ejes son instrumentos de lectura. El quinto — Clarity — es el instrumento de síntesis. Su función no es sumar los hallazgos de los ejes anteriores: es identificar, en el cruce de todos ellos, los puntos de palanca de mayor impacto. La empresa que sabe dónde están sus palancas puede mover el mundo con la fracción del esfuerzo que gasta hoy en iniciativas dispersas.</p>
+  </div>
+</div>
+
+<!-- SECCIÓN 04 — POSITION -->
+<div class="content-section" id="position">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 04 · Eje I</span>
+    <h2 class="section-h2">Position — <em>La lectura honesta del terreno</em></h2>
+    <div class="section-rule"></div>
+
+    <div class="axis-detail pos">
+      <div class="axis-detail-header">
+        <div class="axis-color-bar"></div>
+        <div class="axis-detail-meta">
+          <span class="axis-eje-label">Eje I del SCA Framework™</span>
+          <div class="axis-name">Position</div>
+          <div class="axis-tagline">Posición competitiva real: dónde está la empresa, cómo la percibe el mercado, cuál es su ventaja y qué tan sostenible es</div>
+        </div>
+      </div>
+    </div>
+
+    <p>El primer eje del SCA Framework™ confronta a la organización con su posición real — no la que la dirección describe en sus presentaciones internas, sino la que el mercado reconoce, la que los clientes eligen y la que la competencia respeta. Esta distinción es fundamental: la brecha entre la posición que una empresa cree tener y la posición que realmente ocupa es, en la mayoría de los casos, la primera fuente de errores estratégicos.</p>
+
+    <p>Position no evalúa la historia de la empresa ni sus logros pasados. Evalúa el lugar que ocupa hoy en la mente del cliente, en la dinámica competitiva del mercado y en la ecuación de valor del sector. Ese lugar puede coincidir con lo que la dirección cree — o puede ser muy diferente. La aplicación honesta de este eje siempre produce al menos una sorpresa.</p>
+
+    <div class="question-block">
+      <span class="qb-label">Preguntas de aplicación del Eje Position</span>
+      <div class="question-item"><span class="qi-num">1.</span><span class="qi-text">¿En qué segmento específico de mercado, tipo de cliente o categoría de solución compite esta empresa con ventaja diferencial real — no con ventaja declarada?</span></div>
+      <div class="question-item"><span class="qi-num">2.</span><span class="qi-text">¿Cuál es la razón real por la que los clientes eligen esta empresa sobre sus alternativas? ¿Esa razón es defendible o puede ser replicada fácilmente?</span></div>
+      <div class="question-item"><span class="qi-num">3.</span><span class="qi-text">¿Cómo describirían los tres clientes más importantes de la empresa su ventaja competitiva — y coincide esa descripción con la que hace la dirección?</span></div>
+      <div class="question-item"><span class="qi-num">4.</span><span class="qi-text">¿Qué movimientos de la competencia o cambios en el entorno podrían erosionar esta posición en los próximos 24 meses?</span></div>
+      <div class="question-item"><span class="qi-num">5.</span><span class="qi-text">¿Hay segmentos o geografías donde la empresa ya tiene posición relevante pero no la está capitalizando estratégicamente?</span></div>
+    </div>
+
+    <div class="output-box">
+      <span class="ob-label">Output del Eje Position</span>
+      <div class="ob-output">Mapa de posición competitiva real: el espacio que ocupa la empresa en el mercado, la naturaleza y solidez de su ventaja diferencial, y las vulnerabilidades de posición que requieren atención estratégica inmediata o a mediano plazo.</div>
+    </div>
+
+    <p>La aplicación rigurosa de Position requiere separar la evidencia de la narrativa. Las organizaciones construyen con el tiempo narrativas sobre sí mismas que se vuelven parte de su identidad institucional — y esas narrativas pueden ser poderosas o pueden ser trampas. El trabajo en este eje consiste en verificar si la narrativa es real o si encubre una posición más frágil de lo que la dirección percibe.</p>
+  </div>
+</div>
+
+<!-- SECCIÓN 05 — ARCHITECTURE -->
+<div class="content-section" id="architecture">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 05 · Eje II</span>
+    <h2 class="section-h2">Architecture — <em>La estructura que hace posible o imposible el crecimiento</em></h2>
+    <div class="section-rule"></div>
+
+    <div class="axis-detail arc">
+      <div class="axis-detail-header">
+        <div class="axis-color-bar"></div>
+        <div class="axis-detail-meta">
+          <span class="axis-eje-label">Eje II del SCA Framework™</span>
+          <div class="axis-name">Architecture</div>
+          <div class="axis-tagline">Estructura de decisión, modelo organizacional, gobierno corporativo, capacidades institucionales y liderazgo</div>
+        </div>
+      </div>
+    </div>
+
+    <p>Si Position responde a la pregunta "¿dónde está la empresa?", Architecture responde a la pregunta "¿cómo está construida la empresa para llegar a donde quiere ir?". Este eje examina la arquitectura interna de la organización — sus estructuras de decisión, su modelo de gobierno corporativo, sus capacidades institucionales y la calidad de su liderazgo — no como una evaluación de la gestión, sino como una lectura de la capacidad estratégica real de la organización.</p>
+
+    <p>La Architecture es el eje que más frecuentemente revela la brecha entre la ambición y la capacidad. Una empresa puede tener una posición competitiva sólida y un mercado favorable, y aun así no crecer — porque su arquitectura interna no está diseñada para sostener el crecimiento que su posición haría posible. El cuello de botella no está afuera: está adentro.</p>
+
+    <div class="question-block">
+      <span class="qb-label">Preguntas de aplicación del Eje Architecture</span>
+      <div class="question-item"><span class="qi-num">1.</span><span class="qi-text">¿Quién toma realmente las decisiones estratégicas en esta organización, y cómo llega la información necesaria para tomarlas correctamente?</span></div>
+      <div class="question-item"><span class="qi-num">2.</span><span class="qi-text">¿El consejo de administración es un órgano de gobierno activo que contribuye a la estrategia, o una estructura formal de cumplimiento que no genera valor estratégico real?</span></div>
+      <div class="question-item"><span class="qi-num">3.</span><span class="qi-text">¿El equipo directivo actual tiene las capacidades para ejecutar la agenda de crecimiento que la empresa requiere en los próximos tres años, o hay brechas que deben cerrarse antes de escalar?</span></div>
+      <div class="question-item"><span class="qi-num">4.</span><span class="qi-text">¿Qué tan concentradas están las decisiones en el fundador o CEO? ¿Esa concentración es una fortaleza o un cuello de botella para el crecimiento?</span></div>
+      <div class="question-item"><span class="qi-num">5.</span><span class="qi-text">¿La estructura organizacional actual refleja la estrategia que la empresa quiere ejecutar, o refleja la historia de cómo se construyó la empresa hasta hoy?</span></div>
+    </div>
+
+    <div class="output-box">
+      <span class="ob-label">Output del Eje Architecture</span>
+      <div class="ob-output">Diagnóstico de gobierno y arquitectura de poder: la lectura de cómo están distribuidas las decisiones, dónde están las capacidades institucionales reales versus las declaradas, y qué cambios de arquitectura son condición previa para el crecimiento estratégico.</div>
+    </div>
+
+    <p>Este eje es frecuentemente el más incómodo de aplicar — porque sus hallazgos apuntan directamente a las personas que lideran la organización, incluyendo al CEO. La arquitectura de una empresa es siempre el reflejo de las decisiones que tomaron sus líderes. Cambiar la arquitectura implica que esos líderes están dispuestos a cambiar la forma en que ejercen su poder — y esa disposición, o su ausencia, es en sí misma un dato estratégico de primera importancia.</p>
+  </div>
+</div>
+
+<!-- SECCIÓN 06 — MOMENTUM -->
+<div class="content-section" id="momentum">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 06 · Eje III</span>
+    <h2 class="section-h2">Momentum — <em>Las fuerzas reales detrás del movimiento</em></h2>
+    <div class="section-rule"></div>
+
+    <div class="axis-detail mom">
+      <div class="axis-detail-header">
+        <div class="axis-color-bar"></div>
+        <div class="axis-detail-meta">
+          <span class="axis-eje-label">Eje III del SCA Framework™</span>
+          <div class="axis-name">Momentum</div>
+          <div class="axis-tagline">Dirección y velocidad del crecimiento: qué impulsa el negocio, qué lo frena, cuáles son sus motores reales y dónde están los cuellos de botella</div>
+        </div>
+      </div>
+    </div>
+
+    <p>El tercer eje abandona la fotografía estática de la empresa — que es lo que producen Position y Architecture — y analiza la película: la dirección y la velocidad a la que se mueve la organización. Momentum examina qué está generando el crecimiento actual (si existe), qué lo está frenando, y cuáles son las fuerzas — internas y externas — que determinan la trayectoria real de la empresa.</p>
+
+    <p>La distinción entre los motores declarados del crecimiento y los motores reales es, en la práctica, una de las revelaciones más frecuentes del SCA Framework™. Las organizaciones con frecuencia atribuyen su crecimiento a factores que en realidad son secundarios — y subestiman la relevancia de factores que consideran menores. Identificar los motores reales permite amplificarlos deliberadamente, en lugar de desperdiciar recursos en iniciativas que no los activan.</p>
+
+    <div class="question-block">
+      <span class="qb-label">Preguntas de aplicación del Eje Momentum</span>
+      <div class="question-item"><span class="qi-num">1.</span><span class="qi-text">¿Qué está generando realmente el crecimiento actual de la empresa — qué clientes, qué productos, qué geografías, qué relaciones?</span></div>
+      <div class="question-item"><span class="qi-num">2.</span><span class="qi-text">¿Por qué la empresa no crece más rápido? ¿Cuáles son los dos o tres factores que, si se eliminaran, acelerarían de forma inmediata la trayectoria?</span></div>
+      <div class="question-item"><span class="qi-num">3.</span><span class="qi-text">¿Hay líneas de negocio, clientes o productos que están consumiendo recursos desproporcionados sin contribuir al crecimiento estratégico?</span></div>
+      <div class="question-item"><span class="qi-num">4.</span><span class="qi-text">¿Qué vientos de cola del entorno (regulatorios, de mercado, de industria) está aprovechando la empresa, y cuáles está ignorando?</span></div>
+      <div class="question-item"><span class="qi-num">5.</span><span class="qi-text">¿El ritmo de toma de decisiones de la organización es compatible con la velocidad que el mercado requiere?</span></div>
+    </div>
+
+    <div class="output-box">
+      <span class="ob-label">Output del Eje Momentum</span>
+      <div class="ob-output">Análisis de momentum y cuellos de botella: mapa de los motores reales del crecimiento, los vectores de fricción que lo frenan, y las oportunidades de aceleración que la empresa no está aprovechando con suficiente deliberación.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 07 — RISK -->
+<div class="content-section" id="risk">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 07 · Eje IV</span>
+    <h2 class="section-h2">Risk — <em>Lo que el análisis convencional no ve</em></h2>
+    <div class="section-rule"></div>
+
+    <div class="axis-detail risk">
+      <div class="axis-detail-header">
+        <div class="axis-color-bar"></div>
+        <div class="axis-detail-meta">
+          <span class="axis-eje-label">Eje IV del SCA Framework™</span>
+          <div class="axis-name">Risk</div>
+          <div class="axis-tagline">Riesgos estratégicos visibles e invisibles: operacionales, competitivos, de liderazgo, de contexto regulatorio y de entorno</div>
+        </div>
+      </div>
+    </div>
+
+    <p>El cuarto eje del SCA Framework™ no es un proceso de gestión de riesgos convencional. No produce matrices de probabilidad e impacto con decenas de variables ordenadas por color. Produce algo más valioso y más difícil: la identificación de los riesgos que el análisis convencional no ve — los riesgos que no aparecen en los reportes de auditoría, que no están en el radar del comité de riesgos y que, por esa misma razón, tienen mayor capacidad de sorprender a la organización en el momento más inoportuno.</p>
+
+    <p>Los riesgos estratégicos más peligrosos no son los más evidentes. Son los que la dirección ha normalizado — que existen pero han sido integrados a la narrativa cotidiana de la empresa como "así son las cosas aquí". Son los riesgos de liderazgo que nadie nombra porque nombrarlos es incómodo. Son los riesgos competitivos que no se perciben como amenazas porque el competidor que los representa todavía parece pequeño. Son los riesgos de gobierno que están enquistados en la estructura de la organización desde hace años.</p>
+
+    <div class="question-block">
+      <span class="qb-label">Preguntas de aplicación del Eje Risk</span>
+      <div class="question-item"><span class="qi-num">1.</span><span class="qi-text">¿Qué riesgo estratégico sería el más devastador si se materializara, y cuánta atención genuina está recibiendo hoy en la agenda de la alta dirección?</span></div>
+      <div class="question-item"><span class="qi-num">2.</span><span class="qi-text">¿Hay una concentración de riesgo en una persona, un cliente, un contrato o una relación que, si fallara, podría amenazar la viabilidad del modelo?</span></div>
+      <div class="question-item"><span class="qi-num">3.</span><span class="qi-text">¿Qué cambio regulatorio, tecnológico o de comportamiento del consumidor podría hacer obsoleto el modelo de negocio actual en un horizonte de 3 a 5 años?</span></div>
+      <div class="question-item"><span class="qi-num">4.</span><span class="qi-text">¿Cuáles son los riesgos de liderazgo — sucesión, dependencia de personas clave, conflictos entre socios o accionistas — que la organización no está gestionando explícitamente?</span></div>
+      <div class="question-item"><span class="qi-num">5.</span><span class="qi-text">¿Hay riesgos que la dirección conoce pero que no se nombran en las reuniones de alta dirección porque generarían incomodidad o conflicto?</span></div>
+    </div>
+
+    <div class="output-box">
+      <span class="ob-label">Output del Eje Risk</span>
+      <div class="ob-output">Mapa de riesgos estratégicos priorizados: los vectores de riesgo de mayor relevancia — ordenados no por probabilidad estadística sino por impacto estratégico real — y las brechas de gestión que los convierten en vulnerabilidades activas.</div>
+    </div>
+
+    <p>La regla de oro del análisis de Risk en el SCA Framework™ es esta: <strong>el riesgo más peligroso es siempre el que la organización ha aprendido a ignorar.</strong> La familiaridad con un riesgo no lo elimina — simplemente reduce la percepción de su urgencia hasta que se materializa.</p>
+  </div>
+</div>
+
+<!-- SECCIÓN 08 — CLARITY -->
+<div class="content-section" id="clarity">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 08 · Eje V · Síntesis</span>
+    <h2 class="section-h2">Clarity — <em>El lugar donde la complejidad se convierte en decisión</em></h2>
+    <div class="section-rule"></div>
+
+    <div class="axis-detail cla">
+      <div class="axis-detail-header">
+        <div class="axis-color-bar"></div>
+        <div class="axis-detail-meta">
+          <span class="axis-eje-label">Eje V del SCA Framework™ · Síntesis</span>
+          <div class="axis-name">Clarity</div>
+          <div class="axis-tagline">Las 3–5 decisiones o movimientos que tienen mayor capacidad de desbloquear el potencial de la empresa</div>
+        </div>
+      </div>
+    </div>
+
+    <p>El quinto eje es el corazón del SCA Framework™ y su distinción más fundamental respecto a cualquier metodología de análisis convencional. Clarity no es la suma de los hallazgos de los cuatro ejes anteriores. Es su síntesis — el proceso por el cual el análisis de Position, Architecture, Momentum y Risk se convierte en un número reducido de decisiones o movimientos que tienen la mayor capacidad de transformar la trayectoria de la empresa.</p>
+
+    <p>La claridad es escasa y específica. No hay una lista de veinte "recomendaciones estratégicas": hay tres, cuatro o cinco movimientos que, si se ejecutan con mandato real y en la secuencia correcta, generan un impacto desproporcionado respecto al esfuerzo que requieren. Identificar esos movimientos — no los que parecen importantes, sino los que realmente lo son — requiere el tipo de criterio ejecutivo que solo se desarrolla a través de años de trabajo al nivel donde se toman las decisiones que definen el valor de las empresas.</p>
+
+    <div class="pullquote">
+      <p>La claridad estratégica no es la ausencia de complejidad. Es la capacidad de actuar con certeza dentro de la complejidad — sabiendo exactamente qué mover, cuándo moverlo y por qué ese movimiento y no otro produce el cambio que la empresa necesita.</p>
+      <span class="pq-source">SCA Framework™ · Principio del Eje Clarity</span>
+    </div>
+
+    <div class="question-block">
+      <span class="qb-label">Preguntas de síntesis del Eje Clarity</span>
+      <div class="question-item"><span class="qi-num">1.</span><span class="qi-text">Si la empresa solo pudiera tomar tres decisiones estratégicas en los próximos 90 días, ¿cuáles serían las tres con mayor capacidad de transformar su trayectoria?</span></div>
+      <div class="question-item"><span class="qi-num">2.</span><span class="qi-text">¿Qué decisión que la dirección lleva postergando tiene el mayor costo de oportunidad acumulado por no tomarse?</span></div>
+      <div class="question-item"><span class="qi-num">3.</span><span class="qi-text">¿Qué iniciativa, si se eliminara del portafolio, liberaría la mayor cantidad de energía estratégica para las prioridades que realmente importan?</span></div>
+      <div class="question-item"><span class="qi-num">4.</span><span class="qi-text">¿Cuál es el primer movimiento — la acción específica que debe ejecutarse antes que cualquier otra — para activar la arquitectura de crecimiento que la empresa necesita?</span></div>
+      <div class="question-item"><span class="qi-num">5.</span><span class="qi-text">¿Qué debería dejar de hacer la empresa para poder hacer lo que realmente debe hacer?</span></div>
+    </div>
+
+    <div class="output-box">
+      <span class="ob-label">Output del Eje Clarity</span>
+      <div class="ob-output">Strategic Clarity Map y First Moves Memo: las 3–5 decisiones o movimientos de mayor impacto estratégico, ordenados por prioridad y secuencia, con el primer movimiento definido con suficiente precisión para ejecutarse sin ambigüedad en los primeros 30 días.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 09 — APLICACIÓN -->
+<div class="content-section" id="aplicacion">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 09</span>
+    <h2 class="section-h2">Cómo se aplica el <em>SCA Framework™</em></h2>
+    <div class="section-rule"></div>
+    <p class="section-lead">Un framework no se aplica como un formulario. Se aplica como una conversación — diseñada, estructurada y conducida con el criterio necesario para ir donde los documentos y los cuestionarios no llegan.</p>
+
+    <p>El SCA Framework™ se aplica a través de tres instrumentos principales, en este orden:</p>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="pr-diamond"></div>
+        <div class="pr-content">
+          <div class="pr-title">Sesiones ejecutivas de alta calidad</div>
+          <p class="pr-text">El instrumento central. Conversaciones estructuradas con el CEO, el fundador o los accionistas principales, diseñadas para extraer la información estratégica más relevante que no está disponible en ningún documento. Estas sesiones no son entrevistas: son conversaciones de pensamiento estratégico donde el facilitador aporta tanto criterio como preguntas. La calidad de las sesiones determina la calidad del output. El SCA Framework™ aplicado con ejecutivos de rango medio produce resultados de rango medio.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="pr-diamond"></div>
+        <div class="pr-content">
+          <div class="pr-title">Análisis selectivo de documentación</div>
+          <p class="pr-text">Los estados financieros, los reportes de gestión, los planes estratégicos anteriores y los contratos clave se analizan no como fuentes exhaustivas de información sino como puntos de verificación y contraste. La pregunta no es "¿qué dice este documento?" sino "¿en qué se diferencia lo que dice este documento de lo que la dirección percibe?" Esa brecha es frecuentemente más informativa que el documento mismo.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="pr-diamond"></div>
+        <div class="pr-content">
+          <div class="pr-title">Síntesis con criterio ejecutivo, no metodología mecánica</div>
+          <p class="pr-text">La síntesis del SCA Framework™ no es un proceso automático. Requiere el criterio acumulado de quien lo aplica — la capacidad de reconocer patrones en organizaciones que son similares entre sí aunque operen en sectores distintos, de identificar el riesgo que nadie nombra, de ver el motor de crecimiento que la dirección subestima. Ese criterio no se obtiene siguiendo un manual. Se construye en conversaciones reales con directivos reales que toman decisiones reales.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contrast-block">
+      <p>Una nota sobre la autoapplicación: el SCA Framework™ puede usarse como instrumento de reflexión individual — y las preguntas de cada eje son suficientemente poderosas para generar insights relevantes incluso en ese contexto. Sin embargo, la <strong>autoapplicación tiene un límite estructural</strong>: la misma organización que necesita claridad estratégica es la que tiene los puntos ciegos que impiden verla. La claridad de más alto impacto siempre requiere <strong>un ojo externo con criterio real</strong> — no un consultor que valida lo que la dirección ya cree, sino un líder estratégico que desafía las premisas con autoridad y sin conflicto de interés.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 10 — ERRORES -->
+<div class="content-section" id="errores">
+  <div class="section-inner">
+    <span class="section-eyebrow">Sección 10</span>
+    <h2 class="section-h2">Los errores más frecuentes <em>en la aplicación</em></h2>
+    <div class="section-rule"></div>
+    <p>El SCA Framework™ tiene una lógica que puede seguirse en su forma pero traicionarse en su espíritu. Los siguientes son los errores que más frecuentemente degradan la calidad del output:</p>
+
+    <table class="error-table">
+      <thead>
+        <tr>
+          <th>Error</th>
+          <th>Por qué ocurre</th>
+          <th>Cómo se manifiesta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Confundir volumen con profundidad</td>
+          <td>La presión de demostrar trabajo lleva a producir muchos hallazgos en lugar de los hallazgos correctos.</td>
+          <td>Un informe de 80 páginas con tablas, gráficas y benchmarks que el CEO no lee porque no le dice qué hacer.</td>
+        </tr>
+        <tr>
+          <td>Aplicar los ejes de forma aislada</td>
+          <td>Cada eje se analiza como si fuera independiente, sin construir la conexión entre ellos.</td>
+          <td>Cuatro diagnósticos correctos que no producen claridad porque nadie hace la síntesis que los integra.</td>
+        </tr>
+        <tr>
+          <td>Aplicar el eje Risk sin nombrar lo incómodo</td>
+          <td>La incomodidad de señalar riesgos de liderazgo o de gobierno lleva a enfocarse solo en riesgos operativos y externos.</td>
+          <td>Un mapa de riesgos que identifica amenazas del entorno pero ignora las vulnerabilidades internas más críticas.</td>
+        </tr>
+        <tr>
+          <td>Producir recomendaciones en lugar de decisiones</td>
+          <td>El temor a tomar posición lleva a ofrecer opciones en lugar de claridad sobre cuál es la opción correcta.</td>
+          <td>Un documento que presenta "tres alternativas estratégicas" sin un criterio claro sobre cuál es la que la empresa debe elegir.</td>
+        </tr>
+        <tr>
+          <td>Aplicar sin acceso al decisor real</td>
+          <td>El proceso se realiza con mandos medios porque el acceso al CEO o fundador es limitado o difícil.</td>
+          <td>Hallazgos que describen con precisión la perspectiva de la organización media, pero que no capturan la dimensión estratégica que solo vive en la alta dirección.</td>
+        </tr>
+        <tr>
+          <td>No conectar con el primer movimiento</td>
+          <td>El proceso termina con la síntesis estratégica sin definir qué debe ejecutarse en los primeros 30 días.</td>
+          <td>Claridad que no se convierte en movimiento porque no hay un First Move concreto, con responsable y fecha, que active la ejecución.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-block">
+  <div class="cta-inner">
+    <span class="cta-eyebrow">Strategic Clarity Mandate™ · CRETTA SLF</span>
+    <h2 class="cta-title">El SCA Framework™ aplicado por <em>quienes lo diseñaron</em></h2>
+    <p class="cta-lead">La guía que acaba de leer documenta la lógica del framework. Lo que no puede documentarse en ningún PDF es el criterio acumulado en veinticinco años de aplicación — la capacidad de reconocer en la primera conversación el riesgo que nadie nombra, el motor de crecimiento que la dirección subestima, y el movimiento que, con mayor certeza, producirá el cambio que la empresa necesita.</p>
+    <div class="cta-buttons">
+      <button class="btn-cta-primary">Solicitar un Strategic Clarity Mandate™</button>
+      <button class="btn-cta-secondary">Explorar más herramientas SLF Insights</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <span class="df-brand">CRETTA · Strategic Leadership Firm · SCA Framework™</span>
+  <span class="df-note">SLF Insights · Guía de Aplicación · Acceso Abierto · © 2025</span>
+</div>
+
+</body>
+</html>

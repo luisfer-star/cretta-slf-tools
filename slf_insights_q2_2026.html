@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLF Insights · Quarterly Intelligence Report Q2 2026 · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{--navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.1);--cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;--t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;--r:rgba(196,154,60,0.2)}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+.topbar{background:var(--navy);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.tb-brand{font-size:.53rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-label{font-size:.5rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,236,.3)}
+.btn-print{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(196,154,60,.28);color:var(--gold);cursor:pointer}
+.report{max-width:760px;margin:0 auto}
+/* COVER */
+.cover{background:var(--navy);padding:60px 52px 48px;position:relative;overflow:hidden;min-height:340px;display:flex;flex-direction:column;justify-content:flex-end}
+.cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 30%,rgba(196,154,60,.1),transparent 55%)}
+.cover::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--gold);opacity:.2}
+.cov-vol{font-size:.48rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:12px;position:relative;z-index:1}
+.cov-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:300;color:var(--cream);line-height:1.05;margin-bottom:6px;position:relative;z-index:1}
+.cov-title em{font-style:italic;color:var(--gold2)}
+.cov-sub{font-size:.76rem;color:rgba(244,241,236,.4);margin-bottom:22px;position:relative;z-index:1}
+.cov-meta{font-size:.46rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(196,154,60,.4);position:relative;z-index:1}
+/* TOC */
+.toc{background:white;padding:28px 36px;border-left:2px solid var(--navy)}
+.toc-title{font-size:.52rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.toc-item{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid rgba(196,154,60,.08);cursor:pointer}
+.toc-item:last-child{border-bottom:none}
+.ti-num{font-size:.5rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);min-width:28px}
+.ti-name{font-size:.74rem;font-weight:600;color:var(--navy);flex:1}
+.ti-tag{font-size:.42rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px}
+.tt-analysis{background:rgba(13,27,62,.07);color:var(--navy)}.tt-signal{background:var(--golda);color:#7a5c00}.tt-framework{background:rgba(45,122,66,.1);color:#1a5c2e}.tt-lens{background:rgba(196,154,60,.08);color:var(--t3)}
+/* SECTIONS */
+.section-wrap{padding:38px 36px;border-top:2px solid var(--navy)}
+.section-wrap:nth-child(even){background:white}
+.s-eye{font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:10px}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,4vw,2rem);font-weight:300;color:var(--navy);line-height:1.15;margin-bottom:6px}
+.s-title em{font-style:italic;color:var(--gold2)}
+.s-rule{width:28px;height:1px;background:var(--gold);opacity:.5;margin-bottom:14px}
+.s-lede{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;font-style:italic;color:var(--navy);line-height:1.65;margin-bottom:16px;padding-left:16px;border-left:2px solid var(--r)}
+.s-body{font-size:.82rem;color:var(--t2);line-height:1.82;margin-bottom:16px}
+.s-body p{margin-bottom:14px}
+.s-body strong{color:var(--navy);font-weight:700}
+.highlight-box{background:var(--navy);padding:18px 20px;margin:18px 0}
+.hb-text{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.68}
+.hb-text strong{color:var(--gold2);font-style:normal;font-weight:400}
+.signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:18px 0}
+.signal-item{background:white;padding:14px 15px;border-left:3px solid var(--gold)}
+.si-label{font-size:.46rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.si-title{font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.si-text{font-size:.66rem;color:var(--t2);line-height:1.6}
+.framework-box{background:var(--cream2);padding:20px 20px;margin:18px 0}
+.fb-title{font-size:.54rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--r)}
+.fb-row{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
+.fb-num{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--navy);flex-shrink:0;line-height:1;min-width:22px}
+.fb-text{font-size:.75rem;color:var(--t2);line-height:1.6}
+.fb-text strong{color:var(--navy);font-weight:700}
+.section-divider{height:1px;background:var(--r);margin:8px 0}
+/* EDITORIAL FOOTER */
+.editorial-footer{background:var(--navy2);padding:22px 36px}
+.ef-eye{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.4);display:block;margin-bottom:6px}
+.ef-text{font-size:.65rem;color:rgba(244,241,236,.28);line-height:1.7;max-width:600px}
+.ef-brand{font-size:.54rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:block;margin-top:12px}
+.cta-blk{background:var(--navy);padding:28px 36px;text-align:center}
+.cta-eye{font-size:.46rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:10px}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.7;max-width:520px;margin:0 auto 18px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:12px 26px;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+@media print{.topbar,.btn-print,.btn-cta{display:none!important}body{background:white}}
+@media(max-width:600px){.cover{padding:36px 22px 32px}.section-wrap{padding:28px 20px}.toc{padding:20px 20px}.signal-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div style="display:flex;gap:12px;align-items:center">
+    <span class="tb-label">SLF Insights · Quarterly Intelligence Report · Exclusivo</span>
+    <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+  </div>
+</div>
+
+<div class="report">
+  <div class="cover">
+    <span class="cov-vol">SLF Insights · Quarterly Intelligence Report · Q2 2026</span>
+    <h1 class="cov-title">The Quarter of<br><em>Strategic Recalibration</em></h1>
+    <p class="cov-sub">Four signals, three decisions, and one framework every CEO should be applying right now</p>
+    <span class="cov-meta">CRETTA Strategic Leadership Firm · Exclusive · April–June 2026</span>
+  </div>
+
+  <div class="toc">
+    <span class="toc-title">In this report</span>
+    <div class="toc-item"><span class="ti-num">01</span><span class="ti-name">The Four Signals of Q2 2026</span><span class="ti-tag tt-signal">Market Intelligence</span></div>
+    <div class="toc-item"><span class="ti-num">02</span><span class="ti-name">The Decisions Mid-Market CEOs Are Facing Now</span><span class="ti-tag tt-analysis">Analysis</span></div>
+    <div class="toc-item"><span class="ti-num">03</span><span class="ti-name">The Strategic Leadership Layer in a Uncertain Environment</span><span class="ti-tag tt-framework">SLF Framework</span></div>
+    <div class="toc-item"><span class="ti-num">04</span><span class="ti-name">The Cretta Lens — One Question for Your Q2 Board</span><span class="ti-tag tt-lens">Cretta Perspective</span></div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-wrap">
+    <span class="s-eye">01 · Market Intelligence</span>
+    <h2 class="s-title">The Four Signals of <em>Q2 2026</em></h2>
+    <div class="s-rule"></div>
+    <p class="s-lede">Every quarter carries signals that separate companies that will grow from companies that will stall. Q2 2026 carries four.</p>
+    <div class="signal-grid">
+      <div class="signal-item"><span class="si-label">Signal 01 — Execution</span><div class="si-title">Capability gaps are becoming strategic ceilings</div><p class="si-text">Mid-market companies that expanded their strategic ambition in 2024–2025 are now discovering that organizational capability hasn't kept pace. The gap between strategic intent and execution capacity is the defining constraint for the majority of companies in the $10M–$80M range this quarter.</p></div>
+      <div class="signal-item"><span class="si-label">Signal 02 — Capital</span><div class="si-title">Capital is available but patience is shorter</div><p class="si-text">Credit conditions have stabilized, but lenders and investors have meaningfully shortened their evaluation horizons. Companies entering capital conversations in Q2 without a credible 18-month execution plan — not just a strategy — are finding the window narrower than it was 18 months ago.</p></div>
+      <div class="signal-item"><span class="si-label">Signal 03 — Talent</span><div class="si-title">The C-Suite talent premium is compressing the middle</div><p class="si-text">Strong senior leaders — those who can operate strategically and not just manage — are commanding compensation expectations that create structural pressure in mid-market companies. The companies navigating this best are those who have built institutional systems that reduce dependence on individual talent.</p></div>
+      <div class="signal-item"><span class="si-label">Signal 04 — Competition</span><div class="si-title">Consolidation is accelerating in fragmented industries</div><p class="si-text">Strategic acquirers — both financial and industrial — are actively targeting the $5M–$50M segment across construction, logistics, industrial services and professional services. Companies without a clear growth thesis and governance architecture are increasingly becoming targets rather than consolidators.</p></div>
+    </div>
+    <div class="highlight-box">
+      <p class="hb-text">The common thread across all four signals is the same: <strong>companies that have built the organizational architecture to translate strategy into execution are capturing the quarter's opportunities. Companies that haven't are absorbing the quarter's pressures.</strong></p>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section-wrap">
+    <span class="s-eye">02 · Analysis</span>
+    <h2 class="s-title">The Decisions Mid-Market CEOs<br><em>Are Facing Now</em></h2>
+    <div class="s-rule"></div>
+    <p class="s-lede">Three decisions are defining which companies finish Q2 2026 better positioned than they started it — and which ones simply complete the quarter.</p>
+    <div class="s-body">
+      <p><strong>Decision 1: Whether to grow into complexity or simplify before growing.</strong> Companies that have accumulated operational complexity — multiple business lines, too many clients of varying size, a product portfolio that has never been rationalized — are arriving at Q2 with a structural choice. The instinct is to add a new initiative or hire a new executive. The strategic decision is whether the current architecture can actually support the next growth cycle, or whether a period of deliberate simplification would produce faster compounded growth than adding more to an already stressed system.</p>
+      <p><strong>Decision 2: Whether the CEO should be running the business or designing it.</strong> The CEO who is still the highest-performing operating executive in the company is also the single largest constraint on the company's growth. Q2 is typically when this tension becomes visible: the pipeline is full, the opportunities are real, and the CEO doesn't have the bandwidth to execute. The decision isn't whether to delegate — it's whether to build the organizational architecture that makes delegation produce results rather than simply transferring stress.</p>
+      <p><strong>Decision 3: Whether this is the moment to bring in external governance or to wait for a better-defined moment.</strong> There is no better-defined moment. Companies that install governance architecture — a board with independent perspective, a strategic leadership layer with accountability — before they need it, compound the value of that architecture. Companies that install it after they need it spend the first two years undoing the decisions that were made without it.</p>
+    </div>
+    <div class="highlight-box">
+      <p class="hb-text">None of these are new decisions. What is specific to Q2 2026 is that <strong>the cost of postponing them has increased significantly</strong> — because the operating environment now rewards speed of strategic clarity, not deliberation.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section-wrap">
+    <span class="s-eye">03 · SLF Framework</span>
+    <h2 class="s-title">The Strategic Leadership Layer<br><em>in an Uncertain Environment</em></h2>
+    <div class="s-rule"></div>
+    <p class="s-lede">Uncertainty doesn't dissolve the need for a Strategic Leadership Layer. It amplifies it — because the quality of the decisions made in uncertain conditions determines the trajectory of the next three years.</p>
+    <div class="s-body">
+      <p>When operating conditions are stable, companies can navigate without a clearly defined Strategic Leadership Layer. The CEO occupies it informally. The management team fills gaps through experience and habit. The board ratifies without rigorously challenging. It works — slowly, and with significant strategic waste, but it works.</p>
+      <p>When conditions are uncertain — as they are in Q2 2026 — the absence of the Strategic Leadership Layer becomes directly observable. The CEO is simultaneously running operations, managing stakeholders, evaluating strategic options, and making decisions on compressed timelines with incomplete information. The result is a decision-making process that is systematically biased toward the short term, because the architecture for thinking about the long term has no designated space in the organization.</p>
+    </div>
+    <div class="framework-box">
+      <span class="fb-title">What the Strategic Leadership Layer does in an uncertain environment</span>
+      <div class="fb-row"><div class="fb-num">1</div><div class="fb-text"><strong>Separates signal from noise.</strong> Not every market disruption requires a strategic response. The SLL applies strategic criteria — not operational urgency — to determine which signals require action and which require observation.</div></div>
+      <div class="fb-row"><div class="fb-num">2</div><div class="fb-text"><strong>Protects the strategic horizon.</strong> When operational pressure mounts, the SLL holds the long-term view — not passively, but actively, by making the case for decisions that sacrifice short-term comfort for medium-term position.</div></div>
+      <div class="fb-row"><div class="fb-num">3</div><div class="fb-text"><strong>Maintains accountability without paralysis.</strong> In uncertain conditions, accountability systems tend to either tighten (producing defensive management) or loosen (producing strategic drift). The SLL maintains strategic accountability without creating the risk aversion that blocks growth.</div></div>
+      <div class="fb-row"><div class="fb-num">4</div><div class="fb-text"><strong>Provides external reference.</strong> The most dangerous characteristic of uncertain environments is that they are self-referential: the management team evaluates options against its own assumptions, which were formed in the prior environment. External perspective — with real accountability and not just advisory authority — breaks this loop.</div></div>
+    </div>
+    <div class="s-body">
+      <p>The companies that emerge from Q2 2026 with a stronger position than they entered it are not, as a general rule, the companies with the best products or the most aggressive pricing. They are the companies where someone — a person or an institution — is occupying the Strategic Leadership Layer with clarity, authority, and accountability for the result.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-wrap">
+    <span class="s-eye">04 · Cretta Perspective</span>
+    <h2 class="s-title">The Cretta Lens — <em>One Question for Your Q2 Board</em></h2>
+    <div class="s-rule"></div>
+    <p class="s-lede">Every board session should have one question that, if answered with honesty, changes something about how the company operates. This quarter, that question is one.</p>
+    <div class="highlight-box">
+      <p class="hb-text" style="font-size:1.1rem;text-align:center"><em>"If every person in the room were to leave this company in 90 days, <strong>what would be strong enough to survive them?</strong>"</em></p>
+    </div>
+    <div class="s-body">
+      <p>This is not a question about talent retention. It is a question about institutional architecture. The companies that answer it honestly — and find that very little would survive — are the companies that are building a mid-market business, not a strategic enterprise. They are dependent on people rather than on systems, on relationships rather than on processes, on the CEO's judgment rather than on an institutional decision framework.</p>
+      <p>The answer to this question is the most accurate indicator of where the Strategic Leadership Layer is — and how much work there is to do before the company's growth ambition can be credibly matched by its institutional capacity to execute it.</p>
+      <p>At Cretta, this is the question we bring to every first conversation with a CEO. Not as a diagnostic exercise, but as the entry point to the work that matters most: building the architecture that converts strategic ambition into institutional outcomes.</p>
+    </div>
+    <div class="framework-box">
+      <span class="fb-title">How to use this question in your board session</span>
+      <div class="fb-row"><div class="fb-num">1</div><div class="fb-text"><strong>Ask it before the agenda item that matters most.</strong> Not as a rhetorical opener, but as a genuine inquiry that sets the frame for the strategic discussion that follows.</div></div>
+      <div class="fb-row"><div class="fb-num">2</div><div class="fb-text"><strong>Don't accept "our people" as an answer.</strong> Push for the specific processes, systems, and governance structures that would function without those people. If they don't exist, that's the board's agenda item for Q3.</div></div>
+      <div class="fb-row"><div class="fb-num">3</div><div class="fb-text"><strong>Let the CEO answer last.</strong> Management's instinct is to list everything that is strong. The board's function is to identify everything that isn't. The productive tension between these two impulses is the most valuable hour of any board session.</div></div>
+    </div>
+  </div>
+
+  <div class="editorial-footer">
+    <span class="ef-eye">SLF Insights — Publication details</span>
+    <p class="ef-text">SLF Insights Quarterly Intelligence Report is an exclusive publication produced by CRETTA Strategic Leadership Firm for its members and clients. It is a curated perspective on the strategic environment for mid-market companies, not a financial or investment advisory publication. All analysis reflects the institutional perspective of CRETTA's practice across México, LATAM and the USA.</p>
+    <span class="ef-brand">CRETTA · Strategic Leadership Firm · cretta-slf.com</span>
+  </div>
+  <div class="cta-blk">
+    <span class="cta-eye">CRETTA — Strategic Leadership Firm</span>
+    <p class="cta-text">Cretta doesn't advise strategy. Cretta leads it — integrated at the CEO and Board level, with real accountability for growth outcomes.</p>
+    <button class="btn-cta">Contact Cretta →</button>
+  </div>
+</div>
+</body>
+</html>

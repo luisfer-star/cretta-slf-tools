@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revenue Before Headcount Calculator™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{--navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.1);--cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;--t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;--r:rgba(196,154,60,0.2);--green:#1a6b35;--greenl:rgba(26,107,53,0.1);--amber:#7a5000;--amberl:rgba(196,130,0,0.1);--red2:#8a1a1a;--redl:rgba(138,26,26,0.1);--blue:#1a3a6b;--bluel:rgba(26,58,107,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+input,select{font-family:'Montserrat',sans-serif;outline:none}
+.topbar{background:var(--navy);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.tb-brand{font-size:.53rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-label{font-size:.5rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,236,.3)}
+.btn-print{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(196,154,60,.28);color:var(--gold);cursor:pointer;transition:all .18s}
+.btn-print:hover{border-color:var(--gold)}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:2px;min-height:calc(100vh - 48px)}
+.panel-left{background:var(--cream);padding:28px 24px;overflow-y:auto}
+.panel-right{background:white;padding:28px 24px;overflow-y:auto;position:sticky;top:48px;max-height:calc(100vh - 48px)}
+.section-title{font-size:.53rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.section{margin-bottom:26px}
+.field{margin-bottom:14px}
+.field-label{font-size:.6rem;font-weight:600;color:var(--navy);display:block;margin-bottom:4px}
+.field-hint{font-size:.53rem;color:var(--t3);display:block;margin-bottom:5px;font-style:italic}
+.field-row{display:flex;align-items:center;gap:10px}
+.field-value{font-size:.72rem;font-weight:700;color:var(--navy);min-width:72px;text-align:right}
+input[type=range]{flex:1;height:3px;-webkit-appearance:none;background:var(--cream2);border-radius:2px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--navy);cursor:pointer;border:2px solid var(--gold)}
+.field-select{width:100%;padding:8px 11px;border:1px solid var(--r);background:white;font-size:.75rem;color:var(--t1);cursor:pointer;transition:border-color .15s}
+.field-select:focus{border-color:var(--gold)}
+.toggle-group{display:flex;gap:2px;margin-bottom:5px}
+.toggle-btn{flex:1;padding:7px 8px;font-size:.53rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border:1px solid var(--r);color:var(--t3);transition:all .15s;text-align:center;cursor:pointer}
+.toggle-btn.active{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.intro-header{margin-bottom:22px}
+.intro-h1{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--navy);line-height:1.15;margin-bottom:4px}
+.intro-h1 em{font-style:italic;color:var(--gold2)}
+.intro-rule{width:32px;height:1px;background:var(--gold);opacity:.5;margin:10px 0 12px}
+.intro-lead{font-size:.75rem;color:var(--t3);line-height:1.65}
+.rp-header{margin-bottom:20px}
+.rp-eyebrow{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
+.rp-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:300;color:var(--navy);line-height:1.2}
+.score-display{display:flex;align-items:center;gap:18px;background:var(--navy);padding:20px 18px;margin-bottom:14px}
+.score-ring{position:relative;width:68px;height:68px;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring-bg{fill:none;stroke:rgba(255,255,255,.1);stroke-width:5}
+.score-ring-fill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .6s ease,stroke .3s}
+.score-ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:white}
+.score-meta{flex:1}
+.score-decision{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;color:var(--cream);line-height:1.2;margin-bottom:4px}
+.score-subtitle{font-size:.5rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,241,236,.4)}
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:14px}
+.metric{padding:13px 12px}
+.metric-label{font-size:.48rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:3px}
+.metric-value{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;display:block;margin-bottom:1px}
+.metric-bench{font-size:.48rem;color:var(--t3)}
+.metric.ok{background:var(--greenl)}.metric.ok .metric-value{color:var(--green)}
+.metric.warn{background:var(--amberl)}.metric.warn .metric-value{color:var(--amber)}
+.metric.bad{background:var(--redl)}.metric.bad .metric-value{color:var(--red2)}
+.metric.info{background:rgba(13,27,62,.05)}.metric.info .metric-value{color:var(--navy)}
+.gauge-section{margin-bottom:14px}
+.gauge-item{margin-bottom:9px}
+.gauge-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+.gauge-name{font-size:.58rem;font-weight:600;color:var(--navy)}
+.gauge-score{font-size:.55rem;font-weight:700}
+.gauge-track{height:7px;background:var(--cream2);border-radius:2px;overflow:hidden}
+.gauge-fill{height:100%;border-radius:2px;transition:width .5s ease,background .3s}
+.g-green{background:var(--green)}.g-amber{background:#c49000}.g-red{background:#c43c3c}
+.rec-box{padding:16px 16px;margin-bottom:12px}
+.rec-box.proceed{background:var(--greenl);border-left:3px solid var(--green)}
+.rec-box.caution{background:var(--amberl);border-left:3px solid #c49000}
+.rec-box.defer{background:var(--redl);border-left:3px solid var(--red2)}
+.rec-box.restructure{background:var(--bluel);border-left:3px solid var(--blue)}
+.rec-label{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px}
+.rec-box.proceed .rec-label{color:var(--green)}
+.rec-box.caution .rec-label{color:var(--amber)}
+.rec-box.defer .rec-label{color:var(--red2)}
+.rec-box.restructure .rec-label{color:var(--blue)}
+.rec-text{font-size:.73rem;color:var(--t2);line-height:1.65}
+.conditions{margin-bottom:12px}
+.cond-title{font-size:.5rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;display:block}
+.cond-item{display:flex;gap:8px;margin-bottom:6px;align-items:flex-start}
+.cond-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px}
+.cond-text{font-size:.67rem;color:var(--t2);line-height:1.6}
+.philosophy{background:var(--navy);padding:16px 16px}
+.philosophy p{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:300;font-style:italic;color:rgba(244,241,236,.5);line-height:1.65}
+.philosophy strong{color:var(--gold2);font-style:normal;font-weight:400}
+@media print{.topbar,.btn-print{display:none!important}body{background:white}.panel-right{position:static;max-height:none}}
+@media(max-width:680px){.layout{grid-template-columns:1fr}.panel-right{position:static;max-height:none}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div class="tb-right">
+    <span class="tb-label">Revenue Before Headcount Calculator™ · Miembro Exclusivo</span>
+    <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+  </div>
+</div>
+<div class="layout">
+<div class="panel-left">
+  <div class="intro-header">
+    <h1 class="intro-h1">Revenue Before<br><em>Headcount</em> Calculator™</h1>
+    <div class="intro-rule"></div>
+    <p class="intro-lead">El modelo de decisión de Cretta para evaluar si una contratación directiva está justificada por la arquitectura de ingresos actual — antes de que el headcount preceda al revenue.</p>
+  </div>
+  <div class="section">
+    <span class="section-title">Perfil financiero de la empresa</span>
+    <div class="field">
+      <span class="field-label">Ingresos anuales (MXN millones)</span>
+      <div class="field-row"><input type="range" id="revenue" min="1" max="500" value="50" step="1" oninput="calc()"><span class="field-value" id="revenueVal">$50M</span></div>
+    </div>
+    <div class="field">
+      <span class="field-label">Crecimiento de ingresos — últimos 12 meses</span>
+      <div class="field-row"><input type="range" id="growth" min="-20" max="60" value="12" step="1" oninput="calc()"><span class="field-value" id="growthVal">+12%</span></div>
+    </div>
+    <div class="field">
+      <span class="field-label">Margen EBITDA actual</span>
+      <div class="field-row"><input type="range" id="ebitda" min="-10" max="40" value="12" step="1" oninput="calc()"><span class="field-value" id="ebitdaVal">12%</span></div>
+    </div>
+    <div class="field">
+      <span class="field-label">Tamaño actual del equipo directivo (reportes directos al CEO)</span>
+      <div class="field-row"><input type="range" id="leaders" min="1" max="12" value="4" step="1" oninput="calc()"><span class="field-value" id="leadersVal">4 personas</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <span class="section-title">Perfil de la posición considerada</span>
+    <div class="field">
+      <span class="field-label">Nivel de la posición</span>
+      <select class="field-select" id="level" onchange="calc()">
+        <option value="csuite">C-Suite (CEO, CFO, COO, CTO, CMO, CHRO)</option>
+        <option value="director" selected>Director / VP</option>
+        <option value="manager">Gerente Senior / Head of</option>
+      </select>
+    </div>
+    <div class="field">
+      <span class="field-label">Compensación total anual estimada (MXN millones)</span>
+      <span class="field-hint">Incluir salario, beneficios, bono y costos de contratación</span>
+      <div class="field-row"><input type="range" id="comp" min="0.3" max="10" value="1.8" step="0.1" oninput="calc()"><span class="field-value" id="compVal">$1.8M</span></div>
+    </div>
+    <div class="field">
+      <span class="field-label">Tipo de función del rol</span>
+      <div class="toggle-group" id="roleTypeGroup">
+        <div class="toggle-btn" onclick="setT('roleType',0,this)">Revenue</div>
+        <div class="toggle-btn active" onclick="setT('roleType',1,this)">Estratégico</div>
+        <div class="toggle-btn" onclick="setT('roleType',2,this)">Operativo</div>
+        <div class="toggle-btn" onclick="setT('roleType',3,this)">Soporte</div>
+      </div>
+    </div>
+    <div class="field">
+      <span class="field-label">Tiempo estimado hasta productividad plena (meses)</span>
+      <div class="field-row"><input type="range" id="rampup" min="1" max="18" value="6" step="1" oninput="calc()"><span class="field-value" id="rampupVal">6 meses</span></div>
+    </div>
+    <div class="field">
+      <span class="field-label">¿El gap puede cubrirse reestructurando el equipo actual?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn" onclick="setT('canRestruct',0,this)">Sí, claramente</div>
+        <div class="toggle-btn active" onclick="setT('canRestruct',1,this)">Parcialmente</div>
+        <div class="toggle-btn" onclick="setT('canRestruct',2,this)">No</div>
+      </div>
+    </div>
+    <div class="field">
+      <span class="field-label">¿Existe un mandato estratégico claro para este rol?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn" onclick="setT('mandate',0,this)">Sí, bien definido</div>
+        <div class="toggle-btn active" onclick="setT('mandate',1,this)">Parcialmente</div>
+        <div class="toggle-btn" onclick="setT('mandate',2,this)">No aún</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel-right">
+  <div class="rp-header">
+    <span class="rp-eyebrow">Análisis en tiempo real · Modelo RBH™</span>
+    <div class="rp-title">Evaluación de justificación<br>de contratación directiva</div>
+  </div>
+  <div class="score-display">
+    <div class="score-ring">
+      <svg width="68" height="68" viewBox="0 0 68 68">
+        <circle class="score-ring-bg" cx="34" cy="34" r="28"/>
+        <circle class="score-ring-fill" id="scoreRing" cx="34" cy="34" r="28" stroke="#C49A3C" stroke-dasharray="175.9" stroke-dashoffset="175.9"/>
+      </svg>
+      <div class="score-ring-num" id="scoreNum">—</div>
+    </div>
+    <div class="score-meta">
+      <div class="score-decision" id="scoreDecision">Configure los parámetros</div>
+      <span class="score-subtitle" id="scoreLabel">Puntuación RBH™ · Modelo de decisión Cretta</span>
+    </div>
+  </div>
+  <div class="metrics-grid">
+    <div class="metric info"><span class="metric-label">Ratio de justificación</span><span class="metric-value" id="mRJR">—</span><span class="metric-bench">Comp / Revenue anual</span></div>
+    <div class="metric info"><span class="metric-label">Revenue por líder</span><span class="metric-value" id="mRPL">—</span><span class="metric-bench">Después de la contratación</span></div>
+    <div class="metric info"><span class="metric-label">Costo de ramp-up</span><span class="metric-value" id="mRamp">—</span><span class="metric-bench">Inversión improductiva</span></div>
+    <div class="metric info"><span class="metric-label">Impacto en EBITDA</span><span class="metric-value" id="mEBITDA">—</span><span class="metric-bench">% del margen actual</span></div>
+  </div>
+  <div class="gauge-section">
+    <span class="section-title" style="margin-bottom:10px">Dimensiones del modelo RBH™</span>
+    <div class="gauge-item"><div class="gauge-header"><span class="gauge-name">Justificación por nivel de ingresos</span><span class="gauge-score" id="g1s">—</span></div><div class="gauge-track"><div class="gauge-fill" id="g1" style="width:0%"></div></div></div>
+    <div class="gauge-item"><div class="gauge-header"><span class="gauge-name">Umbral mínimo por nivel de posición</span><span class="gauge-score" id="g2s">—</span></div><div class="gauge-track"><div class="gauge-fill" id="g2" style="width:0%"></div></div></div>
+    <div class="gauge-item"><div class="gauge-header"><span class="gauge-name">Trayectoria y cobertura de crecimiento</span><span class="gauge-score" id="g3s">—</span></div><div class="gauge-track"><div class="gauge-fill" id="g3" style="width:0%"></div></div></div>
+    <div class="gauge-item"><div class="gauge-header"><span class="gauge-name">Necesidad estratégica del rol</span><span class="gauge-score" id="g4s">—</span></div><div class="gauge-track"><div class="gauge-fill" id="g4" style="width:0%"></div></div></div>
+    <div class="gauge-item"><div class="gauge-header"><span class="gauge-name">Claridad de mandato</span><span class="gauge-score" id="g5s">—</span></div><div class="gauge-track"><div class="gauge-fill" id="g5" style="width:0%"></div></div></div>
+  </div>
+  <div id="recBox" class="rec-box caution" style="display:none"><span class="rec-label" id="recLabel"></span><p class="rec-text" id="recText"></p></div>
+  <div class="conditions" id="condSection" style="display:none"><span class="cond-title">Condiciones y acciones recomendadas</span><div id="condList"></div></div>
+  <div class="philosophy"><p><strong>Revenue Before Headcount™</strong> — La filosofía organizacional de Cretta que protege la rentabilidad durante las fases de crecimiento: el headcount directivo debe ser consecuencia del revenue generado, no su condición previa. Contratar antes de que el ingreso lo justifique produce dilución de margen, fragmentación del liderazgo y presión de caja que convierte el crecimiento en fragilidad estructural.</p></div>
+</div>
+</div>
+<script>
+let tg={roleType:1,canRestruct:1,mandate:1};
+function setT(k,v,el){tg[k]=v;el.parentElement.querySelectorAll('.toggle-btn').forEach((b,i)=>b.classList.toggle('active',i===v));calc()}
+function fmt(n,d=1){return n.toFixed(d)}
+function fmtM(n){return n>=1?'$'+fmt(n)+'M':'$'+fmt(n*1000,0)+'K'}
+function gcls(s){return s>=70?'g-green':s>=40?'g-amber':'g-red'}
+function calc(){
+  const rev=parseFloat(document.getElementById('revenue').value);
+  const growth=parseFloat(document.getElementById('growth').value);
+  const ebitda=parseFloat(document.getElementById('ebitda').value);
+  const leaders=parseInt(document.getElementById('leaders').value);
+  const level=document.getElementById('level').value;
+  const comp=parseFloat(document.getElementById('comp').value);
+  const rampup=parseInt(document.getElementById('rampup').value);
+  document.getElementById('revenueVal').textContent=fmtM(rev);
+  document.getElementById('growthVal').textContent=(growth>=0?'+':'')+growth+'%';
+  document.getElementById('ebitdaVal').textContent=ebitda+'%';
+  document.getElementById('leadersVal').textContent=leaders+' persona'+(leaders>1?'s':'');
+  document.getElementById('compVal').textContent=fmtM(comp);
+  document.getElementById('rampupVal').textContent=rampup+' mes'+(rampup>1?'es':'');
+  const rjr=(comp/rev)*100;
+  const rplAfter=rev/(leaders+1);
+  const rplBefore=rev/leaders;
+  const rampCost=comp*(rampup/12);
+  const ebitdaImpact=ebitda>0?(comp/(rev*(ebitda/100)))*100:999;
+  const thresholds={csuite:40,director:18,manager:7};
+  const thresh=thresholds[level];
+  const threshRatio=Math.min(rev/thresh,1);
+  let s1=rjr<0.5?100:rjr<1?Math.round(100-(rjr-0.5)*60):rjr<2?Math.round(70-(rjr-1)*60):Math.max(0,Math.round(10-(rjr-2)*5));
+  s1=Math.max(0,Math.min(100,s1));
+  let s2=Math.round(threshRatio*100);if(rev<thresh)s2=Math.min(s2,45);
+  let s3=growth>=20?100:growth>=10?Math.round(60+(growth-10)*4):growth>=0?Math.round(20+growth*4):Math.max(0,Math.round(20+growth*2));
+  s3=Math.max(0,Math.min(100,s3));
+  const rs=[100,80,60,45];let s4=rs[tg.roleType];
+  if(tg.canRestruct===0)s4=Math.round(s4*.6);else if(tg.canRestruct===1)s4=Math.round(s4*.85);
+  const ms=[100,60,20];let s5=ms[tg.mandate];
+  const overall=Math.round(s1*.30+s2*.25+s3*.20+s4*.15+s5*.10);
+  const circ=175.9;
+  document.getElementById('scoreRing').style.strokeDashoffset=circ-(overall/100)*circ;
+  const rc=overall>=70?'#3a8a50':overall>=50?'#c49000':'#c43c3c';
+  document.getElementById('scoreRing').style.stroke=rc;
+  document.getElementById('scoreNum').textContent=overall;
+  let decision,decSub,recClass,recLabel,recText;
+  if(overall>=80){decision='Contratación justificada';decSub='PROCEDER — Condiciones favorables';recClass='proceed';recLabel='PROCEDER — Revenue Before Headcount: condición cumplida';recText=`Con ingresos de ${fmtM(rev)} y una compensación que representa el ${fmt(rjr,1)}% del revenue, la arquitectura financiera de la empresa sostiene esta contratación. Ejecutar con mandato claro y plan de productividad definido.`}
+  else if(overall>=60){decision='Proceder con condiciones';decSub='CAUTELA — Revisar supuestos críticos';recClass='caution';recLabel='PROCEDER CON CONDICIONES — Verificar los supuestos críticos';recText=`La contratación es factible pero hay dimensiones que requieren atención. El ratio de justificación del ${fmt(rjr,1)}% y las condiciones de crecimiento son aceptables, pero existen variables que, si no se resuelven, convertirán esta contratación en una presión de caja antes de ser un activo estratégico.`}
+  else if(overall>=35){decision='Diferir — fortalecer primero';decSub='ESPERAR — Construir la base de ingresos';recClass='defer';recLabel='DIFERIR — El nivel de ingresos actual no justifica esta posición';recText=`Con ingresos de ${fmtM(rev)} y compensación de ${fmtM(comp)} (${fmt(rjr,1)}% del revenue), esta contratación consumiría recursos que la empresa aún no ha generado con suficiente consistencia. Fortalecer la base de ingresos en 2-3 trimestres antes de proceder.`}
+  else{decision='Reestructurar el equipo actual';decSub='RESTRUCTURAR — Sin nueva contratación';recClass='restructure';recLabel='REESTRUCTURAR — El gap puede cubrirse sin headcount adicional';recText='La arquitectura financiera actual no sostiene una contratación directiva adicional en este nivel. Antes de sumar headcount, rediseñar los mandatos del equipo existente para cubrir el gap estratégico identificado.'}
+  document.getElementById('scoreDecision').textContent=decision;
+  document.getElementById('scoreLabel').textContent=decSub;
+  const metrics=[
+    {id:'mRJR',val:fmt(rjr,1)+'%',bench:'vs umbral: <1% óptimo',cls:rjr<1?'ok':rjr<2?'warn':'bad'},
+    {id:'mRPL',val:fmtM(rplAfter),bench:'Actual: '+fmtM(rplBefore),cls:rplAfter>rplBefore*.7?'ok':rplAfter>rplBefore*.5?'warn':'bad'},
+    {id:'mRamp',val:fmtM(rampCost),bench:rampup+' meses improductivos',cls:rampCost/rev<.01?'ok':rampCost/rev<.02?'warn':'bad'},
+    {id:'mEBITDA',val:ebitda>0?fmt(ebitdaImpact,0)+'%':'N/A',bench:ebitda>0?'del EBITDA actual':'Margen negativo',cls:ebitda<=0?'bad':ebitdaImpact<30?'ok':ebitdaImpact<60?'warn':'bad'}
+  ];
+  metrics.forEach(m=>{const el=document.getElementById(m.id);el.textContent=m.val;el.parentElement.className='metric '+m.cls;el.nextElementSibling.textContent=m.bench});
+  [[s1,'g1'],[s2,'g2'],[s3,'g3'],[s4,'g4'],[s5,'g5']].forEach(([s,id])=>{
+    document.getElementById(id).style.width=s+'%';document.getElementById(id).className='gauge-fill '+gcls(s);
+    const se=document.getElementById(id+'s');se.textContent=s;se.style.color=s>=70?'var(--green)':s>=40?'var(--amber)':'var(--red2)';
+  });
+  const rb=document.getElementById('recBox');rb.style.display='block';rb.className='rec-box '+recClass;
+  document.getElementById('recLabel').textContent=recLabel;document.getElementById('recText').textContent=recText;
+  const conds=[];
+  if(rjr>=1)conds.push('Reducir la compensación total o aumentar el revenue base. Ratio objetivo: menos del 1% del ingreso anual.');
+  if(rev<thresh)conds.push(`El nivel ${level==='csuite'?'C-Suite':level==='director'?'Director':'Manager'} requiere un ingreso base mínimo de ${fmtM(thresh)} MXN. Actual: ${fmtM(rev)} MXN.`);
+  if(growth<5)conds.push('La trayectoria de crecimiento es insuficiente para justificar headcount adicional. Objetivo: al menos 10% antes de contratar.');
+  if(tg.mandate===2)conds.push('Definir el mandato del rol antes de contratar. Un directivo sin mandato claro es headcount sin impacto estratégico.');
+  if(tg.canRestruct===0)conds.push('Evaluar si el equipo actual puede cubrir el gap con un rediseño de mandatos antes de sumar un nuevo cargo directivo.');
+  if(rampup>9)conds.push(`Un periodo de ramp-up de ${rampup} meses representa ${fmtM(rampCost)} en inversión improductiva. Diseñar un plan de onboarding que reduzca este periodo.`);
+  if(ebitda<5&&ebitda>-20)conds.push('El margen EBITDA actual es insuficiente para absorber una nueva posición directiva sin impacto significativo en la rentabilidad.');
+  const cs=document.getElementById('condSection');const cl=document.getElementById('condList');
+  if(conds.length>0){cs.style.display='block';cl.innerHTML='';conds.forEach(c=>{cl.innerHTML+=`<div class="cond-item"><div class="cond-dot"></div><span class="cond-text">${c}</span></div>`})}
+  else cs.style.display='none';
+}
+calc();
+</script>
+</body>
+</html>

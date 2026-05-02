@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLF Insights — Página Introductoria y Catálogo de Herramientas · CRETTA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --navy: #0D1B3E;
+    --navy-mid: #142248;
+    --navy-light: #1e2f5c;
+    --gold: #C49A3C;
+    --gold-light: #d4ab50;
+    --gold-pale: rgba(196,154,60,0.12);
+    --cream: #F4F1EC;
+    --cream-dark: #ece8e0;
+    --white: #ffffff;
+    --text-dark: #1a1a1a;
+    --text-mid: #3a3a3a;
+    --text-light: #6a6a6a;
+    --rule: rgba(196,154,60,0.3);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body { background: #f8f6f1; color: var(--text-dark); font-family: 'Crimson Pro', Georgia, serif; font-weight: 300; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+
+  /* ── DOCUMENT META ── */
+  .doc-meta {
+    background: var(--navy-mid);
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .doc-meta span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244,241,236,0.45);
+  }
+  .doc-meta .doc-title {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ── SECTION WRAPPERS ── */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+
+  .section-full {
+    padding: 80px 40px;
+  }
+
+  /* ── PART DIVIDER ── */
+  .part-divider {
+    background: var(--navy);
+    padding: 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .part-divider::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(196,154,60,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .part-number {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .part-divider h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.2;
+  }
+  .part-divider p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    color: rgba(244,241,236,0.5);
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h1 { font-family: 'Cormorant Garamond', serif; font-weight: 300; color: var(--navy); }
+  h2 { font-family: 'Cormorant Garamond', serif; font-weight: 600; color: var(--navy); }
+  h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; color: var(--navy); }
+  p { margin-bottom: 1.5rem; font-size: 1rem; color: var(--text-dark); line-height: 1.85; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--navy); font-weight: 500; }
+
+  /* ── EYEBROW ── */
+  .eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  /* ══════════════════════════════════
+     PARTE I — PÁGINA INTRODUCTORIA
+  ══════════════════════════════════ */
+
+  /* Hero intro block */
+  .hero-intro {
+    background: var(--navy);
+    padding: 100px 40px 88px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-intro::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 0%, rgba(196,154,60,0.09) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 100%, rgba(196,154,60,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero-intro h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    color: var(--cream);
+    font-weight: 300;
+    line-height: 1.1;
+    max-width: 820px;
+    margin: 0 auto 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-intro h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero-intro .hero-sub {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.3rem;
+    color: rgba(244,241,236,0.6);
+    font-style: italic;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-rule {
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 32px;
+    opacity: 0.6;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Manifesto lead */
+  .manifesto {
+    background: var(--cream);
+    padding: 72px 40px;
+  }
+  .manifesto-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .manifesto-lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--navy);
+    border-left: 2px solid var(--gold);
+    padding-left: 28px;
+    line-height: 1.6;
+    margin-bottom: 44px;
+  }
+
+  /* Pullquote */
+  .pullquote {
+    background: var(--navy);
+    padding: 44px 52px;
+    margin: 48px 0;
+    position: relative;
+  }
+  .pullquote::before {
+    content: '\201C';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 9rem;
+    color: var(--gold);
+    opacity: 0.12;
+    position: absolute;
+    top: -20px;
+    left: 32px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .pullquote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.6;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* What you get block */
+  .what-you-get {
+    background: var(--cream-dark);
+    padding: 64px 40px;
+  }
+  .what-you-get-inner {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .what-you-get h2 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+  .what-you-get .section-intro {
+    font-size: 1.05rem;
+    color: var(--text-mid);
+    margin-bottom: 48px;
+    max-width: 620px;
+  }
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2px;
+  }
+  .pillar {
+    background: white;
+    padding: 32px 28px;
+  }
+  .pillar-icon {
+    width: 32px;
+    height: 2px;
+    background: var(--gold);
+    margin-bottom: 20px;
+  }
+  .pillar h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  .pillar p {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Access tiers */
+  .access-tiers {
+    background: var(--navy);
+    padding: 72px 40px;
+  }
+  .access-tiers-inner {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .access-tiers h2 {
+    color: var(--cream);
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+  .access-tiers .section-intro {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: rgba(244,241,236,0.55);
+    font-size: 1.05rem;
+    margin-bottom: 48px;
+  }
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .tier {
+    padding: 36px 32px;
+  }
+  .tier.public { background: var(--navy-light); }
+  .tier.private { background: rgba(196,154,60,0.12); border: 1px solid rgba(196,154,60,0.25); }
+  .tier-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .tier.public .tier-label { color: rgba(244,241,236,0.4); }
+  .tier.private .tier-label { color: var(--gold); }
+  .tier h3 {
+    color: var(--cream);
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+  }
+  .tier ul {
+    list-style: none;
+    padding: 0;
+  }
+  .tier ul li {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.95rem;
+    color: rgba(244,241,236,0.65);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    line-height: 1.5;
+  }
+  .tier ul li:last-child { border-bottom: none; }
+  .tier ul li::before {
+    content: '—';
+    color: var(--gold);
+    margin-right: 10px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  /* CTA block */
+  .cta-block {
+    background: var(--cream);
+    padding: 72px 40px;
+    text-align: center;
+  }
+  .cta-block h2 {
+    font-size: 2.2rem;
+    margin-bottom: 16px;
+  }
+  .cta-block p {
+    max-width: 560px;
+    margin: 0 auto 36px;
+    color: var(--text-mid);
+    font-size: 1.05rem;
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 14px 36px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--navy);
+    padding: 14px 36px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid var(--navy);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  /* ══════════════════════════════════
+     PARTE II — HERRAMIENTAS Y CONTENIDO
+  ══════════════════════════════════ */
+
+  .tools-intro {
+    background: var(--cream);
+    padding: 72px 40px 48px;
+  }
+  .tools-intro-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .tools-intro h2 { font-size: 2rem; margin-bottom: 16px; }
+  .tools-intro p { color: var(--text-mid); }
+
+  /* Tool category */
+  .tool-category {
+    padding: 64px 40px;
+    background: var(--cream-dark);
+  }
+  .tool-category:nth-child(even) { background: var(--cream); }
+  .tool-category-inner {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .category-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .category-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--gold);
+    opacity: 0.4;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: -8px;
+  }
+  .category-info h2 {
+    font-size: 1.7rem;
+    margin-bottom: 4px;
+  }
+  .category-info .category-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .category-info p {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    margin: 0;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2px;
+  }
+
+  .tool-card {
+    background: white;
+    padding: 28px 26px;
+    position: relative;
+  }
+  .tool-card.premium {
+    background: var(--navy);
+  }
+  .tool-access-badge {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+  .badge-public { background: rgba(13,27,62,0.06); color: var(--text-light); }
+  .badge-member { background: var(--gold-pale); color: #8a6a1a; }
+  .badge-exclusive { background: var(--navy); color: var(--gold); }
+  .tool-card.premium .badge-exclusive { background: rgba(196,154,60,0.15); color: var(--gold-light); }
+
+  .tool-card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .tool-card.premium h3 { color: var(--cream); }
+  .tool-card p {
+    font-size: 0.88rem;
+    color: var(--text-light);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+  .tool-card.premium p { color: rgba(244,241,236,0.55); }
+  .tool-format {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    opacity: 0.6;
+  }
+  .tool-card.premium .tool-format { color: rgba(196,154,60,0.5); }
+
+  /* Summary matrix */
+  .summary-matrix {
+    background: var(--navy);
+    padding: 72px 40px;
+  }
+  .summary-matrix-inner {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .summary-matrix h2 { color: var(--cream); font-size: 2rem; margin-bottom: 8px; }
+  .summary-matrix .section-intro {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: rgba(244,241,236,0.5);
+    margin-bottom: 48px;
+  }
+
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .matrix-table th {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(196,154,60,0.25);
+  }
+  .matrix-table td {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.92rem;
+    color: rgba(244,241,236,0.7);
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    line-height: 1.5;
+    vertical-align: top;
+  }
+  .matrix-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .matrix-table .col-name { color: var(--cream); font-weight: 400; }
+  .access-pill {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    display: inline-block;
+  }
+  .pill-pub { background: rgba(255,255,255,0.07); color: rgba(244,241,236,0.4); }
+  .pill-mem { background: rgba(196,154,60,0.15); color: var(--gold); }
+  .pill-exc { background: rgba(196,154,60,0.3); color: var(--gold-light); }
+
+  /* Footer */
+  .doc-footer {
+    background: var(--navy-mid);
+    padding: 28px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .doc-footer span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .doc-footer .brand { color: var(--gold); font-weight: 600; }
+  .doc-footer .note { color: rgba(244,241,236,0.3); font-weight: 400; }
+
+  hr.inner-rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 48px 0;
+  }
+
+  @media (max-width: 640px) {
+    .section, .section-full, .manifesto, .what-you-get, .access-tiers, .cta-block,
+    .tools-intro, .tool-category, .summary-matrix { padding: 48px 24px; }
+    .tiers-grid { grid-template-columns: 1fr; }
+    .hero-intro { padding: 64px 24px 56px; }
+    .doc-footer { flex-direction: column; text-align: center; }
+    .matrix-table { font-size: 0.82rem; }
+    .matrix-table th, .matrix-table td { padding: 10px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- META -->
+<div class="doc-meta">
+  <span class="doc-title">SLF Insights — Arquitectura de Página y Catálogo de Herramientas</span>
+  <span>CRETTA SLF · Documento de Trabajo · 2025</span>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PARTE I: TEXTO INTRODUCTORIO — PÁGINA WEB
+══════════════════════════════════════════ -->
+
+<div class="part-divider">
+  <span class="part-number">Parte I</span>
+  <h2>Texto Introductorio — Página SLF Insights</h2>
+  <p>Copy listo para implementación en Wix · Español · Registro de Chairman</p>
+</div>
+
+
+<!-- HERO -->
+<div class="hero-intro">
+  <span class="eyebrow" style="position:relative;z-index:1;">SLF Insights · CRETTA</span>
+  <h1>El pensamiento que mueve<br><em>las decisiones que importan</em></h1>
+  <div class="hero-rule"></div>
+  <p class="hero-sub">Inteligencia estratégica para quienes dirigen empresas — no para quienes las administran.</p>
+</div>
+
+
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <div class="manifesto-inner">
+
+    <span class="eyebrow">Por qué existe SLF Insights</span>
+    <p class="manifesto-lead">
+      Existe una diferencia fundamental entre tener información y tener criterio. El mercado produce información en abundancia. Lo que escasea — lo que siempre ha escaseado en las empresas de alto potencial — es el criterio para saber qué hacer con ella.
+    </p>
+
+    <p>
+      SLF Insights nació de una convicción: que los directivos, fundadores y miembros de consejo que dirigen las empresas más importantes del mercado mid-market en México y América Latina merecen un espacio de pensamiento que opere a su nivel. No un boletín de tendencias. No un resumen de novedades del mercado. Un espacio donde la estrategia empresarial se examina con la misma profundidad y honestidad con la que se discute en las mejores salas de consejo.
+    </p>
+
+    <p>
+      Cretta lleva veinticinco años en esas salas. SLF Insights es la destilación pública de lo que hemos aprendido en ellas — los patrones que se repiten, los errores que destruyen valor, las decisiones que separan a las empresas que crecen de las que se estancan, y las herramientas que ninguna firma ha puesto al alcance del directivo que no quiere más advisory: quiere más criterio.
+    </p>
+
+    <div class="pullquote">
+      <p>Las mejores decisiones estratégicas no se toman con más datos. Se toman con mejor criterio — construido a lo largo del tiempo, en contacto real con las decisiones que definen el valor de las empresas.</p>
+    </div>
+
+    <p>
+      Este no es el blog de una consultora. Es la plataforma de pensamiento de la primera Strategic Leadership Firm de México y América Latina — una firma que no asesora desde afuera, sino que lidera desde adentro. Lo que publicamos aquí no es lo que se dice en los congresos empresariales. Es lo que se dice — y lo que no se dice — en las conversaciones donde se toman las decisiones reales.
+    </p>
+
+    <p>
+      Bienvenido al espacio donde el liderazgo estratégico se piensa en voz alta.
+    </p>
+
+  </div>
+</div>
+
+
+<!-- WHAT YOU GET -->
+<div class="what-you-get">
+  <div class="what-you-get-inner">
+    <span class="eyebrow">Qué encontrarás aquí</span>
+    <h2>Cuatro dimensiones de inteligencia estratégica</h2>
+    <p class="section-intro">SLF Insights organiza su contenido y herramientas alrededor de las cuatro decisiones que determinan si una empresa crece o se estanca.</p>
+
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-icon"></div>
+        <h3>Arquitectura de Crecimiento</h3>
+        <p>Cómo se diseña, ordena y lidera la expansión de una empresa con criterio real — no con proyecciones optimistas ni con planes que nadie ejecuta.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon"></div>
+        <h3>Gobierno y Liderazgo</h3>
+        <p>La anatomía del consejo que funciona, la relación entre gobierno corporativo y dirección ejecutiva, y los errores de arquitectura que destruyen valor silenciosamente.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon"></div>
+        <h3>Decisiones y Criterio</h3>
+        <p>El proceso real detrás de las decisiones estratégicas de alto impacto — cómo se estructuran, cómo se ejecutan y por qué la mayoría fracasan antes de comenzar.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon"></div>
+        <h3>Capacidad Institucional</h3>
+        <p>Cómo se construye una empresa que puede sostener su propio crecimiento — la arquitectura organizacional, el talento directivo y los sistemas que convierten la ambición en realidad.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ACCESS TIERS -->
+<div class="access-tiers">
+  <div class="access-tiers-inner">
+    <span class="eyebrow" style="color:var(--gold);">Acceso a contenido y herramientas</span>
+    <h2>Dos niveles. Una distinción real.</h2>
+    <p class="section-intro">SLF Insights opera con una lógica de membresía que refleja la misma filosofía con la que Cretta trabaja con sus clientes: el acceso se gana con el nivel de compromiso.</p>
+
+    <div class="tiers-grid">
+      <div class="tier public">
+        <span class="tier-label">Acceso abierto</span>
+        <h3>Visitante</h3>
+        <ul>
+          <li>Artículos del blog SLF Insights (publicaciones completas)</li>
+          <li>Marcos conceptuales de la doctrina de categoría</li>
+          <li>Análisis del mercado estratégico mid-market</li>
+          <li>Extractos de herramientas y metodologías</li>
+          <li>Eventos y conferencias abiertas</li>
+        </ul>
+      </div>
+      <div class="tier private">
+        <span class="tier-label">Acceso exclusivo · Miembro SLF</span>
+        <h3>Miembro</h3>
+        <ul>
+          <li>Herramientas interactivas de diagnóstico estratégico</li>
+          <li>Frameworks descargables y plantillas ejecutivas</li>
+          <li>Sesiones privadas de pensamiento con Luis Fernando Jiménez</li>
+          <li>Casos de transformación con metodología detallada</li>
+          <li>Acceso anticipado a publicaciones e investigaciones</li>
+          <li>Directorio y red de miembros directivos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CTA -->
+<div class="cta-block">
+  <span class="eyebrow">Para quién es SLF Insights</span>
+  <h2>Diseñado para los que dirigen,<br>no para los que observan</h2>
+  <p>CEOs, fundadores, miembros de consejo, directores de empresas familiares en transición y ejecutivos que han decidido que el siguiente nivel de su empresa requiere un nivel diferente de pensamiento.</p>
+  <div class="cta-buttons">
+    <a href="#" class="btn-primary">Solicitar membresía</a>
+    <a href="#" class="btn-secondary">Explorar contenido abierto</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PARTE II: CATÁLOGO DE HERRAMIENTAS Y CONTENIDO
+══════════════════════════════════════════ -->
+
+<div class="part-divider">
+  <span class="part-number">Parte II</span>
+  <h2>Catálogo Propuesto de Herramientas y Contenido</h2>
+  <p>Set estratégico para miembros SLF Insights · Clasificado por categoría y nivel de acceso</p>
+</div>
+
+
+<div class="tools-intro">
+  <div class="tools-intro-inner">
+    <span class="eyebrow">Criterio de diseño</span>
+    <h2>Herramientas que ninguna consultora ha construido</h2>
+    <p>
+      El principio rector del catálogo SLF Insights es simple: cada herramienta debe hacer algo que ningún artículo, ningún framework genérico y ninguna consultora tradicional puede hacer — porque su lógica proviene de la experiencia de liderar estrategia desde adentro, no de diseñar recomendaciones desde afuera.
+    </p>
+    <p>
+      Tres criterios de diseño aplican a cada ítem del catálogo: <strong>relevancia directiva</strong> (construido para el CEO y el consejo, no para el analista), <strong>accionabilidad real</strong> (produce una decisión o un movimiento, no un insight adicional) y <strong>distinción de categoría</strong> (no existe en otro lugar en esta forma y con esta profundidad).
+    </p>
+  </div>
+</div>
+
+
+<!-- CATEGORÍA 1: DIAGNÓSTICO -->
+<div class="tool-category">
+  <div class="tool-category-inner">
+    <div class="category-header">
+      <div class="category-number">01</div>
+      <div class="category-info">
+        <span class="category-sub">Herramientas de Diagnóstico</span>
+        <h2>Antes de decidir, hay que saber dónde se está</h2>
+        <p>Instrumentos de lectura estratégica que permiten a un directivo obtener una lectura objetiva y estructurada de su posición real — no la que reporta el equipo, sino la que determina el mercado.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-card">
+        <span class="tool-access-badge badge-public">Acceso abierto</span>
+        <h3>SLF Strategic Position Index™</h3>
+        <p>Evaluación de 12 preguntas que ubica a la empresa en una de cuatro posiciones estratégicas: Plataforma de Crecimiento, Empresa en Consolidación, Organización en Transición o Negocio en Riesgo Estructural. Produce un diagnóstico preliminar con recomendación de primer paso.</p>
+        <span class="tool-format">Formato: Herramienta interactiva web · 8 minutos</span>
+      </div>
+
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Strategic Leadership Layer Audit™</h3>
+        <p>Diagnóstico profundo del vacío entre gobierno corporativo y ejecución. Evalúa 6 dimensiones: claridad de mandatos, coherencia de prioridades, velocidad de decisión, gestión de la agenda estratégica, accountability y calidad de la información que sube al consejo.</p>
+        <span class="tool-format">Formato: Cuestionario estructurado + reporte generado · 25 min</span>
+      </div>
+
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Board Readiness Assessment™</h3>
+        <p>Evaluación del nivel real de madurez del consejo de administración en 5 dimensiones: composición, dinámica, calidad de deliberación, accountability sobre resultados y conexión con la ejecución. Diseñado para el fundador o CEO que contempla fortalecer su gobierno corporativo.</p>
+        <span class="tool-format">Formato: Evaluación + scorecard visual + recomendaciones · 20 min</span>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-access-badge badge-member">Miembro</span>
+        <h3>CEO Time Architecture Diagnostic</h3>
+        <p>¿Cuánto tiempo del CEO se invierte realmente en liderazgo estratégico vs. gestión operativa? Este diagnóstico muestra la distribución real de la agenda ejecutiva y la compara con el perfil de una empresa que crece. El resultado es frecuentemente el insight más incómodo y más valioso que un CEO puede tener.</p>
+        <span class="tool-format">Formato: Registro de agenda + análisis automatizado · 15 min</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CATEGORÍA 2: ARQUITECTURA ESTRATÉGICA -->
+<div class="tool-category">
+  <div class="tool-category-inner">
+    <div class="category-header">
+      <div class="category-number">02</div>
+      <div class="category-info">
+        <span class="category-sub">Frameworks de Arquitectura</span>
+        <h2>La estructura que hace ejecutable la estrategia</h2>
+        <p>Frameworks propietarios de Cretta — no frameworks académicos adaptados, sino instrumentos construidos desde la experiencia de diseñar y liderar estrategia real en empresas mid-market.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-card">
+        <span class="tool-access-badge badge-public">Acceso abierto</span>
+        <h3>SCA Framework™ — Guía de aplicación</h3>
+        <p>Documentación completa del Strategic Clarity Architecture — el marco de tres capas (Propósito, Posición y Prioridades) que Cretta utiliza para convertir la intención estratégica en arquitectura ejecutable. Incluye preguntas de aplicación y ejemplos de uso.</p>
+        <span class="tool-format">Formato: PDF descargable · 18 páginas</span>
+      </div>
+
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Growth Architecture Canvas™</h3>
+        <p>La herramienta que Cretta usa internamente para diseñar la arquitectura de crecimiento de sus clientes. Canvas interactivo de 9 bloques que integra mercado, capacidades, modelo económico, ruta de expansión y condiciones de éxito en una sola vista estratégica. Único en su clase para el mercado mid-market latinoamericano.</p>
+        <span class="tool-format">Formato: Canvas interactivo + guía de uso + plantilla exportable</span>
+      </div>
+
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Strategic Priority Stack™</h3>
+        <p>Framework de ordenamiento de prioridades estratégicas diseñado para el CEO que tiene demasiadas iniciativas y demasiados frentes abiertos. Usa tres variables — impacto en valor, viabilidad de ejecución y urgencia real — para producir un stack de prioridades que el equipo directivo puede defender y ejecutar.</p>
+        <span class="tool-format">Formato: Herramienta interactiva + reporte de prioridades · 30 min</span>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-access-badge badge-member">Miembro</span>
+        <h3>Competitive Moat Mapper</h3>
+        <p>Visualización estructurada de las ventajas competitivas reales de la empresa — las que el mercado reconoce, no las que la dirección declara. Ayuda a identificar qué defender, qué construir y qué rendimiento se está dejando en la mesa por falta de enfoque.</p>
+        <span class="tool-format">Formato: Cuestionario + mapa visual generado · 20 min</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CATEGORÍA 3: GOBIERNO Y CONSEJO -->
+<div class="tool-category">
+  <div class="tool-category-inner">
+    <div class="category-header">
+      <div class="category-number">03</div>
+      <div class="category-info">
+        <span class="category-sub">Gobierno Corporativo y Consejo</span>
+        <h2>El gobierno que produce valor, no el que lo supervisa</h2>
+        <p>Contenido y herramientas sobre el gobierno corporativo como motor de crecimiento — no como función de cumplimiento. Una perspectiva que ninguna firma de gobierno corporativo tradicional comparte porque su modelo económico depende de que el consejo siga siendo un cuerpo de supervisión.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-card">
+        <span class="tool-access-badge badge-public">Acceso abierto</span>
+        <h3>La anatomía del consejo que funciona</h3>
+        <p>Serie de tres artículos que documenta la diferencia entre un consejo que gobierna y un consejo que lidera. Basado en 25 años de trabajo directo con consejos de empresas medianas y grupos empresariales familiares en México y LATAM.</p>
+        <span class="tool-format">Formato: Artículos de blog · Serie de 3 entregas</span>
+      </div>
+
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Board Agenda Architecture™</h3>
+        <p>Plantilla y guía completa para diseñar la agenda de consejo de una empresa mid-market de alto crecimiento. No es una agenda de cumplimiento — es la arquitectura de la conversación estratégica que el consejo debería tener, con el tiempo, el formato y los materiales que producen decisiones reales.</p>
+        <span class="tool-format">Formato: Plantilla descargable + guía de uso + ejemplos · PDF/Excel</span>
+      </div>
+
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Family Business Governance Navigator™</h3>
+        <p>Framework específico para empresas familiares que enfrentan la transición de empresa fundacional a organización institucionalizada. Aborda los conflictos reales — entre familia y empresa, entre generaciones, entre control y crecimiento — con criterio estratégico, no con recetas de mediación.</p>
+        <span class="tool-format">Formato: Evaluación + mapa de transición + plan de acción · 45 min</span>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-access-badge badge-member">Miembro</span>
+        <h3>Independent Director Profile Builder</h3>
+        <p>Herramienta para diseñar el perfil del consejero independiente que el consejo realmente necesita — basado en las brechas de capacidad del consejo actual, la etapa de crecimiento de la empresa y las decisiones estratégicas que se avecinan. Elimina el error más frecuente: contratar consejeros de nombre en lugar de consejeros de criterio.</p>
+        <span class="tool-format">Formato: Cuestionario + perfil generado + banco de competencias</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CATEGORÍA 4: DECISIONES Y EJECUCIÓN -->
+<div class="tool-category">
+  <div class="tool-category-inner">
+    <div class="category-header">
+      <div class="category-number">04</div>
+      <div class="category-info">
+        <span class="category-sub">Decisiones Estratégicas y Ejecución</span>
+        <h2>De la intención a la realidad sin perder el mandato</h2>
+        <p>Las decisiones de alto impacto tienen una arquitectura. Este conjunto de herramientas documenta esa arquitectura y la pone al alcance del directivo que necesita decidir bien, no decidir rápido.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Strategic Decision Architecture™</h3>
+        <p>El proceso de 6 pasos que Cretta usa para estructurar decisiones estratégicas de alto impacto — expansión geográfica, adquisiciones, cambios de modelo de negocio, reestructuraciones. Cada paso tiene preguntas de calificación, criterios de avance y responsables claros. Convierte una decisión nebulosa en un proceso ejecutable.</p>
+        <span class="tool-format">Formato: Guía + plantilla interactiva · Descargable PDF/Word</span>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-access-badge badge-member">Miembro</span>
+        <h3>Initiative Accountability Tracker</h3>
+        <p>Sistema de seguimiento de iniciativas estratégicas diseñado para el CEO — no para el equipo de PMO. Rastrea las cinco variables que determinan si una iniciativa estratégica sobrevive o muere: claridad de mandato, recursos asignados, responsable accountability, hitos reales y frecuencia de revisión ejecutiva.</p>
+        <span class="tool-format">Formato: Dashboard interactivo / Excel descargable</span>
+      </div>
+
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Transformation Readiness Index™</h3>
+        <p>Antes de lanzar una iniciativa de transformación, este índice evalúa si la organización tiene la capacidad real de sostenerla. Mide 8 factores de readiness — desde el alineamiento del equipo directivo hasta la tolerancia al cambio de la cultura organizacional — y produce un semáforo ejecutivo con recomendaciones de preparación.</p>
+        <span class="tool-format">Formato: Evaluación + reporte ejecutivo + plan de readiness</span>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-access-badge badge-public">Acceso abierto</span>
+        <h3>Por qué el 70% de los planes estratégicos no se ejecutan</h3>
+        <p>Análisis documental — basado en 25 años de trabajo con empresas mid-market — de los siete patrones de falla más frecuentes en la ejecución estratégica. No son fallas de análisis ni de planificación: son fallas de arquitectura y liderazgo.</p>
+        <span class="tool-format">Formato: Artículo de investigación · 2,500 palabras</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CATEGORÍA 5: CAPACIDAD ORGANIZACIONAL -->
+<div class="tool-category">
+  <div class="tool-category-inner">
+    <div class="category-header">
+      <div class="category-number">05</div>
+      <div class="category-info">
+        <span class="category-sub">Capacidad Organizacional y Talento Directivo</span>
+        <h2>La organización que puede sostener su propio crecimiento</h2>
+        <p>La mayoría de las empresas medianas alcanzan un techo de crecimiento que no tiene que ver con el mercado ni con el capital — tiene que ver con la capacidad organizacional para sostener una escala mayor. Estas herramientas atacan ese techo.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Organizational Capacity Map™</h3>
+        <p>Evaluación de la capacidad organizacional real de la empresa frente a sus objetivos de crecimiento. Cruza las ambiciones estratégicas con las capacidades instaladas — talento, procesos, estructura y sistemas — e identifica las brechas que, si no se cierran, harán colapsar el crecimiento antes de que llegue.</p>
+        <span class="tool-format">Formato: Evaluación + mapa de brechas + hoja de ruta · 35 min</span>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-access-badge badge-member">Miembro</span>
+        <h3>C-Suite Capability Audit</h3>
+        <p>Evaluación estructurada del equipo directivo actual frente a las exigencias de la siguiente fase de crecimiento. No evalúa desempeño — evalúa idoneidad estratégica: si el equipo que llevó a la empresa hasta aquí tiene las capacidades para llevarla al siguiente nivel, o si hay brechas que el CEO debe resolver antes de escalar.</p>
+        <span class="tool-format">Formato: Evaluación por posición + matriz de capacidades</span>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-access-badge badge-public">Acceso abierto</span>
+        <h3>El error de contratar talento para lo que ya somos</h3>
+        <p>Análisis del patrón más caro de la gestión de talento en empresas mid-market: contratar para la empresa que la organización es hoy, no para la empresa que necesita ser mañana. Con criterios concretos para diseñar perfiles directivos orientados al crecimiento, no a la operación.</p>
+        <span class="tool-format">Formato: Artículo de análisis + checklist de contratación</span>
+      </div>
+
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>Revenue Before Headcount Calculator™</h3>
+        <p>Herramienta de decisión para evaluar si una contratación directiva está justificada por el nivel actual de ingresos y la arquitectura de valor de la empresa. Basada en la filosofía organizacional de Cretta — Revenue Before Headcount — que protege la rentabilidad durante las fases de crecimiento.</p>
+        <span class="tool-format">Formato: Calculadora interactiva + modelo de decisión</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CATEGORÍA 6: CONTENIDO EDITORIAL -->
+<div class="tool-category">
+  <div class="tool-category-inner">
+    <div class="category-header">
+      <div class="category-number">06</div>
+      <div class="category-info">
+        <span class="category-sub">Contenido Editorial · Artículos y Análisis</span>
+        <h2>Pensamiento que no encontrarás en otro lugar</h2>
+        <p>La agenda editorial de SLF Insights cubre los temas que el mercado de pensamiento empresarial convencional no toca — porque requieren 25 años de trabajo en la sala donde se toman las decisiones para poder escribirlos con autoridad.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-card">
+        <span class="tool-access-badge badge-public">Acceso abierto</span>
+        <h3>Qué es una Strategic Leadership Firm y por qué ninguna consultora puede serlo</h3>
+        <p>El artículo fundacional de SLF Insights. Define la categoría, explica el vacío estructural que ocupa y articula las tres razones por las que ninguna firma de advisory puede convertirse en una SLF sin destruir su propio modelo.</p>
+        <span class="tool-format">Formato: Artículo · 2,400 palabras · Ya publicado</span>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-access-badge badge-public">Acceso abierto</span>
+        <h3>El costo invisible de no tener Strategic Leadership</h3>
+        <p>Cuantificación del costo de oportunidad de operar sin liderazgo estratégico continuo — el valor no generado, las decisiones no tomadas, la distancia que no se cierra entre el potencial de la empresa y su realidad.</p>
+        <span class="tool-format">Formato: Artículo de análisis · 2,200 palabras · Próximo</span>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-access-badge badge-member">Miembro</span>
+        <h3>Casos de transformación — Serie SLF</h3>
+        <p>Documentación detallada — con metodología, decisiones críticas y resultados — de transformaciones lideradas por Cretta en sectores como construcción industrial, logística, empresas familiares y grupos de capital privado. Escritos desde la perspectiva del mandato de liderazgo, no del entregable.</p>
+        <span class="tool-format">Formato: Casos en profundidad · 3,000–4,000 palabras cada uno</span>
+      </div>
+
+      <div class="tool-card premium">
+        <span class="tool-access-badge badge-exclusive">Miembro exclusivo</span>
+        <h3>SLF Insights Quarterly Intelligence Report</h3>
+        <p>Análisis trimestral del estado del liderazgo estratégico en el mercado mid-market de México y LATAM — patrones emergentes, decisiones de referencia, errores sistémicos y oportunidades de posicionamiento que el equipo de Cretta identifica desde su trabajo en curso. Publicación privada, no indexada.</p>
+        <span class="tool-format">Formato: Reporte trimestral · PDF premium · 20–30 páginas</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MATRIZ RESUMEN -->
+<div class="summary-matrix">
+  <div class="summary-matrix-inner">
+    <span class="eyebrow" style="color:var(--gold);">Resumen ejecutivo</span>
+    <h2>Mapa completo del catálogo SLF Insights</h2>
+    <p class="section-intro">22 herramientas y piezas de contenido organizadas por categoría, acceso y formato de entrega.</p>
+
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th style="width:32%">Nombre</th>
+          <th style="width:22%">Categoría</th>
+          <th style="width:16%">Acceso</th>
+          <th style="width:30%">Formato</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="col-name">SLF Strategic Position Index™</td><td>Diagnóstico</td><td><span class="access-pill pill-pub">Abierto</span></td><td>Herramienta interactiva</td></tr>
+        <tr><td class="col-name">Strategic Leadership Layer Audit™</td><td>Diagnóstico</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Cuestionario + reporte</td></tr>
+        <tr><td class="col-name">Board Readiness Assessment™</td><td>Diagnóstico</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Evaluación + scorecard</td></tr>
+        <tr><td class="col-name">CEO Time Architecture Diagnostic</td><td>Diagnóstico</td><td><span class="access-pill pill-mem">Miembro</span></td><td>Análisis de agenda</td></tr>
+        <tr><td class="col-name">SCA Framework™ — Guía</td><td>Arquitectura</td><td><span class="access-pill pill-pub">Abierto</span></td><td>PDF descargable</td></tr>
+        <tr><td class="col-name">Growth Architecture Canvas™</td><td>Arquitectura</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Canvas interactivo</td></tr>
+        <tr><td class="col-name">Strategic Priority Stack™</td><td>Arquitectura</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Herramienta interactiva</td></tr>
+        <tr><td class="col-name">Competitive Moat Mapper</td><td>Arquitectura</td><td><span class="access-pill pill-mem">Miembro</span></td><td>Cuestionario + mapa</td></tr>
+        <tr><td class="col-name">La anatomía del consejo que funciona</td><td>Gobierno</td><td><span class="access-pill pill-pub">Abierto</span></td><td>Serie de artículos</td></tr>
+        <tr><td class="col-name">Board Agenda Architecture™</td><td>Gobierno</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Plantilla + guía</td></tr>
+        <tr><td class="col-name">Family Business Governance Navigator™</td><td>Gobierno</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Evaluación + plan</td></tr>
+        <tr><td class="col-name">Independent Director Profile Builder</td><td>Gobierno</td><td><span class="access-pill pill-mem">Miembro</span></td><td>Perfil generado</td></tr>
+        <tr><td class="col-name">Strategic Decision Architecture™</td><td>Decisiones</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Guía + plantilla</td></tr>
+        <tr><td class="col-name">Initiative Accountability Tracker</td><td>Decisiones</td><td><span class="access-pill pill-mem">Miembro</span></td><td>Dashboard / Excel</td></tr>
+        <tr><td class="col-name">Transformation Readiness Index™</td><td>Decisiones</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Evaluación + reporte</td></tr>
+        <tr><td class="col-name">Por qué el 70% de los planes no se ejecutan</td><td>Decisiones</td><td><span class="access-pill pill-pub">Abierto</span></td><td>Artículo de análisis</td></tr>
+        <tr><td class="col-name">Organizational Capacity Map™</td><td>Capacidad</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Evaluación + mapa</td></tr>
+        <tr><td class="col-name">C-Suite Capability Audit</td><td>Capacidad</td><td><span class="access-pill pill-mem">Miembro</span></td><td>Evaluación por posición</td></tr>
+        <tr><td class="col-name">El error de contratar para lo que ya somos</td><td>Capacidad</td><td><span class="access-pill pill-pub">Abierto</span></td><td>Artículo + checklist</td></tr>
+        <tr><td class="col-name">Revenue Before Headcount Calculator™</td><td>Capacidad</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Calculadora interactiva</td></tr>
+        <tr><td class="col-name">Casos de transformación — Serie SLF</td><td>Editorial</td><td><span class="access-pill pill-mem">Miembro</span></td><td>Casos en profundidad</td></tr>
+        <tr><td class="col-name">SLF Insights Quarterly Intelligence Report</td><td>Editorial</td><td><span class="access-pill pill-exc">Exclusivo</span></td><td>Reporte trimestral PDF</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <span class="brand">CRETTA SLF · SLF Insights</span>
+  <span class="note">Documento de trabajo interno · 2025 · Confidencial</span>
+</div>
+
+</body>
+</html>

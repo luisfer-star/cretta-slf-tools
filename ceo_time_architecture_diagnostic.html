@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEO Time Architecture Diagnostic™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{--navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--gold:#C49A3C;--gold2:#d4ab50;--golda:rgba(196,154,60,0.1);--cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;--t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;--r:rgba(196,154,60,0.2);--c1:#0D1B3E;--c2:#1a6b6e;--c3:#8a5c1a;--c4:#c49000;--c5:#6a6a6a}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:15px}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+.topbar{background:var(--navy);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.tb-brand{font-size:.53rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-label{font-size:.5rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,236,.3)}
+.btn-print{font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(196,154,60,.28);color:var(--gold);cursor:pointer;transition:all .18s}
+.btn-print:hover{border-color:var(--gold)}
+.prog-track{height:2px;background:rgba(196,154,60,.1)}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s ease}
+.shell{max-width:720px;margin:0 auto;padding:0 28px}
+.screen{display:none;padding:38px 0 60px;animation:fi .3s ease}
+.screen.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px}
+.h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,5vw,3rem);font-weight:300;color:var(--navy);line-height:1.12;margin-bottom:8px}
+.h1 em{font-style:italic;color:var(--gold2)}
+.rule{width:32px;height:1px;background:var(--gold);opacity:.5;margin-bottom:18px}
+.lead{font-size:.82rem;color:var(--t2);line-height:1.82;margin-bottom:18px}
+.callout{background:var(--navy);padding:20px 22px;margin-bottom:22px}
+.callout p{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;color:var(--cream);line-height:1.7;font-weight:300}
+.callout strong{color:var(--gold2);font-style:normal;font-weight:400}
+.sec-lbl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:20px}
+.phase-card{background:white;padding:14px 12px;cursor:pointer;border:1px solid transparent;transition:all .15s}
+.phase-card:hover{border-color:var(--r)}.phase-card.sel{border-color:var(--gold);background:var(--golda)}
+.pc-num{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--navy);display:block;margin-bottom:3px}
+.pc-lbl{font-size:.46rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.pc-desc{font-size:.65rem;color:var(--t3);line-height:1.4}
+.tog-grid{display:flex;gap:2px;margin-bottom:18px}
+.tog-btn{flex:1;padding:10px 8px;border:1px solid var(--r);background:white;font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);text-align:center;cursor:pointer;transition:all .13s}
+.tog-btn.sel{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.slider-block{background:white;padding:14px 16px;margin-bottom:2px;display:flex;align-items:center;gap:14px}
+.sb-color{width:6px;height:40px;border-radius:2px;flex-shrink:0}
+.sb-info{flex:1;min-width:0}
+.sb-name{font-size:.7rem;font-weight:700;color:var(--navy);display:block;margin-bottom:2px}
+.sb-sub{font-size:.6rem;color:var(--t3);display:block;margin-bottom:7px}
+.sb-range{display:flex;align-items:center;gap:10px}
+input[type=range]{flex:1;height:3px;-webkit-appearance:none;background:var(--cream2);border-radius:2px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--navy);cursor:pointer;border:2px solid var(--gold)}
+.sb-pct{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--navy);min-width:38px;text-align:right}
+.total-bar{background:var(--cream2);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.tb-label2{font-size:.58rem;font-weight:700;color:var(--t3)}
+.tb-total{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300}
+.tb-remain{font-size:.58rem;font-weight:700;margin-left:10px}
+.btn-action{background:var(--navy);color:var(--cream);padding:12px 26px;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.3;pointer-events:none;transition:all .15s}
+.btn-action.ready{opacity:1;pointer-events:all}.btn-action.ready:hover{background:var(--navy3)}
+.btn-back-ctx{color:var(--t3);border:1px solid var(--r);padding:10px 16px;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-right:8px;transition:all .13s}
+.btn-back-ctx:hover{border-color:var(--gold);color:var(--navy)}
+.calc-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center}
+.calc-lbl{font-size:.54rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.calc-title{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:300;color:var(--navy);margin-bottom:28px;line-height:1.3}
+.calc-bar-bg{width:200px;height:2px;background:rgba(13,27,62,.1);overflow:hidden}
+.calc-bar-fill{height:100%;background:var(--gold);animation:cl 2s ease forwards}
+@keyframes cl{from{width:0}to{width:100%}}
+.res-hero{background:var(--navy);padding:28px 26px;margin-bottom:2px;position:relative;overflow:hidden}
+.res-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 65%,rgba(196,154,60,.08),transparent 60%);pointer-events:none}
+.rh-eye{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.55);display:block;margin-bottom:8px;position:relative;z-index:1}
+.rh-row{display:flex;align-items:center;gap:18px;position:relative;z-index:1;margin-bottom:8px}
+.rh-score{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;line-height:1}
+.rh-archetype{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--cream);margin-bottom:3px;line-height:1.2}
+.rh-sub{font-size:.5rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,154,60,.5)}
+.rh-def{font-size:.7rem;color:rgba(244,241,236,.5);font-style:italic;line-height:1.65;max-width:540px;position:relative;z-index:1}
+.str-section{background:white;padding:16px 18px;margin-bottom:2px;display:flex;align-items:center;gap:18px}
+.str-num-wrap{text-align:center;flex-shrink:0}
+.str-num{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;display:block;line-height:1}
+.str-label{font-size:.46rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.str-title{font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.str-desc{font-size:.68rem;color:var(--t3);line-height:1.6}
+.chart-section{background:white;padding:18px 18px;margin-bottom:2px}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.cl-item{display:flex;align-items:center;gap:6px;font-size:.48rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)}
+.cl-box{width:11px;height:11px;border-radius:1px;flex-shrink:0}
+.cat-row{margin-bottom:13px}
+.cat-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.cat-name{font-size:.65rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:6px}
+.cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cat-pcts{font-size:.58rem;color:var(--t3)}
+.dual-bar{display:flex;flex-direction:column;gap:3px}
+.bar-row{display:flex;align-items:center;gap:7px}
+.bar-lbl{font-size:.46rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);min-width:36px}
+.bar-track{flex:1;height:9px;background:var(--cream2);border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px;transition:width .7s ease;min-width:2px}
+.gap-section{background:var(--cream);padding:18px 18px;margin-bottom:2px}
+.gap-item{background:white;padding:14px 16px;margin-bottom:2px}
+.gap-badge{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;display:inline-block;margin-bottom:5px}
+.gb-over{background:rgba(196,144,0,.12);color:#7a5000}.gb-under{background:rgba(138,26,26,.1);color:#7a1a1a}.gb-ok{background:rgba(26,107,110,.1);color:#1a6b6e}
+.gap-title{font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.gap-text{font-size:.7rem;color:var(--t2);line-height:1.65;margin-bottom:5px}
+.gap-rec{font-size:.64rem;color:var(--t3);font-style:italic}
+.sum-bar{background:var(--navy2);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:2px}
+.sb-stats{display:flex;gap:18px;flex-wrap:wrap}
+.sb-stat{text-align:center}
+.sb-num2{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;display:block;line-height:1}
+.sb-lbl2{font-size:.42rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,236,.28)}
+.btn-restart{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(196,154,60,.18);color:rgba(244,241,236,.35);transition:all .15s}
+.btn-restart:hover{border-color:var(--gold);color:var(--cream)}
+.cta-block{background:var(--navy);padding:30px 26px;text-align:center}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.7;max-width:520px;margin:0 auto 18px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:12px 26px;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:background .15s}
+.btn-cta:hover{background:var(--gold2)}
+@media print{.topbar,.btn-print,.btn-back-ctx,.btn-restart,.btn-cta{display:none!important}body{background:white}}
+@media(max-width:580px){.phase-grid{grid-template-columns:1fr}.tog-grid{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div class="tb-right">
+    <span class="tb-label">CEO Time Architecture Diagnostic™ · Miembro</span>
+    <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+  </div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="pFill" style="width:4%"></div></div>
+<div class="shell">
+
+<div class="screen active" id="sIntro">
+  <span class="eyebrow">Diagnóstico ejecutivo · SLF Insights · Miembro</span>
+  <h1 class="h1">CEO Time Architecture <em>Diagnostic™</em></h1>
+  <div class="rule"></div>
+  <p class="lead">El tiempo del CEO es el único recurso organizacional que no puede comprarse ni delegarse. Su arquitectura — cómo se distribuye entre estrategia, liderazgo, operación y administración — determina si la empresa crece al ritmo de su potencial o si el CEO se convierte en su principal cuello de botella.</p>
+  <div class="callout">
+    <p>La mayoría de los CEOs de empresas medianas no tienen un problema de agenda. Tienen un problema de <strong>arquitectura de tiempo</strong>: la distribución de su semana no es congruente con la fase de crecimiento que están liderando.</p>
+  </div>
+  <p class="lead" style="margin-bottom:28px">Este diagnóstico compara su distribución actual con el benchmark de Cretta para su fase — y revela dónde está el desfase entre cómo usa su tiempo y cómo debería usarlo para liderar el siguiente nivel.</p>
+
+  <span class="sec-lbl">Fase de crecimiento que la empresa está liderando</span>
+  <div class="phase-grid">
+    <div class="phase-card" onclick="selPhase(0,this)"><span class="pc-num">10–25%</span><span class="pc-lbl">Consolidación</span><span class="pc-desc">Escalar el modelo actual con eficiencia y estructura.</span></div>
+    <div class="phase-card" onclick="selPhase(1,this)"><span class="pc-num">25–75%</span><span class="pc-lbl">Crecimiento acelerado</span><span class="pc-desc">Nuevos mercados, clientes o líneas. Alta complejidad.</span></div>
+    <div class="phase-card" onclick="selPhase(2,this)"><span class="pc-num">75%+</span><span class="pc-lbl">Escala significativa</span><span class="pc-desc">Transformación profunda del modelo y la organización.</span></div>
+  </div>
+
+  <span class="sec-lbl">¿Tiene un COO o Director de Operaciones que gestione el día a día?</span>
+  <div class="tog-grid" id="cooGroup">
+    <div class="tog-btn" onclick="selTog('coo',0,this)">Sí, completamente</div>
+    <div class="tog-btn" onclick="selTog('coo',1,this)">Parcialmente</div>
+    <div class="tog-btn" onclick="selTog('coo',2,this)">No</div>
+  </div>
+
+  <span class="sec-lbl">¿Cuántos reportes directos tiene el CEO?</span>
+  <div class="tog-grid" id="reportsGroup">
+    <div class="tog-btn" onclick="selTog('rep',0,this)">1–3</div>
+    <div class="tog-btn" onclick="selTog('rep',1,this)">4–6</div>
+    <div class="tog-btn" onclick="selTog('rep',2,this)">7–10</div>
+    <div class="tog-btn" onclick="selTog('rep',3,this)">11+</div>
+  </div>
+
+  <button class="btn-action" id="btnContext" onclick="goToAlloc()">Continuar →</button>
+</div>
+
+<div class="screen" id="sAlloc">
+  <span class="eyebrow">Paso 2 · Distribución actual de tiempo</span>
+  <h1 class="h1" style="font-size:1.8rem">¿Cómo distribuye su semana <em>actualmente?</em></h1>
+  <div class="rule"></div>
+  <p class="lead" style="margin-bottom:18px">Asigne el porcentaje de su tiempo semanal en cada categoría. Sea honesto — no cómo debería ser, sino cómo es en la práctica. El total debe sumar 100%.</p>
+
+  <div id="sliderBlocks"></div>
+
+  <div class="total-bar">
+    <span class="tb-label2">Total asignado</span>
+    <div>
+      <span class="tb-total" id="totalNum">0%</span>
+      <span class="tb-remain" id="remainSpan"></span>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn-back-ctx" onclick="goBack()">← Anterior</button>
+    <button class="btn-action" id="btnCalc" onclick="showCalc()">Ver diagnóstico →</button>
+  </div>
+</div>
+
+<div class="screen" id="sCalc">
+  <div class="calc-wrap">
+    <span class="calc-lbl">Analizando arquitectura de tiempo</span>
+    <p class="calc-title">Comparando su semana<br>con el modelo ideal para su fase</p>
+    <div class="calc-bar-bg"><div class="calc-bar-fill"></div></div>
+  </div>
+</div>
+
+<div class="screen" id="sResults">
+  <div class="res-hero">
+    <span class="rh-eye">CEO Time Architecture Diagnostic™ · Resultado</span>
+    <div class="rh-row">
+      <div class="rh-score" id="rScore"></div>
+      <div><div class="rh-archetype" id="rArchetype"></div><div class="rh-sub" id="rSub"></div></div>
+    </div>
+    <div class="rh-def" id="rDef"></div>
+  </div>
+  <div class="str-section">
+    <div class="str-num-wrap"><span class="str-num" id="strNum"></span><span class="str-label">Tiempo estratégico</span></div>
+    <div><div class="str-title">Ratio de Tiempo Estratégico (RTE™)</div><div class="str-desc" id="strDesc"></div></div>
+  </div>
+  <div class="chart-section">
+    <span class="sec-lbl" style="margin-bottom:12px">Distribución actual vs. arquitectura ideal · por categoría</span>
+    <div class="chart-legend">
+      <div class="cl-item"><div class="cl-box" style="background:var(--navy);opacity:.7"></div>Distribución actual</div>
+      <div class="cl-item"><div class="cl-box" style="background:var(--gold);opacity:.7"></div>Arquitectura ideal para su fase</div>
+    </div>
+    <div id="chartRows"></div>
+  </div>
+  <div class="gap-section">
+    <span class="sec-lbl">Brechas y recomendaciones de arquitectura</span>
+    <div id="gapItems"></div>
+  </div>
+  <div class="sum-bar">
+    <div class="sb-stats" id="sbStats"></div>
+    <button class="btn-restart" onclick="restart()">Nuevo diagnóstico</button>
+  </div>
+  <div class="cta-block">
+    <p class="cta-text">La arquitectura de tiempo del CEO no se corrige con una mejor agenda — se corrige rediseñando la estructura organizacional y el esquema de delegación que libera al CEO para liderar en lugar de gestionar.</p>
+    <button class="btn-cta">Contactar a Cretta →</button>
+  </div>
+</div>
+
+</div>
+<script>
+const CATS=[{id:'strategy',name:'Estrategia y diseño',sub:'Pensamiento estratégico, diseño de largo plazo, planeación',color:'#0D1B3E',def:20},{id:'leadership',name:'Liderazgo directivo',sub:'Gestión del equipo directivo, talento, gobierno interno',color:'#1a6b6e',def:20},{id:'clients',name:'Clientes y desarrollo',sub:'Relaciones comerciales, cuentas clave, nuevos negocios',color:'#8a5c1a',def:20},{id:'ops',name:'Operaciones y problemas',sub:'Resolución de problemas, decisiones operativas, firefighting',color:'#c49000',def:20},{id:'admin',name:'Administración y otros',sub:'Emails, reportes, juntas sin valor estratégico, trámites',color:'#6a6a6a',def:20}];
+const TARGETS=[[[30,25,22,15,8],[25,22,23,22,8],[20,20,25,27,8]],[[35,28,20,12,5],[30,25,22,18,5],[25,22,25,23,5]],[[40,30,15,10,5],[35,28,18,14,5],[28,25,22,20,5]]];
+const ARCHETYPES=[{min:80,name:'CEO Estratégico',sub:'ARQUITECTURA CALIBRADA',color:'#1a5c2e',def:'Su arquitectura de tiempo está bien alineada con las exigencias de su fase. El tiempo estratégico es suficiente para liderar — no solo gestionar. El riesgo no está en la distribución sino en sostenerla cuando la presión operativa sube.'},{min:62,name:'CEO en Transición',sub:'ARQUITECTURA PARCIALMENTE ALINEADA',color:'#8a5c00',def:'Hay intención estratégica, pero la tracción operativa está erosionando el tiempo de mayor valor. Si no se interviene, la carga operativa ganará terreno y el tiempo estratégico se comprimirá hasta ser insuficiente para el siguiente nivel.'},{min:42,name:'CEO Operativo',sub:'ARQUITECTURA INVERTIDA — CRECIMIENTO EN RIESGO',color:'#8a3c00',def:'El tiempo estratégico es insuficiente para la fase que está liderando. El CEO está gestionando la empresa en lugar de liderarla. Este patrón puede sostener el nivel actual, pero no producirá el crecimiento que la empresa tiene como objetivo.'},{min:0,name:'CEO Bombero',sub:'ARQUITECTURA CRÍTICA — INTERVENCIÓN URGENTE',color:'#8a1a1a',def:'La arquitectura de tiempo es casi completamente reactiva. El CEO está operando en modo de crisis permanente. En estas condiciones, la estrategia no se ejecuta — se abandona. La prioridad es una intervención en la estructura organizacional.'}];
+const GD={strategy:{under:{badge:'Sub-invertido',cls:'gb-under',title:'Tiempo estratégico insuficiente para la fase actual',text:'Con la asignación actual, el CEO no tiene el tiempo necesario para liderar la estrategia — solo para gestionarla cuando los urgentes lo permiten. Este es el patrón que convierte las empresas en organizaciones que reaccionan al mercado en lugar de anticiparlo.',rec:'Blindar un mínimo de 3 horas semanales de tiempo estratégico protegido — sin reuniones, sin interrupciones. Comenzar con una sesión de diseño por semana.'},over:{badge:'Sobre-invertido',cls:'gb-ok',title:'El tiempo estratégico es una fortaleza',text:'Su asignación estratégica está por encima del benchmark. Si el tiempo de calidad es alto y existe el equipo que ejecuta, esto es una ventaja diferencial.',rec:'Verificar que el tiempo estratégico produce outputs concretos: documentos, decisiones, mandatos. El tiempo estratégico que no produce outputs es reflexión sin arquitectura.'}},leadership:{under:{badge:'Sub-invertido',cls:'gb-under',title:'Tiempo de liderazgo directivo insuficiente',text:'Sin tiempo suficiente para liderar al equipo directivo, las capacidades del C-Suite no se desarrollan al ritmo que el crecimiento requiere.',rec:'Implementar reunión quincenal de dirección (90 min) y sesiones individuales mensuales con cada reporte directo. No son juntas operativas — son conversaciones de mandato.'},over:{badge:'Sobre-invertido',cls:'gb-ok',title:'Fuerte inversión en liderazgo del equipo',text:'El tiempo de liderazgo directivo es sólido. El riesgo es que parte sea supervisión operativa disfrazada de liderazgo.',rec:'Auditar la calidad de ese tiempo: ¿es liderazgo estratégico o seguimiento operativo? La diferencia determina si el equipo crece o se vuelve dependiente.'}},clients:{under:{badge:'Sub-invertido',cls:'gb-under',title:'Clientes estratégicos y desarrollo de negocio subatendidos',text:'Para la mayoría de las empresas medianas, el CEO sigue siendo el principal embajador de la relación con clientes estratégicos. Tiempo insuficiente aquí puede traducirse en pérdida de cuentas clave.',rec:'Identificar los 5 clientes estratégicos que requieren presencia del CEO y agendar contacto proactivo trimestral.'},over:{badge:'Sobre-invertido',cls:'gb-ok',title:'Alta dedicación a clientes y desarrollo comercial',text:'El CEO está significativamente involucrado en la gestión comercial. Para fases tempranas puede ser necesario; para fases de escala, puede ser señal de que el equipo comercial no está suficientemente desarrollado.',rec:'Evaluar si este tiempo puede transferirse gradualmente al equipo comercial, manteniendo la presencia del CEO solo en cuentas estratégicas de alto valor.'}},ops:{under:{badge:'Bien calibrado',cls:'gb-ok',title:'Baja operacionalidad — fortaleza de arquitectura',text:'El CEO no está atrapado en la operación. Esto es un indicador de madurez organizacional — la empresa tiene estructura para operar sin depender del CEO en el día a día.',rec:'Sostener y formalizar esta arquitectura. Diseñar protocolos de escalación para que solo los problemas de nivel estratégico lleguen al CEO.'},over:{badge:'Sobre-invertido',cls:'gb-under',title:'El CEO está atrapado en la operación',text:'Cada hora adicional en operaciones es una hora menos de estrategia, liderazgo y desarrollo. La empresa crece a pesar del CEO, no gracias a él.',rec:'Identificar las tres categorías de decisiones operativas que más consumen tiempo del CEO y diseñar el protocolo de delegación para cada una.'}},admin:{under:{badge:'Eficiente',cls:'gb-ok',title:'Bajo costo administrativo — arquitectura eficiente',text:'El CEO está gastando poco tiempo en actividades administrativas de bajo valor estratégico. Señal positiva de estructura de soporte.',rec:'Sostener y proteger. El tiempo administrativo tiende a expandirse con el crecimiento de la empresa si no hay sistemas que lo contengan.'},over:{badge:'Sobre-invertido',cls:'gb-under',title:'Exceso de tiempo administrativo de bajo valor',text:'Un exceso de tiempo administrativo es señal de ausencia de sistemas, asistente ejecutivo o estructura de soporte. El costo real es el tiempo estratégico que desplaza.',rec:'Diseñar un sistema de filtro para el correo y agenda del CEO e implementar protocolos para tipos de comunicación que no requieren respuesta directa del CEO.'}}};
+let phase=-1,coo=-1,rep=-1,alloc={strategy:20,leadership:20,clients:20,ops:20,admin:20};
+function selPhase(i,el){phase=i;document.querySelectorAll('.phase-card').forEach((c,j)=>c.classList.toggle('sel',j===i));chkCtx()}
+function selTog(key,val,el){if(key==='coo')coo=val;else rep=val;el.parentElement.querySelectorAll('.tog-btn').forEach((b,i)=>b.classList.toggle('sel',i===val));chkCtx()}
+function chkCtx(){const ok=phase>=0&&coo>=0&&rep>=0;const b=document.getElementById('btnContext');b.style.opacity=ok?'1':'.3';b.style.pointerEvents=ok?'all':'none'}
+function goToAlloc(){document.getElementById('sIntro').classList.remove('active');renderSliders();document.getElementById('sAlloc').classList.add('active');document.getElementById('pFill').style.width='45%';window.scrollTo(0,0)}
+function goBack(){document.getElementById('sAlloc').classList.remove('active');document.getElementById('sIntro').classList.add('active');document.getElementById('pFill').style.width='4%';window.scrollTo(0,0)}
+function renderSliders(){const sb=document.getElementById('sliderBlocks');sb.innerHTML='';CATS.forEach(cat=>{const val=alloc[cat.id];const bl=document.createElement('div');bl.className='slider-block';bl.innerHTML=`<div class="sb-color" style="background:${cat.color}"></div><div class="sb-info"><span class="sb-name">${cat.name}</span><span class="sb-sub">${cat.sub}</span><div class="sb-range"><input type="range" id="sl_${cat.id}" min="0" max="80" value="${val}" oninput="updSlider('${cat.id}',this.value)"><span class="sb-pct" id="pct_${cat.id}">${val}%</span></div></div>`;sb.appendChild(bl)});updTotal()}
+function updSlider(id,val){alloc[id]=parseInt(val);document.getElementById('pct_'+id).textContent=val+'%';updTotal()}
+function updTotal(){const total=Object.values(alloc).reduce((s,v)=>s+v,0);const rem=100-total;document.getElementById('totalNum').textContent=total+'%';document.getElementById('totalNum').style.color=Math.abs(rem)<=5?'var(--navy)':'#c43c3c';const rs=document.getElementById('remainSpan');if(rem>0){rs.textContent=`(faltan ${rem}%)`;rs.style.color='#c49000'}else if(rem<0){rs.textContent=`(excede ${-rem}%)`;rs.style.color='#c43c3c'}else{rs.textContent='✓ Completo';rs.style.color='#1a5c2e'}const ok=Math.abs(rem)<=5;document.getElementById('btnCalc').classList.toggle('ready',ok)}
+function showCalc(){document.getElementById('sAlloc').classList.remove('active');document.getElementById('sCalc').classList.add('active');document.getElementById('pFill').style.width='80%';setTimeout(showResults,2000)}
+function getTarget(){const cooIdx=Math.min(coo,2);const phaseIdx=Math.min(phase,2);const t=[...TARGETS[phaseIdx][cooIdx]];if(rep>=2){t[0]=Math.max(10,t[0]-5);t[1]=Math.min(45,t[1]+5)}const sum=t.reduce((s,v)=>s+v,0);return t.map(v=>Math.round(v/sum*100))}
+function calcScore(cur,tgt){const weights=[1.5,1.2,0.8,1.3,0.8];const dirs=['under','under','neutral','over','over'];let tp=0,mp=0;cur.forEach((c,i)=>{const diff=c-tgt[i];let pen=0;if(dirs[i]==='under'&&diff<0)pen=Math.abs(diff)*weights[i];else if(dirs[i]==='over'&&diff>0)pen=Math.abs(diff)*weights[i];else if(dirs[i]==='neutral')pen=Math.abs(diff)*weights[i]*.5;tp+=pen;mp+=50*weights[i]});return Math.max(0,Math.round(100-(tp/mp)*100))}
+function showResults(){
+  const total=Object.values(alloc).reduce((s,v)=>s+v,0);const cur=CATS.map(c=>Math.round(alloc[c.id]/total*100));const tgt=getTarget();const score=calcScore(cur,tgt);const arch=ARCHETYPES.find(a=>score>=a.min);
+  document.getElementById('rScore').textContent=score;document.getElementById('rScore').style.color=arch.color;document.getElementById('rArchetype').textContent=arch.name;document.getElementById('rSub').textContent=arch.sub;document.getElementById('rDef').textContent=arch.def;
+  const str=cur[0]+cur[1];const strTgt=tgt[0]+tgt[1];const sn=document.getElementById('strNum');sn.textContent=str+'%';sn.style.color=str>=strTgt-5?'#1a5c2e':str>=strTgt-15?'#8a5c00':'#8a1a1a';const gap=strTgt-str;
+  document.getElementById('strDesc').textContent=`Objetivo para su fase: ${strTgt}%. ${gap>0?`Déficit de ${gap} puntos porcentuales — equivale a aproximadamente ${Math.round(gap*50/100)} horas semanales de tiempo estratégico sin asignar.`:gap<-5?`Su inversión estratégica supera el benchmark — asegurarse de que el equipo tenga la autonomía para aprovecharla.`:'Su ratio estratégico está alineado con el benchmark de su fase.'}`;
+  const cr=document.getElementById('chartRows');cr.innerHTML='';CATS.forEach((cat,i)=>{cr.innerHTML+=`<div class="cat-row"><div class="cat-header"><span class="cat-name"><div class="cat-dot" style="background:${cat.color}"></div>${cat.name}</span><span class="cat-pcts">Actual: ${cur[i]}% · Ideal: ${tgt[i]}%</span></div><div class="dual-bar"><div class="bar-row"><span class="bar-lbl">Actual</span><div class="bar-track"><div class="bar-fill" style="width:0%;background:${cat.color};opacity:.75" data-w="${Math.min(100,cur[i]*1.25)}"></div></div></div><div class="bar-row"><span class="bar-lbl">Ideal</span><div class="bar-track"><div class="bar-fill" style="width:0%;background:#C49A3C;opacity:.65" data-w="${Math.min(100,tgt[i]*1.25)}"></div></div></div></div></div>`});
+  setTimeout(()=>document.querySelectorAll('.bar-fill').forEach(el=>el.style.width=el.dataset.w+'%'),100);
+  const gi=document.getElementById('gapItems');gi.innerHTML='';const gaps=CATS.map((cat,i)=>({cat,i,diff:cur[i]-tgt[i]})).sort((a,b)=>Math.abs(b.diff)-Math.abs(a.diff));gaps.forEach(g=>{if(Math.abs(g.diff)<5)return;const dir=g.diff<0?'under':'over';const gd=GD[g.cat.id][dir];gi.innerHTML+=`<div class="gap-item"><span class="gap-badge ${gd.cls}">${gd.badge} · ${g.diff>0?'+':''}${g.diff}pp</span><div class="gap-title">${gd.title}</div><p class="gap-text">${gd.text}</p><p class="gap-rec">Acción: ${gd.rec}</p></div>`});
+  if(gi.innerHTML==='')gi.innerHTML='<div class="gap-item"><p style="font-size:.75rem;color:var(--t2);font-style:italic;line-height:1.7">Su arquitectura de tiempo está bien calibrada frente al benchmark. El trabajo ahora es protegerla — la presión operativa tiene tendencia a erosionar el tiempo estratégico sin que el CEO lo note hasta que el daño está hecho.</p></div>';
+  const overOps=cur[3]-tgt[3];document.getElementById('sbStats').innerHTML=`<div class="sb-stat"><span class="sb-num2" style="color:var(--gold)">${score}</span><span class="sb-lbl2">Índice TAR™</span></div><div class="sb-stat"><span class="sb-num2" style="color:${str>=strTgt-5?'#5abf7a':'#e8b84a'}">${str}%</span><span class="sb-lbl2">Tiempo estratégico actual</span></div><div class="sb-stat"><span class="sb-num2" style="color:${overOps>5?'#e87a7a':'#5abf7a'}">${cur[3]}%</span><span class="sb-lbl2">Tiempo operativo</span></div><div class="sb-stat"><span class="sb-num2" style="color:var(--cream)">${strTgt}%</span><span class="sb-lbl2">Objetivo estratégico</span></div>`;
+  document.getElementById('sCalc').classList.remove('active');document.getElementById('sResults').classList.add('active');document.getElementById('pFill').style.width='100%';window.scrollTo(0,0);
+}
+function restart(){phase=-1;coo=-1;rep=-1;alloc={strategy:20,leadership:20,clients:20,ops:20,admin:20};document.querySelectorAll('.phase-card').forEach(c=>c.classList.remove('sel'));document.querySelectorAll('.tog-btn').forEach(b=>b.classList.remove('sel'));document.getElementById('sResults').classList.remove('active');document.getElementById('sIntro').classList.add('active');document.getElementById('pFill').style.width='4%';window.scrollTo(0,0);chkCtx()}
+document.getElementById('btnContext').style.opacity='.3';document.getElementById('btnContext').style.pointerEvents='none';
+</script>
+</body>
+</html>

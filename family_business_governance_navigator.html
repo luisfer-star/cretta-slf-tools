@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Business Governance Navigator™ · CRETTA SLF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root{
+  --navy:#0D1B3E;--navy2:#142248;--navy3:#1a2d5a;--navy4:#0a1530;
+  --gold:#C49A3C;--gold2:#d4ab50;--gold3:#e8c878;--golda:rgba(196,154,60,0.1);
+  --cream:#F4F1EC;--cream2:#ece8e0;--cream3:#f8f6f1;
+  --t1:#1a1a1a;--t2:#3a3a3a;--t3:#6a6a6a;
+  --r:rgba(196,154,60,0.2);--r2:rgba(196,154,60,0.08);
+  --s4:#1a5c2e;--s4l:rgba(26,92,46,0.1);
+  --s3:#2d7a42;--s3l:rgba(45,122,66,0.08);
+  --s2:#8a5c00;--s2l:rgba(196,140,0,0.1);
+  --s1:#8a1a1a;--s1l:rgba(138,26,26,0.1);
+  --fam:#4a2080;--faml:rgba(74,32,128,0.1);
+  --own:#1a4a8a;--ownl:rgba(26,74,138,0.1);
+  --bus:#0a5c3a;--busl:rgba(10,92,58,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth}
+body{background:var(--cream3);font-family:'Montserrat',sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:'Montserrat',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+input,textarea,select{font-family:'Montserrat',sans-serif;outline:none}
+
+/* TOP BAR */
+.topbar{background:var(--navy4);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(196,154,60,.15)}
+.tb-brand{font-size:.5rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.tb-right{display:flex;align-items:center;gap:14px}
+.tb-label{font-size:.48rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,241,236,.25)}
+.btn-print{font-size:.5rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 13px;border:1px solid rgba(196,154,60,.25);color:var(--gold)}
+
+/* PROGRESS */
+.prog-track{height:2px;background:rgba(196,154,60,.08)}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .5s ease}
+
+/* SCREENS */
+.shell{max-width:760px;margin:0 auto;padding:0 28px}
+.screen{display:none;padding:44px 0 70px;animation:fadeUp .35s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* INTRO */
+.intro-header{background:var(--navy);padding:38px 36px;margin-bottom:2px;position:relative;overflow:hidden}
+.intro-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,rgba(196,154,60,.12),transparent 55%)}
+.ih-tag{font-size:.48rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:14px;position:relative;z-index:1}
+.ih-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,6vw,3.2rem);font-weight:300;color:var(--cream);line-height:1.08;margin-bottom:8px;position:relative;z-index:1}
+.ih-title em{font-style:italic;color:var(--gold2)}
+.ih-sub{font-size:.76rem;color:rgba(244,241,236,.4);position:relative;z-index:1;line-height:1.65;max-width:520px}
+.three-circles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-bottom:2px}
+.circle-card{padding:18px 16px;position:relative}
+.cc-fam{background:rgba(74,32,128,.12);border-left:3px solid var(--fam)}
+.cc-own{background:rgba(26,74,138,.12);border-left:3px solid var(--own)}
+.cc-bus{background:rgba(10,92,58,.12);border-left:3px solid var(--bus)}
+.cc-label{font-size:.44rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:5px}
+.cc-fam .cc-label{color:var(--fam)}.cc-own .cc-label{color:var(--own)}.cc-bus .cc-label{color:var(--bus)}
+.cc-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:300;color:var(--navy);margin-bottom:4px}
+.cc-desc{font-size:.6rem;color:var(--t3);line-height:1.55}
+.intro-body{background:white;padding:26px 28px;margin-bottom:2px}
+.ib-lede{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;font-style:italic;color:var(--navy);line-height:1.68;margin-bottom:16px;padding-left:16px;border-left:2px solid var(--r)}
+.ib-text{font-size:.82rem;color:var(--t2);line-height:1.82;margin-bottom:14px}
+.dim-overview{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:22px}
+.do-item{background:var(--cream3);padding:11px 13px;display:flex;align-items:flex-start;gap:10px}
+.do-num{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--gold);flex-shrink:0;line-height:1;min-width:18px}
+.do-content{}
+.do-name{font-size:.65rem;font-weight:700;color:var(--navy);margin-bottom:2px}
+.do-sub{font-size:.57rem;color:var(--t3);line-height:1.4}
+.callout{background:var(--navy);padding:18px 20px;margin-bottom:22px}
+.callout p{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-style:italic;color:var(--cream);line-height:1.68;font-weight:300}
+.callout strong{color:var(--gold2);font-style:normal;font-weight:400}
+.sec-lbl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.btn-start{background:var(--navy);color:var(--cream);padding:14px 34px;font-size:.64rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transition:background .15s;margin-top:4px}
+.btn-start:hover{background:var(--navy3)}
+
+/* EVAL */
+.dim-prog{display:flex;gap:2px;margin-bottom:20px}
+.dp-item{flex:1;height:3px;border-radius:1px;background:var(--cream2);transition:background .3s}
+.dp-item.done{background:var(--gold)}.dp-item.active{background:rgba(196,154,60,.5)}
+.dim-hdr{padding:20px 22px;margin-bottom:22px;position:relative;overflow:hidden}
+.dh-fam{background:rgba(74,32,128,.1);border-left:3px solid var(--fam)}
+.dh-own{background:rgba(26,74,138,.1);border-left:3px solid var(--own)}
+.dh-bus{background:rgba(10,92,58,.1);border-left:3px solid var(--bus)}
+.dh-gov{background:var(--golda);border-left:3px solid var(--gold)}
+.dh-suc{background:rgba(138,26,26,.06);border-left:3px solid #c84a4a}
+.dh-pro{background:rgba(50,50,100,.07);border-left:3px solid #5a5aaa}
+.dh-eye{font-size:.48rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:5px}
+.dh-fam .dh-eye{color:var(--fam)}.dh-own .dh-eye{color:var(--own)}.dh-bus .dh-eye{color:var(--bus)}.dh-gov .dh-eye{color:var(--gold)}.dh-suc .dh-eye{color:#c84a4a}.dh-pro .dh-eye{color:#5a5aaa}
+.dh-name{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;color:var(--navy);margin-bottom:4px}
+.dh-sub{font-size:.6rem;color:var(--t3);font-style:italic;line-height:1.5}
+.q-block{background:white;padding:16px 18px;margin-bottom:2px}
+.q-num{font-size:.46rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:5px}
+.q-text{font-size:.8rem;font-weight:600;color:var(--navy);line-height:1.42;margin-bottom:12px}
+.scale-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.sc-btn{padding:10px 5px;border:1px solid var(--r);background:white;cursor:pointer;text-align:center;transition:all .12s}
+.sc-btn:hover{border-color:rgba(196,154,60,.5)}
+.sc-btn .sn{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;display:block;line-height:1;margin-bottom:3px}
+.sc-btn .sl{font-size:.42rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1.2}
+.sc-btn[data-s="1"]{background:#fdf3f3}.sc-btn[data-s="1"] .sn{color:var(--s1)}.sc-btn[data-s="1"] .sl{color:var(--s1)}.sc-btn[data-s="1"].sel{border-color:var(--s1);background:var(--s1l)}
+.sc-btn[data-s="2"]{background:#fdf8ed}.sc-btn[data-s="2"] .sn{color:var(--s2)}.sc-btn[data-s="2"] .sl{color:var(--s2)}.sc-btn[data-s="2"].sel{border-color:var(--s2);background:var(--s2l)}
+.sc-btn[data-s="3"]{background:#f3f9f4}.sc-btn[data-s="3"] .sn{color:var(--s3)}.sc-btn[data-s="3"] .sl{color:var(--s3)}.sc-btn[data-s="3"].sel{border-color:var(--s3);background:var(--s3l)}
+.sc-btn[data-s="4"]{background:#f0f8f2}.sc-btn[data-s="4"] .sn{color:var(--s4)}.sc-btn[data-s="4"] .sl{color:var(--s4)}.sc-btn[data-s="4"].sel{border-color:var(--s4);background:var(--s4l)}
+.eval-nav{display:flex;gap:8px;margin-top:18px}
+.btn-back{color:var(--t3);border:1px solid var(--r);padding:10px 16px;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:all .13s}
+.btn-back:hover{border-color:var(--gold);color:var(--navy)}
+.btn-next{background:var(--navy);color:var(--cream);padding:10px 24px;font-size:.58rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.3;pointer-events:none;transition:all .13s}
+.btn-next.ready{opacity:1;pointer-events:all}.btn-next.ready:hover{background:var(--navy3)}
+
+/* CALC */
+.calc-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center}
+.calc-lbl{font-size:.54rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.calc-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--navy);margin-bottom:28px;line-height:1.3}
+.calc-bar-bg{width:200px;height:2px;background:rgba(13,27,62,.1);overflow:hidden}
+.calc-bar-fill{height:100%;background:var(--gold);animation:cl 2.4s ease forwards}
+@keyframes cl{from{width:0}to{width:100%}}
+
+/* RESULTS */
+.res-cover{background:var(--navy);padding:30px 28px;margin-bottom:2px;position:relative;overflow:hidden}
+.res-cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 25%,rgba(196,154,60,.1),transparent 55%);pointer-events:none}
+.rc-tag{font-size:.46rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:10px;position:relative;z-index:1}
+.rc-row{display:flex;align-items:center;gap:18px;margin-bottom:8px;position:relative;z-index:1}
+.rc-score{font-family:'Cormorant Garamond',serif;font-size:4.5rem;font-weight:300;line-height:1}
+.rc-text{}
+.rc-archetype{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;color:var(--cream);margin-bottom:3px;line-height:1.18}
+.rc-sub{font-size:.5rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,154,60,.5)}
+.rc-def{font-size:.7rem;color:rgba(244,241,236,.5);font-style:italic;line-height:1.68;max-width:580px;position:relative;z-index:1}
+
+/* THREE CIRCLES RESULT MAP */
+.circles-result{background:white;padding:22px 24px;margin-bottom:2px}
+.cr-title{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--r)}
+.cr-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
+.cr-cell{padding:14px 14px;position:relative}
+.cr-fam{background:rgba(74,32,128,.07);border-top:3px solid var(--fam)}
+.cr-own{background:rgba(26,74,138,.07);border-top:3px solid var(--own)}
+.cr-bus{background:rgba(10,92,58,.07);border-top:3px solid var(--bus)}
+.cr-int{background:var(--golda);border-top:3px solid var(--gold);grid-column:span 1}
+.cr-suc{background:rgba(200,74,74,.07);border-top:3px solid #c84a4a}
+.cr-pro{background:rgba(90,90,170,.07);border-top:3px solid #5a5aaa}
+.cr-cell-label{font-size:.44rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
+.cr-fam .cr-cell-label{color:var(--fam)}.cr-own .cr-cell-label{color:var(--own)}.cr-bus .cr-cell-label{color:var(--bus)}.cr-int .cr-cell-label{color:var(--gold)}.cr-suc .cr-cell-label{color:#c84a4a}.cr-pro .cr-cell-label{color:#5a5aaa}
+.cr-cell-name{font-size:.7rem;font-weight:700;color:var(--navy);margin-bottom:5px}
+.cr-score-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.cr-score-num{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;line-height:1}
+.cr-bar-wrap{flex:1}
+.cr-bar-track{height:5px;background:var(--cream2);border-radius:2px;overflow:hidden}
+.cr-bar-fill{height:100%;border-radius:2px;transition:width .8s ease}
+.cr-verdict{font-size:.48rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+
+/* GAPS */
+.gaps-panel{background:var(--cream);padding:20px 22px;margin-bottom:2px}
+.gap-card{background:white;padding:14px 16px;margin-bottom:3px;border-left:3px solid transparent}
+.gap-card-fam{border-left-color:var(--fam)}
+.gap-card-own{border-left-color:var(--own)}
+.gap-card-bus{border-left-color:var(--bus)}
+.gap-card-gov{border-left-color:var(--gold)}
+.gap-card-suc{border-left-color:#c84a4a}
+.gap-card-pro{border-left-color:#5a5aaa}
+.gap-header{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.gap-badge{font-size:.42rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:2px 7px;display:inline-block}
+.gb-crit{background:var(--s1l);color:var(--s1)}.gb-dev{background:var(--s2l);color:var(--s2)}.gb-solid{background:var(--s3l);color:var(--s3)}
+.gap-title{font-size:.75rem;font-weight:700;color:var(--navy)}
+.gap-text{font-size:.68rem;color:var(--t2);line-height:1.65;margin-bottom:5px}
+.gap-rec{font-size:.63rem;color:var(--t3);font-style:italic;border-left:2px solid var(--r);padding-left:8px}
+
+/* RECOMMENDATIONS */
+.recs-panel{background:white;padding:20px 22px;margin-bottom:2px}
+.rec-item{padding:12px 14px;margin-bottom:3px;background:var(--cream3);border-radius:0}
+.ri-priority{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:3px}
+.ri-text{font-size:.72rem;color:var(--t2);line-height:1.6}
+.ri-text strong{color:var(--navy);font-weight:700}
+
+/* SUM BAR */
+.sum-bar{background:var(--navy2);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:2px}
+.sb-stats{display:flex;gap:18px;flex-wrap:wrap}
+.sb-stat{text-align:center}
+.sb-num{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;display:block;line-height:1}
+.sb-lbl{font-size:.42rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,236,.28)}
+.btn-restart{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(196,154,60,.18);color:rgba(244,241,236,.35);transition:all .15s}
+.btn-restart:hover{border-color:var(--gold);color:var(--cream)}
+
+/* STAGE BADGE */
+.stage-banner{background:var(--cream2);padding:14px 22px;margin-bottom:2px;display:flex;align-items:center;gap:14px}
+.sb-icon{width:40px;height:40px;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sbi-num{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--gold);line-height:1}
+.stage-text{}
+.stage-label{font-size:.46rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:2px}
+.stage-name{font-size:.78rem;font-weight:700;color:var(--navy)}
+.stage-desc{font-size:.62rem;color:var(--t3);line-height:1.5}
+
+/* CTA */
+.cta-blk{background:var(--navy);padding:32px 28px;text-align:center}
+.cta-eye{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,154,60,.5);display:block;margin-bottom:10px}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.7;max-width:560px;margin:0 auto 20px}
+.btn-cta{background:var(--gold);color:var(--navy);padding:13px 28px;font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;transition:background .13s}
+.btn-cta:hover{background:var(--gold2)}
+
+/* PHIL */
+.phil{background:var(--navy2);padding:20px 22px}
+.phil p{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:300;font-style:italic;color:rgba(244,241,236,.4);line-height:1.72}
+.phil strong{color:var(--gold2);font-style:normal;font-weight:400}
+
+@media print{.topbar,.eval-nav,.btn-print,.btn-restart,.btn-cta,.btn-start{display:none!important}body{background:white}.screen.active{padding:20px 0}}
+@media(max-width:680px){.three-circles,.dim-overview,.cr-grid{grid-template-columns:1fr}.scale-row{grid-template-columns:repeat(2,1fr)}.rc-row{flex-direction:column;gap:8px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="tb-brand">CRETTA · Strategic Leadership Firm</span>
+  <div class="tb-right">
+    <span class="tb-label">Family Business Governance Navigator™ · Exclusivo</span>
+    <button class="btn-print" onclick="window.print()">Exportar PDF</button>
+  </div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+
+<div class="shell">
+
+<!-- ============================================================ INTRO -->
+<div class="screen active" id="sIntro">
+  <div class="intro-header">
+    <span class="ih-tag">Gobierno de empresa familiar · SLF Insights · Exclusivo</span>
+    <h1 class="ih-title">Family Business<br>Governance <em>Navigator™</em></h1>
+    <p class="ih-sub">El diagnóstico de gobierno más completo para empresas familiares en etapa de crecimiento y profesionalización</p>
+  </div>
+
+  <div class="three-circles">
+    <div class="circle-card cc-fam">
+      <span class="cc-label">Sistema 1</span>
+      <div class="cc-title">La Familia</div>
+      <p class="cc-desc">Los acuerdos, valores y estructuras que gobiernan la relación entre los miembros de la familia como familia.</p>
+    </div>
+    <div class="circle-card cc-own">
+      <span class="cc-label">Sistema 2</span>
+      <div class="cc-title">La Propiedad</div>
+      <p class="cc-desc">La arquitectura accionaria, los derechos de los propietarios y los mecanismos de liquidez y transferencia.</p>
+    </div>
+    <div class="circle-card cc-bus">
+      <span class="cc-label">Sistema 3</span>
+      <div class="cc-title">La Empresa</div>
+      <p class="cc-desc">La gestión profesional, los procesos de gobierno corporativo y la capacidad de operar con independencia.</p>
+    </div>
+  </div>
+
+  <div class="intro-body">
+    <p class="ib-lede">La empresa familiar no es una empresa que pertenece a una familia. Es una institución que opera en la intersección de tres sistemas — y la calidad de su gobierno depende de cuán bien diseñadas están las fronteras y los mecanismos que regulan esa intersección.</p>
+    <p class="ib-text">La mayoría de los conflictos en empresas familiares no son conflictos de negocio. Son conflictos de sistemas: la familia que actúa como propietaria cuando debería actuar como familia, el propietario que actúa como gestor cuando debería ejercer gobierno, o la empresa que carga con decisiones que corresponden a la familia. Sin una arquitectura de gobierno que separe y conecte estos tres sistemas correctamente, el crecimiento produce más conflicto que valor.</p>
+    <p class="ib-text" style="margin-bottom:20px">Este Navigator evalúa seis dimensiones del gobierno de la empresa familiar — cubriendo los tres sistemas y sus intersecciones — para determinar qué está bien construido, qué está en riesgo, y qué decisiones de gobierno deben tomarse antes de iniciar el siguiente ciclo de crecimiento.</p>
+
+    <span class="sec-lbl">Seis dimensiones · 24 preguntas · Escala 1–4</span>
+    <div class="dim-overview">
+      <div class="do-item"><div class="do-num">1</div><div class="do-content"><div class="do-name" style="color:var(--fam)">Protocolo Familiar</div><div class="do-sub">Acuerdos que regulan la relación familia-empresa</div></div></div>
+      <div class="do-item"><div class="do-num">2</div><div class="do-content"><div class="do-name" style="color:var(--own)">Arquitectura de Propiedad</div><div class="do-sub">Estructura accionaria y derechos en contexto familiar</div></div></div>
+      <div class="do-item"><div class="do-num">3</div><div class="do-content"><div class="do-name" style="color:var(--bus)">Gobierno Corporativo</div><div class="do-sub">Consejo y mecanismos de gobierno de la empresa</div></div></div>
+      <div class="do-item"><div class="do-num">4</div><div class="do-content"><div class="do-name" style="color:var(--gold)">Consejo de Familia</div><div class="do-sub">Instancia formal de gobierno de la familia</div></div></div>
+      <div class="do-item"><div class="do-num">5</div><div class="do-content"><div class="do-name" style="color:#c84a4a">Sucesión y Continuidad</div><div class="do-sub">Plan de continuidad generacional del liderazgo y la propiedad</div></div></div>
+      <div class="do-item"><div class="do-num">6</div><div class="do-content"><div class="do-name" style="color:#5a5aaa">Profesionalización</div><div class="do-sub">Criterios de gestión y participación de la familia en la empresa</div></div></div>
+    </div>
+
+    <div class="callout">
+      <p>Las empresas familiares no fracasan por falta de talento ni por mercados adversos. Fracasan porque los tres sistemas que las constituyen — familia, propiedad y empresa — nunca tuvieron las reglas claras para relacionarse entre sí cuando el negocio creció y la familia también. <strong>El gobierno es la arquitectura que hace que el crecimiento de los tres sistemas sea simultáneamente posible.</strong></p>
+    </div>
+    <button class="btn-start" onclick="start()">Iniciar el Navigator — 24 preguntas →</button>
+  </div>
+</div>
+
+<!-- ============================================================ EVAL -->
+<div class="screen" id="sEval">
+  <div class="dim-prog" id="dimProg"></div>
+  <div class="dim-hdr" id="dimHdr"><span class="dh-eye" id="dhEye">Dimensión 1 de 6</span><div class="dh-name" id="dhName"></div><div class="dh-sub" id="dhSub"></div></div>
+  <div id="qCont"></div>
+  <div class="eval-nav">
+    <button class="btn-back" id="btnBack" onclick="goBack()" style="display:none">← Anterior</button>
+    <button class="btn-next" id="btnNext" onclick="goNext()">Siguiente dimensión →</button>
+  </div>
+</div>
+
+<!-- ============================================================ CALC -->
+<div class="screen" id="sCalc">
+  <div class="calc-wrap">
+    <span class="calc-lbl">Navegando la arquitectura de gobierno</span>
+    <p class="calc-title">Construyendo su mapa<br>de gobierno familiar</p>
+    <div class="calc-bar-bg"><div class="calc-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- ============================================================ RESULTS -->
+<div class="screen" id="sRes">
+
+  <div class="res-cover">
+    <span class="rc-tag">Family Business Governance Navigator™ · Resultado del diagnóstico</span>
+    <div class="rc-row">
+      <div class="rc-score" id="rScore"></div>
+      <div class="rc-text">
+        <div class="rc-archetype" id="rArch"></div>
+        <div class="rc-sub" id="rSub"></div>
+      </div>
+    </div>
+    <p class="rc-def" id="rDef"></p>
+  </div>
+
+  <div class="stage-banner" id="stageBanner"></div>
+
+  <div class="circles-result">
+    <span class="cr-title">Mapa de gobierno — resultado por dimensión</span>
+    <div class="cr-grid" id="crGrid"></div>
+  </div>
+
+  <div class="gaps-panel">
+    <span class="sec-lbl">Vacíos de gobierno y acciones prioritarias</span>
+    <div id="gapCards"></div>
+  </div>
+
+  <div class="recs-panel">
+    <span class="sec-lbl">Recomendaciones por horizonte</span>
+    <div id="recsPanel"></div>
+  </div>
+
+  <div class="sum-bar">
+    <div class="sb-stats" id="sbStats"></div>
+    <button class="btn-restart" onclick="restart()">Nuevo diagnóstico</button>
+  </div>
+
+  <div class="cta-blk">
+    <span class="cta-eye">CRETTA Strategic Leadership Firm</span>
+    <p class="cta-text">El gobierno de la empresa familiar no es una tarea que el CEO resuelve solo ni que el abogado formaliza en un documento. Es un proceso de diseño institucional que requiere perspectiva externa, metodología probada y la capacidad de sostener conversaciones difíciles entre personas que también son familia. Eso es lo que Cretta acompaña.</p>
+    <button class="btn-cta">Hablar con Cretta sobre el gobierno de su empresa familiar →</button>
+  </div>
+
+  <div class="phil">
+    <p><strong>Family Business Governance™</strong> — La arquitectura que separa, conecta y protege los tres sistemas que constituyen la empresa familiar: la familia como institución, la propiedad como responsabilidad, y la empresa como proyecto compartido. Sin esta arquitectura, el crecimiento de uno de los sistemas inevitablemente deteriora a los otros dos.</p>
+  </div>
+
+</div>
+</div><!-- end shell -->
+
+<script>
+// ================================================================
+// DATA
+// ================================================================
+const DIMS = [
+  {
+    name: 'Protocolo Familiar',
+    sub: 'Acuerdos formales que regulan la relación entre la familia y la empresa',
+    hdrClass: 'dh-fam',
+    color: '#4a2080',
+    system: 'Sistema Familia',
+    crClass: 'cr-fam',
+    qs: [
+      '¿Existe un protocolo familiar o acuerdo familiar documentado y firmado por los miembros relevantes de la familia?',
+      '¿El protocolo define con claridad los derechos y las obligaciones de la familia como propietaria — separados de sus roles en la gestión?',
+      '¿Hay acuerdos explícitos sobre cómo se toman las decisiones que afectan tanto a la familia como a la empresa?',
+      '¿El protocolo ha sido revisado en los últimos 3 años para reflejar cambios en la familia o en la empresa?'
+    ]
+  },
+  {
+    name: 'Arquitectura de Propiedad',
+    sub: 'Estructura accionaria y mecanismos de transferencia en el contexto familiar',
+    hdrClass: 'dh-own',
+    color: '#1a4a8a',
+    system: 'Sistema Propiedad',
+    crClass: 'cr-own',
+    qs: [
+      '¿La estructura accionaria está clara y documentada formalmente — todos los propietarios conocen su participación exacta y sus derechos?',
+      '¿Hay mecanismos acordados para la valoración de la empresa en caso de compra-venta de acciones entre miembros de la familia?',
+      '¿Existe un proceso definido para la transferencia de acciones entre generaciones — con criterios fiscales, legales y familiares acordados?',
+      '¿Hay acuerdos sobre qué ocurre con las acciones de un miembro de la familia en caso de divorcio, fallecimiento o incapacidad?'
+    ]
+  },
+  {
+    name: 'Gobierno Corporativo',
+    sub: 'Consejo de administración y mecanismos de gobierno formal de la empresa',
+    hdrClass: 'dh-bus',
+    color: '#0a5c3a',
+    system: 'Sistema Empresa',
+    crClass: 'cr-bus',
+    qs: [
+      '¿La empresa tiene un Consejo de Administración (o instancia equivalente) que sesiona regularmente y produce decisiones formales?',
+      '¿El Consejo tiene al menos un consejero independiente — alguien que no es miembro de la familia ni empleado de la empresa?',
+      '¿Las funciones del Consejo están claramente separadas de las funciones de la gestión operativa — el Consejo gobierna, no opera?',
+      '¿Las decisiones de mayor impacto estratégico se toman en el Consejo con documentación formal — no solo en conversaciones informales?'
+    ]
+  },
+  {
+    name: 'Consejo de Familia',
+    sub: 'Instancia formal de gobierno de la familia como propietaria colectiva',
+    hdrClass: 'dh-gov',
+    color: '#C49A3C',
+    system: 'Intersección Familia-Propiedad',
+    crClass: 'cr-int',
+    qs: [
+      '¿Existe un Consejo de Familia o instancia equivalente donde la familia discute los temas que la conciernen como propietaria?',
+      '¿El Consejo de Familia sesiona con una cadencia regular — al menos dos veces al año — con agenda y acuerdos documentados?',
+      '¿Hay un proceso para que los miembros de la familia que no trabajan en la empresa tengan información y voz en los temas relevantes?',
+      '¿El Consejo de Familia tiene mecanismos para resolver conflictos familiares relacionados con la empresa antes de que lleguen al Consejo de Administración?'
+    ]
+  },
+  {
+    name: 'Sucesión y Continuidad',
+    sub: 'Plan de continuidad generacional del liderazgo y la propiedad familiar',
+    hdrClass: 'dh-suc',
+    color: '#c84a4a',
+    system: 'Continuidad Generacional',
+    crClass: 'cr-suc',
+    qs: [
+      '¿Existe un plan de sucesión documentado para el CEO y los roles directivos más críticos de la empresa?',
+      '¿Hay claridad sobre los criterios que debe cumplir un miembro de la familia para asumir un rol de liderazgo en la empresa?',
+      '¿La familia ha discutido formalmente la visión de largo plazo sobre la empresa — si seguirá siendo familiar, si se abrirá a capital externo, o si eventualmente podría venderse?',
+      '¿Hay mecanismos para preparar a la siguiente generación — educación, exposición gradual, mentoría — antes de que asuman responsabilidades de liderazgo o propiedad?'
+    ]
+  },
+  {
+    name: 'Profesionalización',
+    sub: 'Criterios de gestión profesional y participación de la familia en la operación',
+    hdrClass: 'dh-pro',
+    color: '#5a5aaa',
+    system: 'Intersección Empresa-Familia',
+    crClass: 'cr-pro',
+    qs: [
+      '¿Hay criterios formales y objetivos para el ingreso de miembros de la familia a la empresa — equivalentes a los criterios que se aplican a candidatos externos?',
+      '¿La compensación de los miembros de la familia que trabajan en la empresa es consistente con los roles equivalentes del mercado — no determinada por la relación familiar?',
+      '¿Hay un proceso de evaluación de desempeño que se aplica a los miembros de la familia con los mismos estándares que al resto del equipo?',
+      '¿Existe claridad sobre cuándo y cómo un miembro de la familia puede ser removido de un rol directivo si su desempeño no es el requerido?'
+    ]
+  }
+];
+
+const ARCHETYPES = [
+  {
+    min: 3.3,
+    name: 'Empresa familiar institucionalmente madura',
+    sub: 'GOBIERNO SÓLIDO — Los tres sistemas están bien arquitectados',
+    color: '#1a5c2e',
+    def: 'La empresa familiar tiene una arquitectura de gobierno madura en los tres sistemas — familia, propiedad y empresa — y en sus intersecciones. Los acuerdos están formalizados, el gobierno es funcional y hay mecanismos de continuidad. El trabajo es mantener y actualizar esta arquitectura al ritmo del crecimiento familiar y empresarial.'
+  },
+  {
+    min: 2.5,
+    name: 'Empresa familiar en proceso de institucionalización',
+    sub: 'EN CONSTRUCCIÓN — Elementos presentes, arquitectura incompleta',
+    color: '#8a5c00',
+    def: 'Hay elementos de gobierno presentes pero sin la arquitectura completa. La empresa funciona bien cuando no hay conflictos — pero los mecanismos para gestionar los conflictos cuando aparecen no están suficientemente desarrollados. Completar la arquitectura de gobierno es una prioridad antes del siguiente ciclo de crecimiento.'
+  },
+  {
+    min: 1.7,
+    name: 'Empresa familiar con gobierno informal',
+    sub: 'ATENCIÓN — El gobierno depende de las relaciones, no de los sistemas',
+    color: '#7a3c00',
+    def: 'El gobierno de la empresa familiar es fundamentalmente informal. Los tres sistemas — familia, propiedad y empresa — no tienen fronteras claras ni mecanismos formales de relacionamiento. El crecimiento en estas condiciones producirá conflictos que los sistemas informales no podrán gestionar.'
+  },
+  {
+    min: 0,
+    name: 'Empresa familiar sin arquitectura de gobierno',
+    sub: 'CRÍTICO — Los tres sistemas operan sin reglas',
+    color: '#8a1a1a',
+    def: 'La empresa familiar opera sin una arquitectura de gobierno. Los roles de familia, propietario y gestor se superponen sin reglas claras. Las decisiones se toman en función de las relaciones del momento, no de criterios institucionales. Este es un riesgo existencial que crece con cada año de ausencia de gobierno.'
+  }
+];
+
+const STAGES = [
+  { min: 3.3, num: 'IV', name: 'Empresa Familiar Institucionalizada', desc: 'Con acuerdos formalizados, consejo activo y plan de sucesión estructurado. Lista para el siguiente nivel de escala.' },
+  { min: 2.5, num: 'III', name: 'Empresa Familiar Profesionalizada', desc: 'Con gobierno parcialmente formalizado. Los mecanismos existen pero no están completos ni suficientemente robustos.' },
+  { min: 1.7, num: 'II', name: 'Empresa Familiar en Transición', desc: 'En proceso de separar los sistemas de familia, propiedad y empresa. Las reglas están siendo construidas sobre la marcha.' },
+  { min: 0, num: 'I', name: 'Empresa Familiar Fundacional', desc: 'Operada por los fundadores con reglas implícitas. El gobierno existe en las relaciones personales, no en los sistemas institucionales.' }
+];
+
+const GAPS = [
+  {
+    c: 'No existe protocolo familiar. Las reglas de relación entre la familia y la empresa son implícitas y distintas según el miembro de la familia que se le pregunte.',
+    d: 'Hay acuerdos informales pero sin la formalización que los hace exigibles y robustos ante conflictos o cambios en la familia.',
+    a: 'Iniciar el proceso de construcción del protocolo familiar con facilitación externa: es un proceso de 3-6 meses que requiere conversaciones difíciles y asesoría especializada.',
+    color: '#4a2080', cls: 'gap-card-fam', badge: 'Protocolo Familiar'
+  },
+  {
+    c: 'La arquitectura de propiedad no está diseñada para el contexto familiar. No hay mecanismos para situaciones previsibles como divorcios, fallecimientos o disputas entre herederos.',
+    d: 'La estructura accionaria existe pero sin los mecanismos de transferencia y valoración que la convierten en una arquitectura de gobierno completa.',
+    a: 'Estructurar el régimen de propiedad familiar con asesoría legal y fiscal especializada: valoración, transferencias entre generaciones y protección ante eventos no planificados.',
+    color: '#1a4a8a', cls: 'gap-card-own', badge: 'Arquitectura de Propiedad'
+  },
+  {
+    c: 'No hay Consejo de Administración funcional. Las decisiones más importantes de la empresa las toma el CEO-fundador sin instancia que las desafíe con perspectiva externa.',
+    d: 'El Consejo existe pero no es suficientemente funcional: no sesiona con regularidad, no tiene independientes, o no produce decisiones formales.',
+    a: 'Constituir o profesionalizar el Consejo de Administración: al menos un consejero independiente con experiencia en la industria, sesiones trimestrales con agenda estratégica y actas formales.',
+    color: '#0a5c3a', cls: 'gap-card-bus', badge: 'Gobierno Corporativo'
+  },
+  {
+    c: 'No existe Consejo de Familia. Los miembros de la familia que no participan en la gestión no tienen espacio ni mecanismo para ser parte de la empresa como propietarios.',
+    d: 'Hay reuniones familiares informales que mezclan temas de familia y empresa sin estructura que produzca acuerdos exigibles.',
+    a: 'Constituir el Consejo de Familia: definir quiénes lo integran, con qué frecuencia sesiona, qué temas son de su competencia y cómo se conecta con el Consejo de Administración.',
+    color: '#C49A3C', cls: 'gap-card-gov', badge: 'Consejo de Familia'
+  },
+  {
+    c: 'No hay plan de sucesión. La empresa es totalmente dependiente del CEO fundador sin ningún plan para una transición ordenada.',
+    d: 'Hay intención de sucesión pero sin el plan, los criterios y los mecanismos de preparación del sucesor.',
+    a: 'Iniciar el proceso de sucesión: definir los criterios de la siguiente generación de liderazgo, identificar candidatos y diseñar el plan de preparación con horizonte de 5-10 años.',
+    color: '#c84a4a', cls: 'gap-card-suc', badge: 'Sucesión y Continuidad'
+  },
+  {
+    c: 'No hay criterios de profesionalización para la familia. Los miembros de la familia entran a la empresa por relación, no por mérito, y se les gestiona distinto al resto del equipo.',
+    d: 'Hay criterios informales pero no formalizados, lo que genera percepciones de inequidad entre el equipo y entre los propios miembros de la familia.',
+    a: 'Formalizar la política de participación familiar: criterios de ingreso, compensación de mercado, evaluación de desempeño y proceso para remover de un rol si es necesario.',
+    color: '#5a5aaa', cls: 'gap-card-pro', badge: 'Profesionalización'
+  }
+];
+
+// ================================================================
+// STATE
+// ================================================================
+let cur = 0;
+const ans = {};
+for (let i = 0; i < 6; i++) ans[i] = {};
+
+// ================================================================
+// NAVIGATION
+// ================================================================
+function start() {
+  document.getElementById('sIntro').classList.remove('active');
+  renderDim(0);
+  document.getElementById('sEval').classList.add('active');
+  updProg();
+  window.scrollTo(0, 0);
+}
+
+function renderDim(idx) {
+  const d = DIMS[idx];
+  document.getElementById('dhEye').textContent = `Dimensión ${idx + 1} de 6 · ${d.system}`;
+  document.getElementById('dhName').textContent = d.name;
+  document.getElementById('dhSub').textContent = d.sub;
+  const hdr = document.getElementById('dimHdr');
+  hdr.className = `dim-hdr ${d.hdrClass}`;
+
+  const dp = document.getElementById('dimProg');
+  dp.innerHTML = '';
+  DIMS.forEach((_, i) => {
+    const el = document.createElement('div');
+    el.className = 'dp-item' + (i < idx ? ' done' : i === idx ? ' active' : '');
+    dp.appendChild(el);
+  });
+
+  const qc = document.getElementById('qCont');
+  qc.innerHTML = '';
+  d.qs.forEach((q, qi) => {
+    const sv = ans[idx][qi];
+    const bl = document.createElement('div');
+    bl.className = 'q-block';
+    let row = '<div class="scale-row">';
+    [[4, 'Robusto'], [3, 'Presente'], [2, 'Incipiente'], [1, 'Ausente']].forEach(([s, l]) => {
+      row += `<div class="sc-btn${sv === s ? ' sel' : ''}" data-s="${s}" onclick="setA(${idx},${qi},${s},this)"><span class="sn">${s}</span><span class="sl">${l}</span></div>`;
+    });
+    row += '</div>';
+    bl.innerHTML = `<span class="q-num">Pregunta ${qi + 1} de ${d.qs.length}</span><div class="q-text">${q}</div>${row}`;
+    qc.appendChild(bl);
+  });
+
+  document.getElementById('btnBack').style.display = idx === 0 ? 'none' : 'inline-block';
+  document.getElementById('btnNext').textContent = idx === 5 ? 'Ver diagnóstico →' : 'Siguiente dimensión →';
+  updNxt(idx);
+}
+
+function setA(d, q, s, el) {
+  ans[d][q] = s;
+  el.closest('.scale-row').querySelectorAll('.sc-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+  updNxt(d);
+}
+
+function updNxt(idx) {
+  const ready = DIMS[idx].qs.every((_, i) => ans[idx][i] !== undefined);
+  document.getElementById('btnNext').classList.toggle('ready', ready);
+}
+
+function goNext() {
+  if (!DIMS[cur].qs.every((_, i) => ans[cur][i] !== undefined)) return;
+  if (cur === 5) { showCalc(); return; }
+  cur++;
+  renderDim(cur);
+  updProg();
+  window.scrollTo(0, 0);
+}
+
+function goBack() {
+  if (cur === 0) return;
+  cur--;
+  renderDim(cur);
+  updProg();
+  window.scrollTo(0, 0);
+}
+
+function updProg() {
+  const done = Object.keys(ans).filter(i => DIMS[i].qs.every((_, j) => ans[i][j] !== undefined)).length;
+  document.getElementById('pFill').style.width = Math.round((done / 6) * 100) + '%';
+}
+
+function showCalc() {
+  document.getElementById('sEval').classList.remove('active');
+  document.getElementById('sCalc').classList.add('active');
+  setTimeout(showRes, 2500);
+}
+
+// ================================================================
+// RESULTS
+// ================================================================
+function showRes() {
+  const ds = DIMS.map((_, i) => {
+    const v = DIMS[i].qs.map((_, j) => ans[i][j]);
+    return +(v.reduce((s, x) => s + x, 0) / v.length).toFixed(2);
+  });
+  const overall = +(ds.reduce((s, v) => s + v, 0) / 6).toFixed(2);
+
+  // Archetype
+  const arch = ARCHETYPES.find(a => overall >= a.min);
+  document.getElementById('rScore').textContent = overall.toFixed(1);
+  document.getElementById('rScore').style.color = arch.color;
+  document.getElementById('rArch').textContent = arch.name;
+  document.getElementById('rSub').textContent = arch.sub;
+  document.getElementById('rDef').textContent = arch.def;
+
+  // Stage banner
+  const stage = STAGES.find(s => overall >= s.min);
+  document.getElementById('stageBanner').innerHTML = `
+    <div class="sb-icon"><span class="sbi-num">${stage.num}</span></div>
+    <div class="stage-text">
+      <span class="stage-label">Etapa de madurez de gobierno</span>
+      <div class="stage-name">${stage.name}</div>
+      <div class="stage-desc">${stage.desc}</div>
+    </div>`;
+
+  // Three circles grid
+  const grid = document.getElementById('crGrid');
+  grid.innerHTML = '';
+  const cellColors = ['var(--fam)', 'var(--own)', 'var(--bus)', 'var(--gold)', '#c84a4a', '#5a5aaa'];
+  ds.forEach((sc, i) => {
+    const d = DIMS[i];
+    const pct = ((sc - 1) / 3) * 100;
+    const verdictColor = sc >= 3.3 ? 'var(--s4)' : sc >= 2.5 ? 'var(--s3)' : sc >= 1.7 ? 'var(--s2)' : 'var(--s1)';
+    const verdict = sc >= 3.3 ? 'Robusto' : sc >= 2.5 ? 'Desarrollado' : sc >= 1.7 ? 'Incipiente' : 'Ausente';
+    grid.innerHTML += `
+      <div class="cr-cell ${d.crClass}">
+        <span class="cr-cell-label">${d.system}</span>
+        <div class="cr-cell-name">${d.name}</div>
+        <div class="cr-score-row">
+          <span class="cr-score-num" style="color:${cellColors[i]}">${sc.toFixed(1)}</span>
+          <div class="cr-bar-wrap">
+            <div class="cr-bar-track">
+              <div class="cr-bar-fill" style="width:0%;background:${cellColors[i]};opacity:.7" data-w="${pct}"></div>
+            </div>
+          </div>
+        </div>
+        <span class="cr-verdict" style="color:${verdictColor}">${verdict}</span>
+      </div>`;
+  });
+  setTimeout(() => document.querySelectorAll('.cr-bar-fill').forEach(el => el.style.width = el.dataset.w + '%'), 120);
+
+  // Gap cards
+  const gc = document.getElementById('gapCards');
+  gc.innerHTML = '';
+  const sorted = ds.map((sc, i) => ({ i, sc })).sort((a, b) => a.sc - b.sc);
+  sorted.forEach(({ i, sc }) => {
+    if (sc >= 3.5) return; // skip very solid dims
+    const g = GAPS[i];
+    const isCrit = sc < 2;
+    const badgeCls = isCrit ? 'gb-crit' : sc < 3 ? 'gb-dev' : 'gb-solid';
+    const badgeLbl = isCrit ? 'Crítico' : sc < 3 ? 'En desarrollo' : 'Optimizar';
+    gc.innerHTML += `
+      <div class="gap-card ${g.cls}">
+        <div class="gap-header">
+          <span class="gap-badge ${badgeCls}">${badgeLbl} · ${sc.toFixed(1)}/4.0</span>
+          <span class="gap-title">${DIMS[i].name}</span>
+        </div>
+        <p class="gap-text">${isCrit ? g.c : g.d}</p>
+        <p class="gap-rec">${g.a}</p>
+      </div>`;
+  });
+  if (!gc.innerHTML) gc.innerHTML = '<div class="gap-card" style="border-left:3px solid var(--s4)"><p class="gap-text" style="font-style:italic">El gobierno de su empresa familiar está en un nivel de madurez sólido en todas las dimensiones. La prioridad es sostener y actualizar la arquitectura al ritmo del crecimiento.</p></div>';
+
+  // Recommendations by horizon
+  const crit = ds.filter(s => s < 2).length;
+  const dev = ds.filter(s => s >= 2 && s < 3).length;
+  const rp = document.getElementById('recsPanel');
+  rp.innerHTML = '';
+  const recs = [];
+  if (crit > 0) recs.push({ h: 'Inmediato — 0 a 6 meses', t: `Hay <strong>${crit} dimensión${crit > 1 ? 'es' : ''}</strong> de gobierno en estado crítico. Antes de cualquier iniciativa de crecimiento, atender las brechas críticas identificadas. Sin esta base, el crecimiento produce conflicto.` });
+  if (dev > 0) recs.push({ h: 'Corto plazo — 6 a 18 meses', t: `Hay <strong>${dev} dimensión${dev > 1 ? 'es' : ''}</strong> en desarrollo. Completar la arquitectura de gobierno en estas áreas con asesoría especializada. El objetivo es que ninguna dimensión quede en nivel crítico o incipiente antes del siguiente ciclo de crecimiento.` });
+  recs.push({ h: 'Mediano plazo — 18 a 36 meses', t: 'Revisar el protocolo familiar y la arquitectura de propiedad con perspectiva de la siguiente generación. Las reglas que funcionan en la primera generación rara vez son suficientes en la segunda.' });
+  recs.push({ h: 'Permanente', t: 'El gobierno de la empresa familiar requiere revisión y actualización continua. Cada evento relevante en la familia — nuevos miembros, divorcios, fallecimientos — y cada evento en la empresa — crecimiento, adquisiciones, nuevos socios — debe desencadenar una revisión de la arquitectura de gobierno.' });
+  recs.forEach(r => {
+    rp.innerHTML += `<div class="rec-item"><span class="ri-priority">${r.h}</span><p class="ri-text">${r.t}</p></div>`;
+  });
+
+  // Summary bar
+  const ok = ds.filter(s => s >= 3).length;
+  document.getElementById('sbStats').innerHTML = `
+    <div class="sb-stat"><span class="sb-num" style="color:var(--gold)">${overall.toFixed(1)}</span><span class="sb-lbl">Índice de gobierno</span></div>
+    <div class="sb-stat"><span class="sb-num" style="color:#5abf7a">${ok}</span><span class="sb-lbl">Dimensiones sólidas</span></div>
+    <div class="sb-stat"><span class="sb-num" style="color:#e8b84a">${dev}</span><span class="sb-lbl">En desarrollo</span></div>
+    <div class="sb-stat"><span class="sb-num" style="color:#e87a7a">${crit}</span><span class="sb-lbl">Críticas</span></div>
+    <div class="sb-stat"><span class="sb-num" style="color:var(--cream)">6</span><span class="sb-lbl">Dimensiones evaluadas</span></div>`;
+
+  document.getElementById('sCalc').classList.remove('active');
+  document.getElementById('sRes').classList.add('active');
+  document.getElementById('pFill').style.width = '100%';
+  window.scrollTo(0, 0);
+}
+
+// ================================================================
+// RESTART
+// ================================================================
+function restart() {
+  cur = 0;
+  for (let i = 0; i < 6; i++) ans[i] = {};
+  document.getElementById('sRes').classList.remove('active');
+  document.getElementById('sIntro').classList.add('active');
+  document.getElementById('pFill').style.width = '0%';
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
